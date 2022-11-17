@@ -10,6 +10,8 @@ import UIKit
 final class BoxOfficeListCollectionViewCell: UICollectionViewCell {
     static let identifier = String(describing: BoxOfficeListCollectionViewCell.self)
     
+    // MARK: - View Define
+    
     private let posterImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .orange
@@ -29,6 +31,8 @@ final class BoxOfficeListCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    // MARK: - View LifeCycle
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -38,6 +42,8 @@ final class BoxOfficeListCollectionViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Layout
     
     private func setupViews() {
         setupPosterImageView()

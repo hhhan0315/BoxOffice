@@ -10,6 +10,8 @@ import UIKit
 final class BoxOfficeListTableViewCell: UITableViewCell {
     static let identifier = String(describing: BoxOfficeListTableViewCell.self)
     
+    // MARK: - View Define
+    
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: 140, height: 300)
@@ -20,6 +22,8 @@ final class BoxOfficeListTableViewCell: UITableViewCell {
         collectionView.showsHorizontalScrollIndicator = false
         return collectionView
     }()
+    
+    // MARK: - View LifeCycle
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -32,6 +36,8 @@ final class BoxOfficeListTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Layout
     
     private func setupViews() {
         setupCollectionView()
@@ -48,6 +54,8 @@ final class BoxOfficeListTableViewCell: UITableViewCell {
         ])
     }
 }
+
+// MARK: - UICollectionViewDataSource
 
 extension BoxOfficeListTableViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
