@@ -47,3 +47,39 @@ enum API {
         return nil
     }
 }
+
+struct DailyBoxOfficeListResponse: Decodable {
+    let boxOfficeResult: BoxOfficeResult
+    
+    struct BoxOfficeResult: Decodable {
+        let dailyBoxOfficeList: [DailyBoxOfficeList]
+        
+        struct DailyBoxOfficeList: Decodable {
+            let rank: String
+            let rankInten: String
+            let rankOldAndNew: String
+            let movieCd: String
+            let movieNm: String
+            let openDt: String
+            let audiAcc: String
+        }
+    }
+}
+
+struct WeeklyBoxOfficeListResponse: Decodable {
+    let boxOfficeResult: BoxOfficeResult
+    
+    struct BoxOfficeResult: Decodable {
+        let weeklyBoxOfficeList: [WeeklyBoxOfficeList]
+        
+        struct WeeklyBoxOfficeList: Decodable {
+            let rank: String
+            let rankInten: String
+            let rankOldAndNew: String
+            let movieCd: String
+            let movieNm: String
+            let openDt: String
+            let audiAcc: String
+        }
+    }
+}
