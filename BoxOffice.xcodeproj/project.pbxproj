@@ -7,14 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0198069F29290A35004639A0 /* TmdbAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0198069E29290A35004639A0 /* TmdbAPI.swift */; };
+		019806A129290A5D004639A0 /* TargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019806A029290A5D004639A0 /* TargetType.swift */; };
+		019806A329290D0B004639A0 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019806A229290D0B004639A0 /* HTTPMethod.swift */; };
+		019806A5292B1D30004639A0 /* DailyBoxOfficeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019806A4292B1D30004639A0 /* DailyBoxOfficeDTO.swift */; };
+		019806A7292B1E86004639A0 /* WeeklyBoxOfficeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019806A6292B1E86004639A0 /* WeeklyBoxOfficeDTO.swift */; };
+		019806A9292B1FD5004639A0 /* MovieDetailDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019806A8292B1FD5004639A0 /* MovieDetailDTO.swift */; };
+		019806AB292B21D1004639A0 /* TmdbDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019806AA292B21D1004639A0 /* TmdbDTO.swift */; };
+		019806AE292B4F89004639A0 /* BoxOfficeList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019806AD292B4F89004639A0 /* BoxOfficeList.swift */; };
+		019806B1292B9C99004639A0 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019806B0292B9C99004639A0 /* Date+Extension.swift */; };
 		01AE58502925F74900B409D8 /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AE584F2925F74900B409D8 /* APIError.swift */; };
-		01AE58522925F76400B409D8 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AE58512925F76400B409D8 /* API.swift */; };
+		01AE58522925F76400B409D8 /* KobisAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AE58512925F76400B409D8 /* KobisAPI.swift */; };
 		01AE58542925F76A00B409D8 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AE58532925F76A00B409D8 /* APIService.swift */; };
 		01AE58562925F7A400B409D8 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AE58552925F7A400B409D8 /* Secrets.swift */; };
 		01AE5858292606F000B409D8 /* WeekType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AE5857292606F000B409D8 /* WeekType.swift */; };
 		01AE586029261BD700B409D8 /* BoxOfficeListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AE585F29261BD700B409D8 /* BoxOfficeListCollectionViewCell.swift */; };
 		01AE586229262BC300B409D8 /* BoxOfficeListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AE586129262BC300B409D8 /* BoxOfficeListTableViewCell.swift */; };
 		01AE58642926388F00B409D8 /* BoxOfficeListButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AE58632926388F00B409D8 /* BoxOfficeListButton.swift */; };
+		01AE58682927B7DD00B409D8 /* BoxOfficeListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AE58672927B7DD00B409D8 /* BoxOfficeListViewModel.swift */; };
 		01F6E9742925C6D500770A4A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F6E9732925C6D500770A4A /* AppDelegate.swift */; };
 		01F6E9762925C6D500770A4A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F6E9752925C6D500770A4A /* SceneDelegate.swift */; };
 		01F6E9782925C6D500770A4A /* BoxOfficeListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F6E9772925C6D500770A4A /* BoxOfficeListViewController.swift */; };
@@ -23,14 +33,24 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0198069E29290A35004639A0 /* TmdbAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TmdbAPI.swift; sourceTree = "<group>"; };
+		019806A029290A5D004639A0 /* TargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetType.swift; sourceTree = "<group>"; };
+		019806A229290D0B004639A0 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
+		019806A4292B1D30004639A0 /* DailyBoxOfficeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyBoxOfficeDTO.swift; sourceTree = "<group>"; };
+		019806A6292B1E86004639A0 /* WeeklyBoxOfficeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyBoxOfficeDTO.swift; sourceTree = "<group>"; };
+		019806A8292B1FD5004639A0 /* MovieDetailDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailDTO.swift; sourceTree = "<group>"; };
+		019806AA292B21D1004639A0 /* TmdbDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TmdbDTO.swift; sourceTree = "<group>"; };
+		019806AD292B4F89004639A0 /* BoxOfficeList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoxOfficeList.swift; sourceTree = "<group>"; };
+		019806B0292B9C99004639A0 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		01AE584F2925F74900B409D8 /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
-		01AE58512925F76400B409D8 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		01AE58512925F76400B409D8 /* KobisAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KobisAPI.swift; sourceTree = "<group>"; };
 		01AE58532925F76A00B409D8 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		01AE58552925F7A400B409D8 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		01AE5857292606F000B409D8 /* WeekType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekType.swift; sourceTree = "<group>"; };
 		01AE585F29261BD700B409D8 /* BoxOfficeListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoxOfficeListCollectionViewCell.swift; sourceTree = "<group>"; };
 		01AE586129262BC300B409D8 /* BoxOfficeListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoxOfficeListTableViewCell.swift; sourceTree = "<group>"; };
 		01AE58632926388F00B409D8 /* BoxOfficeListButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoxOfficeListButton.swift; sourceTree = "<group>"; };
+		01AE58672927B7DD00B409D8 /* BoxOfficeListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoxOfficeListViewModel.swift; sourceTree = "<group>"; };
 		01F6E9702925C6D500770A4A /* BoxOffice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BoxOffice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		01F6E9732925C6D500770A4A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		01F6E9752925C6D500770A4A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -51,6 +71,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		019806AC292B4AE9004639A0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				019806AD292B4F89004639A0 /* BoxOfficeList.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		019806AF292B9C8C004639A0 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				019806B0292B9C99004639A0 /* Date+Extension.swift */,
+			);
+			name = Extension;
+			sourceTree = "<group>";
+		};
 		01AE584A2925C94E00B409D8 /* Application */ = {
 			isa = PBXGroup;
 			children = (
@@ -73,10 +109,17 @@
 		01AE584E2925F72600B409D8 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				01AE58512925F76400B409D8 /* API.swift */,
 				01AE584F2925F74900B409D8 /* APIError.swift */,
 				01AE58532925F76A00B409D8 /* APIService.swift */,
+				019806A229290D0B004639A0 /* HTTPMethod.swift */,
+				01AE58512925F76400B409D8 /* KobisAPI.swift */,
+				019806A4292B1D30004639A0 /* DailyBoxOfficeDTO.swift */,
+				019806A6292B1E86004639A0 /* WeeklyBoxOfficeDTO.swift */,
+				019806A8292B1FD5004639A0 /* MovieDetailDTO.swift */,
 				01AE58552925F7A400B409D8 /* Secrets.swift */,
+				019806A029290A5D004639A0 /* TargetType.swift */,
+				0198069E29290A35004639A0 /* TmdbAPI.swift */,
+				019806AA292B21D1004639A0 /* TmdbDTO.swift */,
 				01AE5857292606F000B409D8 /* WeekType.swift */,
 			);
 			path = Network;
@@ -97,6 +140,7 @@
 				01AE586129262BC300B409D8 /* BoxOfficeListTableViewCell.swift */,
 				01AE58632926388F00B409D8 /* BoxOfficeListButton.swift */,
 				01F6E9772925C6D500770A4A /* BoxOfficeListViewController.swift */,
+				01AE58672927B7DD00B409D8 /* BoxOfficeListViewModel.swift */,
 			);
 			path = BoxOfficeList;
 			sourceTree = "<group>";
@@ -120,6 +164,8 @@
 		01F6E9722925C6D500770A4A /* BoxOffice */ = {
 			isa = PBXGroup;
 			children = (
+				019806AF292B9C8C004639A0 /* Extension */,
+				019806AC292B4AE9004639A0 /* Model */,
 				01AE584A2925C94E00B409D8 /* Application */,
 				01AE584E2925F72600B409D8 /* Network */,
 				01AE584B2925C9E600B409D8 /* Resource */,
@@ -199,15 +245,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				01F6E9782925C6D500770A4A /* BoxOfficeListViewController.swift in Sources */,
+				019806A7292B1E86004639A0 /* WeeklyBoxOfficeDTO.swift in Sources */,
+				019806A5292B1D30004639A0 /* DailyBoxOfficeDTO.swift in Sources */,
 				01AE58562925F7A400B409D8 /* Secrets.swift in Sources */,
 				01AE586229262BC300B409D8 /* BoxOfficeListTableViewCell.swift in Sources */,
 				01AE58542925F76A00B409D8 /* APIService.swift in Sources */,
+				019806AB292B21D1004639A0 /* TmdbDTO.swift in Sources */,
+				019806AE292B4F89004639A0 /* BoxOfficeList.swift in Sources */,
 				01AE58642926388F00B409D8 /* BoxOfficeListButton.swift in Sources */,
 				01AE5858292606F000B409D8 /* WeekType.swift in Sources */,
+				019806A129290A5D004639A0 /* TargetType.swift in Sources */,
+				019806B1292B9C99004639A0 /* Date+Extension.swift in Sources */,
+				019806A9292B1FD5004639A0 /* MovieDetailDTO.swift in Sources */,
 				01AE586029261BD700B409D8 /* BoxOfficeListCollectionViewCell.swift in Sources */,
+				019806A329290D0B004639A0 /* HTTPMethod.swift in Sources */,
 				01F6E9742925C6D500770A4A /* AppDelegate.swift in Sources */,
+				01AE58682927B7DD00B409D8 /* BoxOfficeListViewModel.swift in Sources */,
+				0198069F29290A35004639A0 /* TmdbAPI.swift in Sources */,
 				01AE58502925F74900B409D8 /* APIError.swift in Sources */,
-				01AE58522925F76400B409D8 /* API.swift in Sources */,
+				01AE58522925F76400B409D8 /* KobisAPI.swift in Sources */,
 				01F6E9762925C6D500770A4A /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -276,7 +332,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -330,7 +386,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -355,7 +411,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -387,7 +443,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -14,7 +14,7 @@ final class BoxOfficeListTableViewCell: UITableViewCell {
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 140, height: 300)
+        layout.itemSize = CGSize(width: 160, height: 300)
         layout.scrollDirection = .horizontal
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -22,6 +22,16 @@ final class BoxOfficeListTableViewCell: UITableViewCell {
         collectionView.showsHorizontalScrollIndicator = false
         return collectionView
     }()
+    
+    // MARK: - Internal Properties
+    
+    var boxOfficeLists: [BoxOfficeList] = [] {
+        didSet {
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
+        }
+    }
     
     // MARK: - View LifeCycle
     
@@ -59,14 +69,15 @@ final class BoxOfficeListTableViewCell: UITableViewCell {
 
 extension BoxOfficeListTableViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return boxOfficeLists.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BoxOfficeListCollectionViewCell.identifier, for: indexPath) as? BoxOfficeListCollectionViewCell else {
             return .init()
         }
-        
+        let boxOfficeList = boxOfficeLists[indexPath.item]
+        cell.boxOfficeList = boxOfficeList
         return cell
     }
 }

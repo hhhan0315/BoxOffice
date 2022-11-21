@@ -54,10 +54,8 @@ final class BoxOfficeListViewController: UIViewController {
     }()
     
     // MARK: - Private Properties
-        
-    private let apiService = APIService()
     
-//    private 
+    private let viewModel = BoxOfficeListViewModel()
     
     // MARK: - View LifeCycle
 
@@ -73,6 +71,14 @@ final class BoxOfficeListViewController: UIViewController {
         weekDaysButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
         
         setupViews()
+        
+        viewModel.fetch()
+        
+        viewModel.reloadTableViewClosure = { [weak self] in
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
+        }
     }
     
     // MARK: - Layout
@@ -80,11 +86,14 @@ final class BoxOfficeListViewController: UIViewController {
     private func setupViews() {
         view.backgroundColor = .systemBackground
         
-        navigationItem.title = "Box Office"
-        navigationController?.navigationBar.prefersLargeTitles = true
-        
+        setupNavigation()
         setupButtonStackView()
         setupTableView()
+    }
+    
+    private func setupNavigation() {
+        navigationItem.title = "Box Office"
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     private func setupButtonStackView() {
@@ -120,28 +129,6 @@ final class BoxOfficeListViewController: UIViewController {
         
         button.isSelected.toggle()
     }
-    
-    // MARK: - Networking
-    
-    private func getRequest() {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyyMMdd"
-        
-        guard let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) else {
-            return
-        }
-        
-        let dateString = dateFormatter.string(from: yesterday)
-        
-//        apiService.request(api: .getDailyBoxOfficeList(date: dateString), dataType: DailyBoxOfficeListResponse.self) { [weak self] result in
-//            switch result {
-//            case .success(let dailyBoxOfficeListResponse):
-//                print(dailyBoxOfficeListResponse)
-//            case .failure(let apiError):
-//                print(apiError.rawValue)
-//            }
-//        }
-    }
 }
 
 // MARK: - UITableViewDataSource
@@ -155,7 +142,7 @@ extension BoxOfficeListViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: BoxOfficeListTableViewCell.identifier, for: indexPath) as? BoxOfficeListTableViewCell else {
             return .init()
         }
-        
+        cell.boxOfficeLists = viewModel.boxOfficeLists
         return cell
     }
 }

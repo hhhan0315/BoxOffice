@@ -20,16 +20,45 @@ final class BoxOfficeListCollectionViewCell: UICollectionViewCell {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "title"
+        label.textAlignment = .center
+        label.font = .systemFont(ofSize: 16.0)
         return label
     }()
     
     private let infoLabel: UILabel = {
         let label = UILabel()
+        label.textAlignment = .center
         label.numberOfLines = 2
-        label.text = "개봉\n누적 관객"
+        label.font = .systemFont(ofSize: 16.0)
         return label
     }()
+    
+    // MARK: - Internal Properties
+    
+    var boxOfficeList: BoxOfficeList? {
+        didSet {
+            guard let boxOfficeList = boxOfficeList else {
+                return
+            }
+            
+            titleLabel.text = boxOfficeList.movieName
+            infoLabel.text = "\(boxOfficeList.openDate) 개봉\n누적관객 \(boxOfficeList.audienceAcc)"
+//            
+//            guard let posterPath = boxOfficeList.posterPath else {
+//                return
+//            }
+//            
+//            URLSession.shared.dataTask(with: URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)")!) { data, response, error in
+//                guard let data = data else {
+//                    return
+//                }
+//                
+//                DispatchQueue.main.async {
+//                    self.posterImageView.image = UIImage(data: data)
+//                }
+//            }.resume()
+        }
+    }
     
     // MARK: - View LifeCycle
     
@@ -56,9 +85,9 @@ final class BoxOfficeListCollectionViewCell: UICollectionViewCell {
         posterImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            posterImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            posterImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            posterImageView.heightAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 1.5)
+            posterImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            posterImageView.widthAnchor.constraint(equalToConstant: 140.0),
+            posterImageView.heightAnchor.constraint(equalToConstant: 210.0)
         ])
     }
     
@@ -67,8 +96,8 @@ final class BoxOfficeListCollectionViewCell: UICollectionViewCell {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: posterImageView.bottomAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: posterImageView.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: posterImageView.trailingAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
         ])
     }
     
@@ -77,9 +106,9 @@ final class BoxOfficeListCollectionViewCell: UICollectionViewCell {
         infoLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             infoLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
-            infoLabel.leadingAnchor.constraint(equalTo: posterImageView.leadingAnchor),
+            infoLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             infoLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            infoLabel.trailingAnchor.constraint(equalTo: posterImageView.trailingAnchor),
+            infoLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
         ])
     }
 }
