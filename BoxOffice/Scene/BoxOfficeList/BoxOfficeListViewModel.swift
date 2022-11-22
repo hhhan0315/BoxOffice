@@ -22,14 +22,12 @@ final class BoxOfficeListViewModel {
     
     private let apiService = APIService()
     
-    var boxOfficeLists: [Movie] = [] {
+    var movies: [Movie] = [] {
         didSet {
             reloadTableViewClosure?()
         }
     }
     
-    var loadingStartClosure: (() -> Void)?
-    var loadingEndClosure: (() -> Void)?
     var reloadTableViewClosure: (() -> Void)?
     
     // dailyBoxOfficeList -> movieCd로 Detail 조회 -> moviewNm으로 TMDB API 조회 -> poster 정보 -> 전체 BoxOfficeList 모델 만들 수 있음
@@ -47,19 +45,20 @@ final class BoxOfficeListViewModel {
                 let yesterday = Date.yesterday.toString(dateFormat: .yyyyMMdd)
                 let dailyResponseDTO = try await apiService.request(api: KobisAPI.getDailyBoxOfficeList(date: yesterday), dataType: DailyResponseDTO.self)
                 let dailyBoxOfficeLists = dailyResponseDTO.boxOfficeResult.dailyBoxOfficeList
-                
+
                 let newBoxOfficeLists = dailyBoxOfficeLists.map { Movie(movieInfo: $0.toDomain(), movieDetailInfo: nil, tmdbInfo: nil) }
-                boxOfficeLists.append(contentsOf: newBoxOfficeLists)
-                
-                for (index, movie) in boxOfficeLists.enumerated() {
+                                
+                movies.append(contentsOf: newBoxOfficeLists)
+
+                for (index, movie) in movies.enumerated() {
                     let movieName = movie.movieInfo.movieName
                     let openYear = String(movie.movieInfo.openDate.prefix(4))
                     let tmdbResponseDTO = try await apiService.request(api: TmdbAPI.getSearchMovie(movieName: movieName, openYear: openYear), dataType: TmdbResponseDTO.self)
-                    
+
                     let tmdbResult = tmdbResponseDTO.results.first
                     let tmdbInfo = tmdbResult.map { $0.toDomain() }
-                    
-                    boxOfficeLists[index].tmdbInfo = tmdbInfo
+
+                    movies[index].tmdbInfo = tmdbInfo
                     
 //                    let movieCode = movie.movieInfo.movieCode
 //                    let movieDetailResponseDTO = try await apiService.request(api: KobisAPI.getMovieInfo(movieCode: movieCode), dataType: MovieDetailResponseDTO.self)

@@ -25,6 +25,6 @@ extension BoxOfficeListDTO {
                      movieCode: movieCd,
                      movieName: movieNm,
                      openDate: openDt.replacingOccurrences(of: "-", with: "."),
-                     audienceAcc: Int(audiAcc)!.formattedString(with: .audienceAcc))
+                     audienceAcc: Int(audiAcc)?.formattedString(with: .audienceAcc) ?? "")
     }
 }

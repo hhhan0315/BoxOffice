@@ -27,6 +27,7 @@
 		01AE58682927B7DD00B409D8 /* BoxOfficeListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AE58672927B7DD00B409D8 /* BoxOfficeListViewModel.swift */; };
 		01D807BB292C731100B12962 /* BoxOfficeListDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D807BA292C731100B12962 /* BoxOfficeListDTO.swift */; };
 		01D807BF292C9C3D00B12962 /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D807BE292C9C3D00B12962 /* Int+Extension.swift */; };
+		01D807C1292CC26700B12962 /* PosterNewLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D807C0292CC26700B12962 /* PosterNewLabelView.swift */; };
 		01F6E9742925C6D500770A4A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F6E9732925C6D500770A4A /* AppDelegate.swift */; };
 		01F6E9762925C6D500770A4A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F6E9752925C6D500770A4A /* SceneDelegate.swift */; };
 		01F6E9782925C6D500770A4A /* BoxOfficeListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F6E9772925C6D500770A4A /* BoxOfficeListViewController.swift */; };
@@ -55,6 +56,7 @@
 		01AE58672927B7DD00B409D8 /* BoxOfficeListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoxOfficeListViewModel.swift; sourceTree = "<group>"; };
 		01D807BA292C731100B12962 /* BoxOfficeListDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoxOfficeListDTO.swift; sourceTree = "<group>"; };
 		01D807BE292C9C3D00B12962 /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
+		01D807C0292CC26700B12962 /* PosterNewLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterNewLabelView.swift; sourceTree = "<group>"; };
 		01F6E9702925C6D500770A4A /* BoxOffice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BoxOffice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		01F6E9732925C6D500770A4A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		01F6E9752925C6D500770A4A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 				01AE58632926388F00B409D8 /* BoxOfficeListButton.swift */,
 				01F6E9772925C6D500770A4A /* BoxOfficeListViewController.swift */,
 				01AE58672927B7DD00B409D8 /* BoxOfficeListViewModel.swift */,
+				01D807C0292CC26700B12962 /* PosterNewLabelView.swift */,
 			);
 			path = BoxOfficeList;
 			sourceTree = "<group>";
@@ -268,6 +271,7 @@
 				01F6E9742925C6D500770A4A /* AppDelegate.swift in Sources */,
 				01AE58682927B7DD00B409D8 /* BoxOfficeListViewModel.swift in Sources */,
 				01D807BF292C9C3D00B12962 /* Int+Extension.swift in Sources */,
+				01D807C1292CC26700B12962 /* PosterNewLabelView.swift in Sources */,
 				0198069F29290A35004639A0 /* TmdbAPI.swift in Sources */,
 				01AE58502925F74900B409D8 /* APIError.swift in Sources */,
 				01D807BB292C731100B12962 /* BoxOfficeListDTO.swift in Sources */,

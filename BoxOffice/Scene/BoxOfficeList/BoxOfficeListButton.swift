@@ -11,8 +11,8 @@ final class BoxOfficeListButton: UIButton {
     
     override var isSelected: Bool {
         didSet {
-            backgroundColor = isSelected ? .label : .systemBackground
             layer.borderColor = isSelected ? UIColor.label.cgColor : UIColor.lightGray.cgColor
+            isUserInteractionEnabled = isSelected ? false : true
         }
     }
     
@@ -20,15 +20,10 @@ final class BoxOfficeListButton: UIButton {
         super.init(frame: .zero)
         
         setTitle(title, for: .normal)
+        setTitleColor(.systemGray3, for: .normal)
+        setTitleColor(.white, for: .selected)
         
-        titleLabel?.font = .systemFont(ofSize: 17.0, weight: .semibold)
-        
-        setTitleColor(.lightGray, for: .normal)
-        setTitleColor(.systemBackground, for: .selected)
-                
-        layer.borderColor = UIColor.lightGray.cgColor
-        layer.borderWidth = 2
-        layer.cornerRadius = 10
+        titleLabel?.font = .systemFont(ofSize: 18.0, weight: .bold)
     }
     
     required init?(coder: NSCoder) {

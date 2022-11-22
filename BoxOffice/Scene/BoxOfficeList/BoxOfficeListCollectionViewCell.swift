@@ -20,6 +20,14 @@ final class BoxOfficeListCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
+    private let posterRankLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 48.0, weight: .bold)
+        return label
+    }()
+        
+    private let posterNewLabelView = PosterNewLabelView()
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
@@ -52,9 +60,9 @@ final class BoxOfficeListCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Internal Properties
     
-    var boxOfficeList: Movie? {
+    var movie: Movie? {
         didSet {
-            guard let boxOfficeList = boxOfficeList else {
+            guard let boxOfficeList = movie else {
                 return
             }
             
@@ -63,6 +71,9 @@ final class BoxOfficeListCollectionViewCell: UICollectionViewCell {
             titleLabel.text = movieInfo.movieName
             openDateLabel.text = "개봉 \(movieInfo.openDate)"
             audienceAccLabel.text = "누적 관객수 \(movieInfo.audienceAcc)"
+            
+            posterRankLabel.text = movieInfo.rank
+            posterNewLabelView.isHidden = movieInfo.rankOldAndNew == "NEW" ? false : true
             
             guard let posterPath = boxOfficeList.tmdbInfo?.posterPath else {
                 return
@@ -102,6 +113,9 @@ final class BoxOfficeListCollectionViewCell: UICollectionViewCell {
     
     private func setupViews() {
         setupPosterImageView()
+        setupPosterRankLabel()
+        setupPosterNewLabelView()
+        
         setupTitleLabel()
         setupLabelStackView()
     }
@@ -114,6 +128,24 @@ final class BoxOfficeListCollectionViewCell: UICollectionViewCell {
             posterImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             posterImageView.widthAnchor.constraint(equalToConstant: 140.0),
             posterImageView.heightAnchor.constraint(equalToConstant: 210.0)
+        ])
+    }
+    
+    private func setupPosterRankLabel() {
+        posterImageView.addSubview(posterRankLabel)
+        posterRankLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            posterRankLabel.leadingAnchor.constraint(equalTo: posterImageView.leadingAnchor, constant: 4.0),
+            posterRankLabel.bottomAnchor.constraint(equalTo: posterImageView.bottomAnchor),
+        ])
+    }
+    
+    private func setupPosterNewLabelView() {
+        posterImageView.addSubview(posterNewLabelView)
+        posterNewLabelView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            posterNewLabelView.topAnchor.constraint(equalTo: posterImageView.topAnchor, constant: 4.0),
+            posterNewLabelView.trailingAnchor.constraint(equalTo: posterImageView.trailingAnchor, constant: -4.0),
         ])
     }
     

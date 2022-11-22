@@ -40,7 +40,6 @@ final class BoxOfficeListViewController: UIViewController {
     private lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: buttons)
         stackView.axis = .horizontal
-        stackView.spacing = 10
         stackView.distribution = .fillEqually
         return stackView
     }()
@@ -72,13 +71,13 @@ final class BoxOfficeListViewController: UIViewController {
         
         setupViews()
         
-        viewModel.fetch()
-        
         viewModel.reloadTableViewClosure = { [weak self] in
             DispatchQueue.main.async {
                 self?.tableView.reloadData()
             }
         }
+        
+        viewModel.fetch()
     }
     
     // MARK: - Layout
@@ -142,7 +141,7 @@ extension BoxOfficeListViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: BoxOfficeListTableViewCell.identifier, for: indexPath) as? BoxOfficeListTableViewCell else {
             return .init()
         }
-        cell.boxOfficeLists = viewModel.boxOfficeLists
+        cell.movies = viewModel.movies
         return cell
     }
 }

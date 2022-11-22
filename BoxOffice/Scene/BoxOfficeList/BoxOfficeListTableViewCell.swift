@@ -26,7 +26,7 @@ final class BoxOfficeListTableViewCell: UITableViewCell {
     
     // MARK: - Internal Properties
     
-    var boxOfficeLists: [Movie] = [] {
+    var movies: [Movie] = [] {
         didSet {
             DispatchQueue.main.async {
 //                self.collectionView.reloadData()
@@ -71,15 +71,15 @@ final class BoxOfficeListTableViewCell: UITableViewCell {
 
 extension BoxOfficeListTableViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return boxOfficeLists.count
+        return movies.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BoxOfficeListCollectionViewCell.identifier, for: indexPath) as? BoxOfficeListCollectionViewCell else {
             return .init()
         }
-        let boxOfficeList = boxOfficeLists[indexPath.item]
-        cell.boxOfficeList = boxOfficeList
+        let movie = movies[indexPath.item]
+        cell.movie = movie
         return cell
     }
 }
