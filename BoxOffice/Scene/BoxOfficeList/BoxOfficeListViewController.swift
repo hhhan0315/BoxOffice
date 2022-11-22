@@ -168,7 +168,6 @@ extension BoxOfficeListViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: BoxOfficeListTableViewCell.identifier, for: indexPath) as? BoxOfficeListTableViewCell else {
             return .init()
         }
-//        print(viewModel.movies)
         cell.movies = viewModel.movies
         return cell
     }

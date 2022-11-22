@@ -74,20 +74,7 @@ final class BoxOfficeListCollectionViewCell: UICollectionViewCell {
             posterRankLabel.text = movieInfo.rank
             posterNewLabelView.isHidden = movieInfo.rankOldAndNew == "NEW" ? false : true
             
-            posterImageView.downloadPoster(with: movie)
-//            guard let posterPath = movie.tmdbInfo?.posterPath else {
-//                return
-//            }
-            
-//            URLSession.shared.dataTask(with: URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)")!) { data, response, error in
-//                guard let data = data else {
-//                    return
-//                }
-//
-//                DispatchQueue.main.async { [weak self] in
-//                    self?.posterImageView.image = UIImage(data: data)
-//                }
-//            }.resume()
+            posterImageView.downloadTmdbImage(with: movie.tmdbInfo?.posterPath)
         }
     }
     

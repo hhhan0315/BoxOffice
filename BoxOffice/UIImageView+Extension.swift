@@ -8,12 +8,12 @@
 import UIKit
 
 extension UIImageView {
-    func downloadPoster(with movie: Movie) {
-        guard let posterPath = movie.tmdbInfo?.posterPath else {
+    func downloadTmdbImage(with path: String?) {
+        guard let path = path else {
             return
         }
         
-        let urlString = "https://image.tmdb.org/t/p/w500\(posterPath)"
+        let urlString = "https://image.tmdb.org/t/p/w500\(path)"
         
         guard let url = URL(string: urlString) else {
             return

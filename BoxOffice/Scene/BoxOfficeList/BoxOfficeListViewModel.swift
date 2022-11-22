@@ -17,9 +17,6 @@ final class BoxOfficeListViewModel {
     // 배열 [BoxOfficeList] -> 만들어줘야함
     // 일별 네트워크 통신 -> 세부정보 네트워크 통신 -> 해당 정보로 TMDB API 호출 -> 포스터 정보도 해당 배열에 넣어줘야함
     
-    // 1. 로딩 시작 시 indicator 표시
-    // 2. 로딩 종료 시 indicator 종료
-    
     private let apiService = APIService()
     
     var movies: [Movie] = []
@@ -63,13 +60,13 @@ final class BoxOfficeListViewModel {
 
                     let tmdbResult = tmdbResponseDTO.results.first
                     let tmdbInfo = tmdbResult.map { $0.toDomain() }
-
+                    
                     movies[index].tmdbInfo = tmdbInfo
                 }
                 reloadTableViewClosure?()
                 
-            } catch {
-                print(error.localizedDescription)
+            } catch let error as APIError {
+                print(error.rawValue)
             }
         }
     }

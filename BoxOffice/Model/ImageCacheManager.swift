@@ -8,21 +8,7 @@
 import Foundation
 
 final class ImageCacheManager {
-    let cache = URLCache.shared
-    
-    func getImage(imageURL: URL, completion: @escaping (Data) -> Void) {
-        let request = URLRequest(url: imageURL)
-        
-        if self.cache.cachedResponse(for: request) == nil {
-            downloadImage(imageURL: imageURL) { data in
-                completion(data)
-            }
-        } else {
-            loadFromCache(imageURL: imageURL) { data in
-                completion(data)
-            }
-        }
-    }
+    private let cache = URLCache.shared
     
     private func downloadImage(imageURL: URL, completion: @escaping (Data) -> Void) {
         let request = URLRequest(url: imageURL)
@@ -43,6 +29,20 @@ final class ImageCacheManager {
         
         if let data = self.cache.cachedResponse(for: request)?.data {
             completion(data)
+        }
+    }
+    
+    func getImage(imageURL: URL, completion: @escaping (Data) -> Void) {
+        let request = URLRequest(url: imageURL)
+        
+        if self.cache.cachedResponse(for: request) == nil {
+            downloadImage(imageURL: imageURL) { data in
+                completion(data)
+            }
+        } else {
+            loadFromCache(imageURL: imageURL) { data in
+                completion(data)
+            }
         }
     }
 }
