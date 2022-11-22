@@ -49,7 +49,7 @@ final class BoxOfficeListViewController: UIViewController {
         let tableView = UITableView()
         tableView.register(BoxOfficeListTableViewCell.self, forCellReuseIdentifier: BoxOfficeListTableViewCell.identifier)
         tableView.isScrollEnabled = false
-//        tableView.separatorStyle = .none
+        tableView.separatorStyle = .none
         return tableView
     }()
     

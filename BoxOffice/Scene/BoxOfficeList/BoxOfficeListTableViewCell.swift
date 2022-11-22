@@ -20,15 +20,17 @@ final class BoxOfficeListTableViewCell: UITableViewCell {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(BoxOfficeListCollectionViewCell.self, forCellWithReuseIdentifier: BoxOfficeListCollectionViewCell.identifier)
         collectionView.showsHorizontalScrollIndicator = false
+        collectionView.backgroundColor = .systemBackground
         return collectionView
     }()
     
     // MARK: - Internal Properties
     
-    var boxOfficeLists: [BoxOfficeList] = [] {
+    var boxOfficeLists: [Movie] = [] {
         didSet {
             DispatchQueue.main.async {
-                self.collectionView.reloadData()
+//                self.collectionView.reloadData()
+                self.collectionView.reloadSections(IndexSet(integer: 0))
             }
         }
     }

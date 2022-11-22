@@ -8,9 +8,17 @@
 import Foundation
 
 extension Date {
+    enum DateFormat: String {
+        case yyyyMMdd = "yyyyMMdd"
+    }
+    
     static var yesterday: Date! {
         return Calendar.current.date(byAdding: .day, value: -1, to: Date())
     }
     
-//    func toString(_ for)
+    func toString(dateFormat: DateFormat) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = dateFormat.rawValue
+        return dateFormatter.string(from: self)
+    }
 }

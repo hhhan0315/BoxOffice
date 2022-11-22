@@ -22,24 +22,15 @@ final class BoxOfficeListViewModel {
     
     private let apiService = APIService()
     
-    var boxOfficeLists: [BoxOfficeList] = [] {
+    var boxOfficeLists: [Movie] = [] {
         didSet {
             reloadTableViewClosure?()
         }
     }
     
+    var loadingStartClosure: (() -> Void)?
+    var loadingEndClosure: (() -> Void)?
     var reloadTableViewClosure: (() -> Void)?
-    
-    private func getYesterdayString() -> String? {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyyMMdd"
-        
-        guard let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) else {
-            return nil
-        }
-        
-        return dateFormatter.string(from: yesterday)
-    }
     
     // dailyBoxOfficeList -> movieCd로 Detail 조회 -> moviewNm으로 TMDB API 조회 -> poster 정보 -> 전체 BoxOfficeList 모델 만들 수 있음
     // 1. dailyBoxOfficeList로 먼저 일별 박스오피스 조회하고 boxOfficeLists에 값 넣기
@@ -51,149 +42,35 @@ final class BoxOfficeListViewModel {
     // 해당 id로 -> video search -> type trailer filter -> 해당 key 저장 -> Youtube api 호출
     
     func fetch() {
-        getDailyBoxOfficeList()
-    }
-    
-    private func getDailyBoxOfficeList() {
-        guard let yesterday = getYesterdayString() else {
-            return
-        }
-        
-        apiService.request(api: KobisAPI.getDailyBoxOfficeList(date: yesterday), dataType: DailyBoxOfficeDTO.self) { result in
-            switch result {
-            case .success(let dailyBoxOfficeDTO):
-                let dailyBoxOfficeLists = dailyBoxOfficeDTO.boxOfficeResult.dailyBoxOfficeList
-                dailyBoxOfficeLists.forEach {
-                    let boxOfficeList = BoxOfficeList(
-                        rank: $0.rank,
-                        rankInten: $0.rankInten,
-                        rankOldAndNew: $0.rankOldAndNew,
-                        movieCode: $0.movieCd,
-                        movieName: $0.movieNm,
-                        openDate: $0.openDt,
-                        audienceAcc: $0.audiAcc,
-                        backdropPath: nil,
-                        posterPath: nil,
-                        tmdbID: nil,
-                        overview: nil,
-                        showTime: nil,
-                        genres: nil,
-                        directors: nil,
-                        actors: nil,
-                        watchGrade: nil
-                    )
-                    self.boxOfficeLists.append(boxOfficeList)
+        Task {
+            do {
+                let yesterday = Date.yesterday.toString(dateFormat: .yyyyMMdd)
+                let dailyResponseDTO = try await apiService.request(api: KobisAPI.getDailyBoxOfficeList(date: yesterday), dataType: DailyResponseDTO.self)
+                let dailyBoxOfficeLists = dailyResponseDTO.boxOfficeResult.dailyBoxOfficeList
+                
+                let newBoxOfficeLists = dailyBoxOfficeLists.map { Movie(movieInfo: $0.toDomain(), movieDetailInfo: nil, tmdbInfo: nil) }
+                boxOfficeLists.append(contentsOf: newBoxOfficeLists)
+                
+                for (index, movie) in boxOfficeLists.enumerated() {
+                    let movieName = movie.movieInfo.movieName
+                    let openYear = String(movie.movieInfo.openDate.prefix(4))
+                    let tmdbResponseDTO = try await apiService.request(api: TmdbAPI.getSearchMovie(movieName: movieName, openYear: openYear), dataType: TmdbResponseDTO.self)
+                    
+                    let tmdbResult = tmdbResponseDTO.results.first
+                    let tmdbInfo = tmdbResult.map { $0.toDomain() }
+                    
+                    boxOfficeLists[index].tmdbInfo = tmdbInfo
+                    
+//                    let movieCode = movie.movieInfo.movieCode
+//                    let movieDetailResponseDTO = try await apiService.request(api: KobisAPI.getMovieInfo(movieCode: movieCode), dataType: MovieDetailResponseDTO.self)
+//                    
+//                    let movieInfo = movieDetailResponseDTO.movieInfoResult.movieInfo
+//                    let movieDetailInfo = movieInfo.toDomain()
+//                    boxOfficeLists[index].movieDetailInfo = movieDetailInfo
                 }
-                
-//                for dailyBoxOfficeList in dailyBoxOfficeLists {
-//                    self.apiService.request(api: KobisAPI.getMovieInfo(movieCode: dailyBoxOfficeList.movieCd), dataType: MovieDetailDTO.self) { result in
-//                        switch result {
-//                        case .success(let movieDetailDTO):
-//                            let movieInfo = movieDetailDTO.movieInfoResult.movieInfo
-//                            let openYear = String(dailyBoxOfficeList.openDt.prefix(4))
-//
-//                            self.apiService.request(api: TmdbAPI.getSearchMovie(movieName: dailyBoxOfficeList.movieNm, openYear: openYear), dataType: TmdbDTO.self) { result in
-//                                switch result {
-//                                case .success(let tmdbDTO):
-//                                    let tmdbResult = tmdbDTO.results.first
-//                                    let boxOfficeList = BoxOfficeList(
-//                                        rank: dailyBoxOfficeList.rank,
-//                                        rankInten: dailyBoxOfficeList.rankInten,
-//                                        rankOldAndNew: dailyBoxOfficeList.rankOldAndNew,
-//                                        movieCode: dailyBoxOfficeList.movieCd,
-//                                        movieName: dailyBoxOfficeList.movieNm,
-//                                        openDate: dailyBoxOfficeList.openDt,
-//                                        audienceAcc: dailyBoxOfficeList.audiAcc,
-//                                        backdropPath: tmdbResult?.backdropPath,
-//                                        posterPath: tmdbResult?.posterPath,
-//                                        tmdbID: tmdbResult?.id,
-//                                        overview: tmdbResult?.overview,
-//                                        showTime: movieInfo.showTm,
-//                                        genres: movieInfo.genres.map { String($0.genreNm) },
-//                                        directors: movieInfo.directors.map { String($0.peopleNm) },
-//                                        actors: movieInfo.actors.map { String($0.peopleNm) },
-//                                        watchGrade: movieInfo.audits.first?.watchGradeNm ?? ""
-//                                    )
-//                                    self.boxOfficeLists.append(boxOfficeList)
-//                                case .failure:
-//                                    break
-//                                }
-//                            }
-//                        case .failure:
-//                            break
-//                        }
-//                    }
-//                }
-                
-            case .failure:
-                break
+            } catch {
+                print(error.localizedDescription)
             }
         }
     }
-    
-//    private func getDailyBoxOfficeList() async throws -> [BoxOfficeList] {
-//        guard let yesterday = getYesterdayString() else {
-//            return
-//        }
-        
-
-//        let dailyBoxOfficeDTO = try await apiService.request(api: KobisAPI.getDailyBoxOfficeList(date: getYesterdayString()!), dataType: DailyBoxOfficeDTO.self)
-//        let dailyBoxOfficeLists = dailyBoxOfficeDTO.boxOfficeResult.dailyBoxOfficeList
-//        
-//        try await withThrowingTaskGroup(of: (DailyBoxOfficeDTO, TmdbDTO).self, body: { group in
-//            for dailyBoxOfficeList in dailyBoxOfficeLists {
-//                group.addTask {
-//                    let openYear = String(dailyBoxOfficeList.openDt.prefix(4))
-//                    let tmdbDTO = try await self.apiService.request(api: TmdbAPI.getSearchMovie(movieName: dailyBoxOfficeList.movieNm, openYear: openYear), dataType: TmdbDTO.self)
-//                    return (dailyBoxOfficeDTO, tmdbDTO)
-//                }
-//            }
-//            
-//            for try await (dailyBoxOfficeDTO, tmdbDTO) in group {
-//                let dailyBoxOfficeLists = dailyBoxOfficeDTO.boxOfficeResult.dailyBoxOfficeList
-//                
-//                for dailyBoxOfficeList in dailyBoxOfficeLists {
-//                    <#body#>
-//                }
-//                
-//                if let tmdbResult = tmdbDTO.results.first {
-//                    let boxOfficeList = BoxOfficeList(rank: <#T##String#>, rankInten: <#T##String#>, rankOldAndNew: <#T##String#>, movieCode: <#T##String#>, movieName: <#T##String#>, openDate: <#T##String#>, audienceAcc: <#T##String#>, backdropPath: <#T##String?#>, posterPath: <#T##String?#>, id: <#T##Int#>)
-//                }
-//            }
-//        })
-        
-//        dailyBoxOfficeLists.forEach {
-//            let openYear = String($0.openDt.prefix(4))
-//            let tmdbDTO = try await apiService.request(api: TmdbAPI.getSearchMovie(movieName: $0.movieNm, openYear: openYear), dataType: TmdbDTO.self)
-//        }
-//    }
-    
-    
-    
-    
-    
-    //        apiService.request(api: KobisAPI.getDailyBoxOfficeList(date: yesterday), dataType: DailyBoxOfficeDTO.self) { [weak self] result in
-    //            switch result {
-    //            case .success(let dailyBoxOfficeDTO):
-    //                let dailyBoxOfficeLists = dailyBoxOfficeDTO.boxOfficeResult.dailyBoxOfficeList
-    //
-    //                dailyBoxOfficeLists.forEach {
-    //                    let year = String($0.openDt.prefix(4))
-    //
-    //                    self?.apiService.request(api: TmdbAPI.getSearchMovie(movieName: $0.movieNm, openYear: year), dataType: TmdbDTO.self, completion: { [weak self] result in
-    //                        switch result {
-    //                        case .success(let tmdbDTO):
-    //                            let result = tmdbDTO.results.first
-    //
-    //
-    //                        case .failure(let apiError):
-    //                            print(apiError.rawValue)
-    //                        }
-    //                    })
-    //                }
-    //            case .failure(let apiError):
-    //                print(apiError.rawValue)
-    //            }
-    //        }
 }
-
