@@ -22,12 +22,15 @@ final class BoxOfficeListViewModel {
     
     private let apiService = APIService()
     
-    var movies: [Movie] = [] {
-        didSet {
-            reloadTableViewClosure?()
-        }
-    }
+    var movies: [Movie] = []
+//    {
+//        didSet {
+//            reloadTableViewClosure?()
+//        }
+//    }
     
+    var loadingStartClosure: (() -> Void)?
+    var loadingEndClosure: (() -> Void)?
     var reloadTableViewClosure: (() -> Void)?
     
     // dailyBoxOfficeList -> movieCd로 Detail 조회 -> moviewNm으로 TMDB API 조회 -> poster 정보 -> 전체 BoxOfficeList 모델 만들 수 있음
@@ -40,6 +43,7 @@ final class BoxOfficeListViewModel {
     // 해당 id로 -> video search -> type trailer filter -> 해당 key 저장 -> Youtube api 호출
     
     func fetch() {
+        loadingStartClosure?()
         Task {
             do {
                 let yesterday = Date.yesterday.toString(dateFormat: .yyyyMMdd)
@@ -49,6 +53,8 @@ final class BoxOfficeListViewModel {
                 let newBoxOfficeLists = dailyBoxOfficeLists.map { Movie(movieInfo: $0.toDomain(), movieDetailInfo: nil, tmdbInfo: nil) }
                                 
                 movies.append(contentsOf: newBoxOfficeLists)
+                loadingEndClosure?()
+                reloadTableViewClosure?()
 
                 for (index, movie) in movies.enumerated() {
                     let movieName = movie.movieInfo.movieName
@@ -59,14 +65,9 @@ final class BoxOfficeListViewModel {
                     let tmdbInfo = tmdbResult.map { $0.toDomain() }
 
                     movies[index].tmdbInfo = tmdbInfo
-                    
-//                    let movieCode = movie.movieInfo.movieCode
-//                    let movieDetailResponseDTO = try await apiService.request(api: KobisAPI.getMovieInfo(movieCode: movieCode), dataType: MovieDetailResponseDTO.self)
-//                    
-//                    let movieInfo = movieDetailResponseDTO.movieInfoResult.movieInfo
-//                    let movieDetailInfo = movieInfo.toDomain()
-//                    boxOfficeLists[index].movieDetailInfo = movieDetailInfo
                 }
+                reloadTableViewClosure?()
+                
             } catch {
                 print(error.localizedDescription)
             }

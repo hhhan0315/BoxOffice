@@ -8,8 +8,6 @@
 import Foundation
 
 final class APIService {
-    let cache = URLCache.shared
-    
     private func makeURLRequest(with api: TargetType) -> URLRequest? {
         guard var urlComponents = URLComponents(string: api.baseURL + api.path) else {
             return nil
@@ -53,14 +51,7 @@ final class APIService {
             throw APIError.invalidURLRequest
         }
         
-        var data: Data
-        
-        if let cachedData = cache.cachedResponse(for: urlRequest)?.data {
-            print("cached")
-            data = cachedData
-        } else {
-            data = try await download(with: urlRequest)
-        }
+        let data = try await download(with: urlRequest)
         
         do {
             let decodeData = try JSONDecoder().decode(T.self, from: data)

@@ -52,6 +52,11 @@ final class BoxOfficeListViewController: UIViewController {
         return tableView
     }()
     
+    private let activityIndicatorView: UIActivityIndicatorView = {
+        let activityIndicatorView = UIActivityIndicatorView(style: .large)
+        return activityIndicatorView
+    }()
+    
     // MARK: - Private Properties
     
     private let viewModel = BoxOfficeListViewModel()
@@ -71,6 +76,18 @@ final class BoxOfficeListViewController: UIViewController {
         
         setupViews()
         
+        viewModel.loadingStartClosure = {
+            DispatchQueue.main.async { [weak self] in
+                self?.activityIndicatorView.startAnimating()
+            }
+        }
+        
+        viewModel.loadingEndClosure = {
+            DispatchQueue.main.async { [weak self] in
+                self?.activityIndicatorView.stopAnimating()
+            }
+        }
+        
         viewModel.reloadTableViewClosure = { [weak self] in
             DispatchQueue.main.async {
                 self?.tableView.reloadData()
@@ -88,6 +105,7 @@ final class BoxOfficeListViewController: UIViewController {
         setupNavigation()
         setupButtonStackView()
         setupTableView()
+        setupAcitivityIndicatorView()
     }
     
     private func setupNavigation() {
@@ -117,6 +135,15 @@ final class BoxOfficeListViewController: UIViewController {
         ])
     }
     
+    private func setupAcitivityIndicatorView() {
+        view.addSubview(activityIndicatorView)
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            activityIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        ])
+    }
+    
     // MARK: - User Action
     
     @objc private func buttonDidTap(_ button: UIButton) {
@@ -141,6 +168,7 @@ extension BoxOfficeListViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: BoxOfficeListTableViewCell.identifier, for: indexPath) as? BoxOfficeListTableViewCell else {
             return .init()
         }
+//        print(viewModel.movies)
         cell.movies = viewModel.movies
         return cell
     }

@@ -23,14 +23,13 @@ final class BoxOfficeListTableViewCell: UITableViewCell {
         collectionView.backgroundColor = .systemBackground
         return collectionView
     }()
-    
+        
     // MARK: - Internal Properties
     
     var movies: [Movie] = [] {
         didSet {
-            DispatchQueue.main.async {
-//                self.collectionView.reloadData()
-                self.collectionView.reloadSections(IndexSet(integer: 0))
+            DispatchQueue.main.async { [weak self] in
+                self?.collectionView.reloadData()
             }
         }
     }
@@ -40,9 +39,9 @@ final class BoxOfficeListTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        setupViews()
-        
         collectionView.dataSource = self
+        
+        setupViews()
     }
     
     required init?(coder: NSCoder) {

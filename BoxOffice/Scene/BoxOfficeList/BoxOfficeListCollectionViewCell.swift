@@ -14,7 +14,6 @@ final class BoxOfficeListCollectionViewCell: UICollectionViewCell {
     
     private let posterImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = .systemBackground
         imageView.layer.cornerRadius = 10
         imageView.clipsToBounds = true
         return imageView
@@ -62,11 +61,11 @@ final class BoxOfficeListCollectionViewCell: UICollectionViewCell {
     
     var movie: Movie? {
         didSet {
-            guard let boxOfficeList = movie else {
+            guard let movie = movie else {
                 return
             }
             
-            let movieInfo = boxOfficeList.movieInfo
+            let movieInfo = movie.movieInfo
             
             titleLabel.text = movieInfo.movieName
             openDateLabel.text = "개봉 \(movieInfo.openDate)"
@@ -75,19 +74,20 @@ final class BoxOfficeListCollectionViewCell: UICollectionViewCell {
             posterRankLabel.text = movieInfo.rank
             posterNewLabelView.isHidden = movieInfo.rankOldAndNew == "NEW" ? false : true
             
-            guard let posterPath = boxOfficeList.tmdbInfo?.posterPath else {
-                return
-            }
+            posterImageView.downloadPoster(with: movie)
+//            guard let posterPath = movie.tmdbInfo?.posterPath else {
+//                return
+//            }
             
-            URLSession.shared.dataTask(with: URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)")!) { data, response, error in
-                guard let data = data else {
-                    return
-                }
-                
-                DispatchQueue.main.async {
-                    self.posterImageView.image = UIImage(data: data)
-                }
-            }.resume()
+//            URLSession.shared.dataTask(with: URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)")!) { data, response, error in
+//                guard let data = data else {
+//                    return
+//                }
+//
+//                DispatchQueue.main.async { [weak self] in
+//                    self?.posterImageView.image = UIImage(data: data)
+//                }
+//            }.resume()
         }
     }
     
