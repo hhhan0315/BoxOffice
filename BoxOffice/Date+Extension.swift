@@ -16,6 +16,10 @@ extension Date {
         return Calendar.current.date(byAdding: .day, value: -1, to: Date())
     }
     
+    static var oneWeekAge: Date! {
+        return Calendar.current.date(byAdding: .day, value: -7, to: Date())
+    }
+    
     func toString(dateFormat: DateFormat) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = dateFormat.rawValue

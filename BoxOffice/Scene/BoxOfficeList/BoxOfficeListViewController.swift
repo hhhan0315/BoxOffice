@@ -69,10 +69,13 @@ final class BoxOfficeListViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
-        dailyButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
-        weekButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
-        weekendButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
-        weekDaysButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+//        dailyButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+//        weekButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+//        weekendButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+//        weekDaysButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+        buttons.forEach {
+            $0.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+        }
         
         setupViews()
         
@@ -94,7 +97,7 @@ final class BoxOfficeListViewController: UIViewController {
             }
         }
         
-        viewModel.fetch()
+        viewModel.fetchDaily()
     }
     
     // MARK: - Layout
@@ -154,6 +157,19 @@ final class BoxOfficeListViewController: UIViewController {
         buttons.forEach { $0.isSelected = false }
         
         button.isSelected.toggle()
+        
+        switch button {
+        case dailyButton:
+            viewModel.fetchDaily()
+        case weekButton:
+            viewModel.fetch(with: .week)
+        case weekendButton:
+            viewModel.fetch(with: .weekend)
+        case weekDaysButton:
+            viewModel.fetch(with: .weekdays)
+        default:
+            break
+        }
     }
 }
 

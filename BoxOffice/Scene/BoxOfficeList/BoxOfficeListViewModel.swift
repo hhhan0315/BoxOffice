@@ -39,20 +39,16 @@ final class BoxOfficeListViewModel {
     // cell click하면 detailBoxOfficeList
     // 해당 id로 -> video search -> type trailer filter -> 해당 key 저장 -> Youtube api 호출
     
-    func fetch() {
-        loadingStartClosure?()
+    private func fetchMovies(with boxOfficeLists: [BoxOfficeListDTO]) {
+        let movies = boxOfficeLists.map { Movie(movieInfo: $0.toDomain(), movieDetailInfo: nil, tmdbInfo: nil) }
+        self.movies.append(contentsOf: movies)
+        loadingEndClosure?()
+        reloadTableViewClosure?()
+    }
+    
+    private func fetchTmdbInfo() {
         Task {
             do {
-                let yesterday = Date.yesterday.toString(dateFormat: .yyyyMMdd)
-                let dailyResponseDTO = try await apiService.request(api: KobisAPI.getDailyBoxOfficeList(date: yesterday), dataType: DailyResponseDTO.self)
-                let dailyBoxOfficeLists = dailyResponseDTO.boxOfficeResult.dailyBoxOfficeList
-
-                let newBoxOfficeLists = dailyBoxOfficeLists.map { Movie(movieInfo: $0.toDomain(), movieDetailInfo: nil, tmdbInfo: nil) }
-                                
-                movies.append(contentsOf: newBoxOfficeLists)
-                loadingEndClosure?()
-                reloadTableViewClosure?()
-
                 for (index, movie) in movies.enumerated() {
                     let movieName = movie.movieInfo.movieName
                     let openYear = String(movie.movieInfo.openDate.prefix(4))
@@ -64,7 +60,48 @@ final class BoxOfficeListViewModel {
                     movies[index].tmdbInfo = tmdbInfo
                 }
                 reloadTableViewClosure?()
+            } catch let error as APIError {
+                print(error.rawValue)
+            }
+        }
+        
+    }
+    
+    func fetchDaily() {
+        movies.removeAll()
+        
+        reloadTableViewClosure?()
+        
+        loadingStartClosure?()
+        Task {
+            do {
+                let yesterday = Date.yesterday.toString(dateFormat: .yyyyMMdd)
+                let dailyResponseDTO = try await apiService.request(api: KobisAPI.getDailyBoxOfficeList(date: yesterday), dataType: DailyResponseDTO.self)
+                let dailyBoxOfficeLists = dailyResponseDTO.boxOfficeResult.dailyBoxOfficeList
                 
+                fetchMovies(with: dailyBoxOfficeLists)
+
+                fetchTmdbInfo()
+            } catch let error as APIError {
+                print(error.rawValue)
+            }
+        }
+    }
+    
+    func fetch(with weekType: WeekType) {
+        movies.removeAll()
+        
+        reloadTableViewClosure?()
+        loadingStartClosure?()
+        Task {
+            do {
+                let oneWeekAgo = Date.oneWeekAge.toString(dateFormat: .yyyyMMdd)
+                let weeklyResponseDTO = try await apiService.request(api: KobisAPI.getWeeklyBoxOfficeList(date: oneWeekAgo, weekType: weekType), dataType: WeeklyResponseDTO.self)
+                let weeklyBoxOfficeLists = weeklyResponseDTO.boxOfficeResult.weeklyBoxOfficeList
+                
+                fetchMovies(with: weeklyBoxOfficeLists)
+                
+                fetchTmdbInfo()
             } catch let error as APIError {
                 print(error.rawValue)
             }
