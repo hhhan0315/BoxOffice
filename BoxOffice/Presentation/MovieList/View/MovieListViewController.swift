@@ -1,5 +1,5 @@
 //
-//  BoxOfficeListViewController.swift
+//  MovieListViewController.swift
 //  BoxOffice
 //
 //  Created by rae on 2022/11/17.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class BoxOfficeListViewController: UIViewController {
+final class MovieListViewController: UIViewController {
     
     // MARK: - View Define
     
@@ -59,7 +59,7 @@ final class BoxOfficeListViewController: UIViewController {
         return buttons
     }()
     
-    private let viewModel = BoxOfficeListViewModel()
+//    private let viewModel = movielistviewmo()
     
     // MARK: - View LifeCycle
 
@@ -70,13 +70,13 @@ final class BoxOfficeListViewController: UIViewController {
         tableView.delegate = self
         
         setupViews()
-        setupViewModel()
+//        setupViewModel()
         
         buttons.forEach {
             $0.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
         }
         
-        viewModel.fetchDaily()
+//        viewModel.fetchDaily()
     }
     
     // MARK: - Layout
@@ -131,26 +131,26 @@ final class BoxOfficeListViewController: UIViewController {
     
     // MARK: - Bind ViewModel
     
-    private func setupViewModel() {
-        viewModel.loadingStartClosure = {
-            DispatchQueue.main.async { [weak self] in
-                self?.activityIndicatorView.startAnimating()
-            }
-        }
-        
-        viewModel.loadingEndClosure = {
-            DispatchQueue.main.async { [weak self] in
-                self?.activityIndicatorView.stopAnimating()
-            }
-        }
-        
-        viewModel.reloadTableViewClosure = { [weak self] in
-            DispatchQueue.main.async {
-                self?.tableView.reloadData()
-            }
-        }
-    }
-    
+//    private func setupViewModel() {
+//        viewModel.loadingStartClosure = {
+//            DispatchQueue.main.async { [weak self] in
+//                self?.activityIndicatorView.startAnimating()
+//            }
+//        }
+//
+//        viewModel.loadingEndClosure = {
+//            DispatchQueue.main.async { [weak self] in
+//                self?.activityIndicatorView.stopAnimating()
+//            }
+//        }
+//
+//        viewModel.reloadTableViewClosure = { [weak self] in
+//            DispatchQueue.main.async {
+//                self?.tableView.reloadData()
+//            }
+//        }
+//    }
+//
     // MARK: - User Action
     
     @objc private func buttonDidTap(_ button: UIButton) {
@@ -162,24 +162,24 @@ final class BoxOfficeListViewController: UIViewController {
         
         button.isSelected.toggle()
         
-        switch button {
-        case dailyButton:
-            viewModel.fetchDaily()
-        case weekButton:
-            viewModel.fetch(with: .week)
-        case weekendButton:
-            viewModel.fetch(with: .weekend)
-        case weekDaysButton:
-            viewModel.fetch(with: .weekdays)
-        default:
-            break
-        }
+//        switch button {
+//        case dailyButton:
+//            viewModel.fetchDaily()
+//        case weekButton:
+//            viewModel.fetch(with: .week)
+//        case weekendButton:
+//            viewModel.fetch(with: .weekend)
+//        case weekDaysButton:
+//            viewModel.fetch(with: .weekdays)
+//        default:
+//            break
+//        }
     }
 }
 
 // MARK: - UITableViewDataSource
 
-extension BoxOfficeListViewController: UITableViewDataSource {
+extension MovieListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
@@ -188,14 +188,14 @@ extension BoxOfficeListViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: BoxOfficeListTableViewCell.identifier, for: indexPath) as? BoxOfficeListTableViewCell else {
             return .init()
         }
-        cell.movies = viewModel.movies
+//        cell.movies = viewModel.movies
         return cell
     }
 }
 
 // MARK: - UITableViewDelegate
 
-extension BoxOfficeListViewController: UITableViewDelegate {
+extension MovieListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 300
     }

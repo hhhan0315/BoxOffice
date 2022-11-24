@@ -12,5 +12,5 @@ struct MovieDetail {
     let genres: [String]
     let directors: [String]
     let actors: [String]
-    let watchGrade: String
+    let watchGrade: [String]
 }

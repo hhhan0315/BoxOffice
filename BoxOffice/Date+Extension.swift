@@ -20,7 +20,7 @@ extension Date {
         return Calendar.current.date(byAdding: .day, value: -7, to: Date())
     }
     
-    func toString(dateFormat: DateFormat) -> String {
+    func toString(_ dateFormat: DateFormat) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = dateFormat.rawValue
         return dateFormatter.string(from: self)
