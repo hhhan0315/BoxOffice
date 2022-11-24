@@ -11,9 +11,6 @@ struct TmdbResponseDTO: Decodable {
     let results: [TmdbResultDTO]
 }
 
-//extension TmdbResponseDTO {
-//
-//}
 struct TmdbResultDTO: Decodable {
     let backdropPath: String?
     let id: Int

@@ -32,13 +32,8 @@ final class BoxOfficeListViewController: UIViewController {
         return button
     }()
     
-    private lazy var buttons: [UIButton] = {
-        let buttons: [UIButton] = [dailyButton, weekButton, weekendButton, weekDaysButton]
-        return buttons
-    }()
-    
-    private lazy var buttonStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: buttons)
+    private let buttonStackView: UIStackView = {
+        let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         return stackView
@@ -59,6 +54,11 @@ final class BoxOfficeListViewController: UIViewController {
     
     // MARK: - Private Properties
     
+    private lazy var buttons: [UIButton] = {
+        let buttons: [UIButton] = [dailyButton, weekButton, weekendButton, weekDaysButton]
+        return buttons
+    }()
+    
     private let viewModel = BoxOfficeListViewModel()
     
     // MARK: - View LifeCycle
@@ -69,32 +69,11 @@ final class BoxOfficeListViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
-//        dailyButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
-//        weekButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
-//        weekendButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
-//        weekDaysButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+        setupViews()
+        setupViewModel()
+        
         buttons.forEach {
             $0.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
-        }
-        
-        setupViews()
-        
-        viewModel.loadingStartClosure = {
-            DispatchQueue.main.async { [weak self] in
-                self?.activityIndicatorView.startAnimating()
-            }
-        }
-        
-        viewModel.loadingEndClosure = {
-            DispatchQueue.main.async { [weak self] in
-                self?.activityIndicatorView.stopAnimating()
-            }
-        }
-        
-        viewModel.reloadTableViewClosure = { [weak self] in
-            DispatchQueue.main.async {
-                self?.tableView.reloadData()
-            }
         }
         
         viewModel.fetchDaily()
@@ -117,6 +96,9 @@ final class BoxOfficeListViewController: UIViewController {
     }
     
     private func setupButtonStackView() {
+        buttons.forEach {
+            buttonStackView.addArrangedSubview($0)
+        }
         view.addSubview(buttonStackView)
         buttonStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -145,6 +127,28 @@ final class BoxOfficeListViewController: UIViewController {
             activityIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
         ])
+    }
+    
+    // MARK: - Bind ViewModel
+    
+    private func setupViewModel() {
+        viewModel.loadingStartClosure = {
+            DispatchQueue.main.async { [weak self] in
+                self?.activityIndicatorView.startAnimating()
+            }
+        }
+        
+        viewModel.loadingEndClosure = {
+            DispatchQueue.main.async { [weak self] in
+                self?.activityIndicatorView.stopAnimating()
+            }
+        }
+        
+        viewModel.reloadTableViewClosure = { [weak self] in
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
+        }
     }
     
     // MARK: - User Action

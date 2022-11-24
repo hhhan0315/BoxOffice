@@ -40,6 +40,7 @@ final class BoxOfficeListTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         collectionView.dataSource = self
+        collectionView.delegate = self
         
         setupViews()
     }
@@ -80,5 +81,13 @@ extension BoxOfficeListTableViewCell: UICollectionViewDataSource {
         let movie = movies[indexPath.item]
         cell.movie = movie
         return cell
+    }
+}
+
+// MARK: - UICollectionViewDelegate
+
+extension BoxOfficeListTableViewCell: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        print(indexPath.item)
     }
 }
