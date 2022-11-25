@@ -1,5 +1,5 @@
 //
-//  BoxOfficeListTableViewCell.swift
+//  MovieListTableViewCell.swift
 //  BoxOffice
 //
 //  Created by rae on 2022/11/17.
@@ -7,8 +7,8 @@
 
 import UIKit
 
-final class BoxOfficeListTableViewCell: UITableViewCell {
-    static let identifier = String(describing: BoxOfficeListTableViewCell.self)
+final class MovieListTableViewCell: UITableViewCell {
+    static let identifier = String(describing: MovieListTableViewCell.self)
     
     // MARK: - View Define
     
@@ -18,7 +18,7 @@ final class BoxOfficeListTableViewCell: UITableViewCell {
         layout.scrollDirection = .horizontal
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(BoxOfficeListCollectionViewCell.self, forCellWithReuseIdentifier: BoxOfficeListCollectionViewCell.identifier)
+        collectionView.register(MovieListCollectionViewCell.self, forCellWithReuseIdentifier: MovieListCollectionViewCell.identifier)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .systemBackground
         return collectionView
@@ -26,7 +26,7 @@ final class BoxOfficeListTableViewCell: UITableViewCell {
         
     // MARK: - Internal Properties
     
-    var movies: [Movie] = [] {
+    var items: [MovieListItemViewModel] = [] {
         didSet {
             DispatchQueue.main.async { [weak self] in
                 self?.collectionView.reloadData()
@@ -69,24 +69,24 @@ final class BoxOfficeListTableViewCell: UITableViewCell {
 
 // MARK: - UICollectionViewDataSource
 
-extension BoxOfficeListTableViewCell: UICollectionViewDataSource {
+extension MovieListTableViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return movies.count
+        return items.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BoxOfficeListCollectionViewCell.identifier, for: indexPath) as? BoxOfficeListCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieListCollectionViewCell.identifier, for: indexPath) as? MovieListCollectionViewCell else {
             return .init()
         }
-        let movie = movies[indexPath.item]
-        cell.movie = movie
+        let item = items[indexPath.item]
+        cell.item = item
         return cell
     }
 }
 
 // MARK: - UICollectionViewDelegate
 
-extension BoxOfficeListTableViewCell: UICollectionViewDelegate {
+extension MovieListTableViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 //        print(indexPath.item)
     }

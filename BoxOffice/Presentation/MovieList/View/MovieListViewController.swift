@@ -6,42 +6,17 @@
 //
 
 import UIKit
+import Combine
 
 final class MovieListViewController: UIViewController {
     
     // MARK: - View Define
     
-    private let dailyButton: UIButton = {
-        let button = BoxOfficeListButton(title: "일별")
-        button.isSelected = true
-        return button
-    }()
-    
-    private let weekButton: UIButton = {
-        let button = BoxOfficeListButton(title: "주간")
-        return button
-    }()
-    
-    private let weekendButton: UIButton = {
-        let button = BoxOfficeListButton(title: "주말")
-        return button
-    }()
-    
-    private let weekDaysButton: UIButton = {
-        let button = BoxOfficeListButton(title: "주중")
-        return button
-    }()
-    
-    private let buttonStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        return stackView
-    }()
+    private let buttonStackView = MovieListButtonStackView()
     
     private let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(BoxOfficeListTableViewCell.self, forCellReuseIdentifier: BoxOfficeListTableViewCell.identifier)
+        tableView.register(MovieListTableViewCell.self, forCellReuseIdentifier: MovieListTableViewCell.identifier)
         tableView.isScrollEnabled = false
         tableView.separatorStyle = .none
         return tableView
@@ -54,29 +29,24 @@ final class MovieListViewController: UIViewController {
     
     // MARK: - Private Properties
     
-    private lazy var buttons: [UIButton] = {
-        let buttons: [UIButton] = [dailyButton, weekButton, weekendButton, weekDaysButton]
-        return buttons
-    }()
-    
-//    private let viewModel = movielistviewmo()
+    private let viewModel = MovieListViewModel()
+    private let input = PassthroughSubject<MovieListViewModel.Input, Never>()
+    private var cancellables = Set<AnyCancellable>()
     
     // MARK: - View LifeCycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        buttonStackView.delegate = self
+        
         tableView.dataSource = self
         tableView.delegate = self
         
         setupViews()
-//        setupViewModel()
+        bind()
         
-        buttons.forEach {
-            $0.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
-        }
-        
-//        viewModel.fetchDaily()
+        input.send(.viewDidLoad)
     }
     
     // MARK: - Layout
@@ -96,9 +66,6 @@ final class MovieListViewController: UIViewController {
     }
     
     private func setupButtonStackView() {
-        buttons.forEach {
-            buttonStackView.addArrangedSubview($0)
-        }
         view.addSubview(buttonStackView)
         buttonStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -129,51 +96,29 @@ final class MovieListViewController: UIViewController {
         ])
     }
     
-    // MARK: - Bind ViewModel
+    // MARK: - Bind
     
-//    private func setupViewModel() {
-//        viewModel.loadingStartClosure = {
-//            DispatchQueue.main.async { [weak self] in
-//                self?.activityIndicatorView.startAnimating()
-//            }
-//        }
-//
-//        viewModel.loadingEndClosure = {
-//            DispatchQueue.main.async { [weak self] in
-//                self?.activityIndicatorView.stopAnimating()
-//            }
-//        }
-//
-//        viewModel.reloadTableViewClosure = { [weak self] in
-//            DispatchQueue.main.async {
-//                self?.tableView.reloadData()
-//            }
-//        }
-//    }
-//
-    // MARK: - User Action
-    
-    @objc private func buttonDidTap(_ button: UIButton) {
-        guard !button.isSelected else {
-            return
-        }
-        
-        buttons.forEach { $0.isSelected = false }
-        
-        button.isSelected.toggle()
-        
-//        switch button {
-//        case dailyButton:
-//            viewModel.fetchDaily()
-//        case weekButton:
-//            viewModel.fetch(with: .week)
-//        case weekendButton:
-//            viewModel.fetch(with: .weekend)
-//        case weekDaysButton:
-//            viewModel.fetch(with: .weekdays)
-//        default:
-//            break
-//        }
+    private func bind() {
+        let output = viewModel.transform(input: input.eraseToAnyPublisher())
+        output
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] event in
+                switch event {
+                case .fetchDidSucceed:
+                    self?.tableView.reloadData()
+//                    self?.tableView.reloadData()
+                    break
+                case .fetchDidFail(let networkError):
+                    break
+                }
+            }
+            .store(in: &cancellables)
+    }
+}
+
+extension MovieListViewController: MovieListButtonStackViewDelegate {
+    func didSelectButton(title: String) {
+//        input.send(.didSelectButton)
     }
 }
 
@@ -185,10 +130,10 @@ extension MovieListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: BoxOfficeListTableViewCell.identifier, for: indexPath) as? BoxOfficeListTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieListTableViewCell.identifier, for: indexPath) as? MovieListTableViewCell else {
             return .init()
         }
-//        cell.movies = viewModel.movies
+        cell.items = viewModel.items
         return cell
     }
 }

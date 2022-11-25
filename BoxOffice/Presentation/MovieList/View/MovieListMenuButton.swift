@@ -1,5 +1,5 @@
 //
-//  BoxOfficeListButton.swift
+//  MovieListMenuButton.swift
 //  BoxOffice
 //
 //  Created by rae on 2022/11/17.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class BoxOfficeListButton: UIButton {
+final class MovieListMenuButton: UIButton {
     
     override var isSelected: Bool {
         didSet {

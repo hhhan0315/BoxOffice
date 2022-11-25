@@ -35,9 +35,9 @@ struct MovieListItemViewModel {
         
         if let audienceAccNum = Int(movie.audienceAcc) {
             if audienceAccNum < 10_000 {
-                self.audienceAcc = movie.audienceAcc
+                self.audienceAcc = "누적 \(movie.audienceAcc)"
             } else {
-                self.audienceAcc = "\(audienceAccNum / 10_000)만"
+                self.audienceAcc = "누적 \(audienceAccNum / 10_000)만"
             }
         } else {
             self.audienceAcc = nil

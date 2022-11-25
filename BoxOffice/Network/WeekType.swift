@@ -8,7 +8,8 @@
 import Foundation
 
 enum WeekType: Int {
-    case week
-    case weekend
-    case weekdays
+    case daily = -1
+    case week = 0
+    case weekend = 1
+    case weekdays = 2
 }

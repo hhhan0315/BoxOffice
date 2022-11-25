@@ -1,5 +1,5 @@
 //
-//  BoxOfficeListCollectionViewCell.swift
+//  MovieListCollectionViewCell.swift
 //  BoxOffice
 //
 //  Created by rae on 2022/11/17.
@@ -7,8 +7,8 @@
 
 import UIKit
 
-final class BoxOfficeListCollectionViewCell: UICollectionViewCell {
-    static let identifier = String(describing: BoxOfficeListCollectionViewCell.self)
+final class MovieListCollectionViewCell: UICollectionViewCell {
+    static let identifier = String(describing: MovieListCollectionViewCell.self)
     
     // MARK: - View Define
     
@@ -25,7 +25,7 @@ final class BoxOfficeListCollectionViewCell: UICollectionViewCell {
         return label
     }()
         
-    private let posterNewLabelView = PosterNewLabelView()
+    private let posterNewLabelView = MoviePosterNewLabelView()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -59,8 +59,8 @@ final class BoxOfficeListCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Internal Properties
     
-    var movie: Movie? {
-        didSet {
+//    var movie: Movie? {
+//        didSet {
 //            guard let movie = movie else {
 //                return
 //            }
@@ -75,6 +75,20 @@ final class BoxOfficeListCollectionViewCell: UICollectionViewCell {
 //            posterNewLabelView.isHidden = movieInfo.rankOldAndNew == "NEW" ? false : true
 //            
 //            posterImageView.downloadTmdbImage(with: movie.tmdbInfo?.posterPath)
+//        }
+//    }
+    
+    var item: MovieListItemViewModel? {
+        didSet {
+            guard let item = item else {
+                return
+            }
+            
+            titleLabel.text = item.movieName
+            openDateLabel.text = item.openDate
+            audienceAccLabel.text = item.audienceAcc
+            posterRankLabel.text = item.rank
+            posterNewLabelView.isHidden = !item.isNew
         }
     }
     

@@ -1,5 +1,5 @@
 //
-//  PosterNewLabelView.swift
+//  MoviePosterNewLabelView.swift
 //  BoxOffice
 //
 //  Created by rae on 2022/11/22.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class PosterNewLabelView: UIView {
+final class MoviePosterNewLabelView: UIView {
     
     private let newLabel: UILabel = {
         let label = UILabel()
