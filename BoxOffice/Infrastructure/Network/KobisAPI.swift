@@ -7,9 +7,16 @@
 
 import Foundation
 
+enum KobisRequestType: Int {
+    case daily = -1
+    case week = 0
+    case weekend = 1
+    case weekdays = 2
+}
+
 enum KobisAPI: TargetType {
     case getDailyBoxOfficeList(date: String)
-    case getWeeklyBoxOfficeList(date: String, weekType: WeekType)
+    case getWeeklyBoxOfficeList(date: String, kobisRequestType: KobisRequestType)
     case getMovieInfo(movieCode: String)
     
     var method: HTTPMethod {
@@ -38,11 +45,11 @@ enum KobisAPI: TargetType {
                 "key": Secrets.kobisKey,
                 "targetDt": date
             ]
-        case let .getWeeklyBoxOfficeList(date, weekType):
+        case let .getWeeklyBoxOfficeList(date, kobisRequestType):
             return [
                 "key": Secrets.kobisKey,
                 "targetDt": date,
-                "weekGb": "\(weekType.rawValue)"
+                "weekGb": "\(kobisRequestType.rawValue)"
             ]
         case let .getMovieInfo(movieCode):
             return [

@@ -30,7 +30,6 @@ final class MovieListViewController: UIViewController {
     // MARK: - Private Properties
     
     private let viewModel = MovieListViewModel()
-    private let input = PassthroughSubject<MovieListViewModel.Input, Never>()
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - View LifeCycle
@@ -46,7 +45,7 @@ final class MovieListViewController: UIViewController {
         setupViews()
         bind()
         
-        input.send(.viewDidLoad)
+        viewModel.viewDidLoad()
     }
     
     // MARK: - Layout
@@ -99,26 +98,39 @@ final class MovieListViewController: UIViewController {
     // MARK: - Bind
     
     private func bind() {
-        let output = viewModel.transform(input: input.eraseToAnyPublisher())
-        output
+        viewModel.$items
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] event in
-                switch event {
-                case .fetchDidSucceed:
-                    self?.tableView.reloadData()
-//                    self?.tableView.reloadData()
-                    break
-                case .fetchDidFail(let networkError):
-                    break
+            .sink { [weak self] _ in
+                self?.tableView.reloadData()
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$loading
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] loading in
+                if loading {
+                    self?.activityIndicatorView.startAnimating()
+                } else {
+                    self?.activityIndicatorView.stopAnimating()
                 }
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$errorMessage
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] errorMessage in
+                self?.showAlert(message: errorMessage)
             }
             .store(in: &cancellables)
     }
 }
 
 extension MovieListViewController: MovieListButtonStackViewDelegate {
-    func didSelectButton(title: String) {
-//        input.send(.didSelectButton)
+    func didSelectButton(tag: Int) {
+        guard let kobisRequestType = KobisRequestType(rawValue: tag) else {
+            return
+        }
+        viewModel.didSelectButton(kobisRequestType)
     }
 }
 

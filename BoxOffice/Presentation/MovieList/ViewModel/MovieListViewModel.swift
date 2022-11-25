@@ -8,53 +8,52 @@
 import Foundation
 import Combine
 
-final class MovieListViewModel {
+protocol MovieListViewModelInput {
+    func viewDidLoad()
+//    func didSelectItem()
+    func didSelectButton(_ kobisRequestType: KobisRequestType)
+}
+
+protocol MovieListViewModelOutput {
+    var items: [MovieListItemViewModel] { get }
+    var loading: Bool { get }
+    var errorMessage: String? { get }
+}
+
+final class MovieListViewModel: MovieListViewModelInput, MovieListViewModelOutput {
     private let moviesRepository: MoviesRepository = DefaultMoviesRepository(networkService: NetworkService())
     
-    enum Input {
-        case viewDidLoad
-        case didSelectItem
-        case didSelectButton
+    // MARK: - Input
+    
+    func viewDidLoad() {
+        fetchMovies(with: .daily)
     }
+    
+    func didSelectButton(_ kobisRequestType: KobisRequestType) {
+        fetchMovies(with: kobisRequestType)
+    }
+    
+    // MARK: - Output
 
-    enum Output {
-//        case fetchDidSucceed(items: [MovieListItemViewModel])
-        case fetchDidSucceed
-        case fetchDidFail(networkError: NetworkError)
-    }
-    
     @Published var items: [MovieListItemViewModel] = []
+    @Published var loading: Bool = false
+    @Published var errorMessage: String? = nil
     
-//    struct Input {
-//        let viewDidLoad: AnyPublisher<Void, Never>
-//    }
-//
-//    struct Output {
-//        let items: AnyPublisher<[MovieListItemViewModel], Never>
-//    }
-    
-//    private var items: CurrentValueSubject<[MovieListItemViewModel], Never> = .init([])
-    private let output: PassthroughSubject<Output, Never> = .init()
-    private var cancellables = Set<AnyCancellable>()
-    
-    func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
-        input.sink { [weak self] event in
-            switch event {
-            case .viewDidLoad:
-                self?.fetch()
-            default:
-                break
-            }
-        }
-        .store(in: &cancellables)
-        
-        return output.eraseToAnyPublisher()
-    }
-    
-    private func fetch() {
+    private func fetchMovies(with kobisRequestType: KobisRequestType) {
         Task {
             do {
-                let movies = try await moviesRepository.fetchDailyMovieList()
+                items.removeAll()
+                loading = true
+                
+                var movies: [Movie] = []
+                
+                if kobisRequestType == .daily {
+                    movies = try await moviesRepository.fetchDailyMovieList()
+                } else {
+                    movies = try await moviesRepository.fetchWeeklyMovieList(with: kobisRequestType)
+                }
+                
+                var tempItems: [MovieListItemViewModel] = []
                 
                 for movie in movies {
                     let movieName = movie.movieName
@@ -63,13 +62,14 @@ final class MovieListViewModel {
                     let tmdb = tmdbs.first
                     
                     let item = MovieListItemViewModel(movie: movie, tmdb: tmdb)
-                    items.append(item)
+                    tempItems.append(item)
                 }
                 
-                output.send(.fetchDidSucceed)
+                loading = false
+                items.append(contentsOf: tempItems)
             } catch {
                 if let networkError = error as? NetworkError {
-                    output.send(.fetchDidFail(networkError: networkError))
+                    errorMessage = networkError.rawValue
                 }
             }
         }

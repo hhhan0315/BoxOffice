@@ -8,7 +8,7 @@
 import UIKit
 
 protocol MovieListButtonStackViewDelegate: AnyObject {
-    func didSelectButton(title: String)
+    func didSelectButton(tag: Int)
 }
 
 final class MovieListButtonStackView: UIStackView {
@@ -23,21 +23,25 @@ final class MovieListButtonStackView: UIStackView {
     private let dailyButton: UIButton = {
         let button = MovieListMenuButton(title: ButtonTitle.daily.rawValue)
         button.isSelected = true
+        button.tag = KobisRequestType.daily.rawValue
         return button
     }()
     
     private let weekButton: UIButton = {
         let button = MovieListMenuButton(title: ButtonTitle.week.rawValue)
+        button.tag = KobisRequestType.week.rawValue
         return button
     }()
     
     private let weekendButton: UIButton = {
         let button = MovieListMenuButton(title: ButtonTitle.weekend.rawValue)
+        button.tag = KobisRequestType.weekend.rawValue
         return button
     }()
     
     private let weekDaysButton: UIButton = {
         let button = MovieListMenuButton(title: ButtonTitle.weekdays.rawValue)
+        button.tag = KobisRequestType.weekdays.rawValue
         return button
     }()
     
@@ -70,6 +74,6 @@ final class MovieListButtonStackView: UIStackView {
         
         button.isSelected = true
         
-        delegate?.didSelectButton(title: button.title(for: .normal) ?? "")
+        delegate?.didSelectButton(tag: button.tag)
     }
 }
