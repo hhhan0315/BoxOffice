@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 final class MovieListViewModel {
-    private let moviesRepository: DefaultMoviesRepository = .init(networkService: NetworkService())
+    private let moviesRepository: MoviesRepository = DefaultMoviesRepository(networkService: NetworkService())
     
     enum Input {
         case viewDidLoad
@@ -55,8 +55,17 @@ final class MovieListViewModel {
         Task {
             do {
                 let movies = try await moviesRepository.fetchDailyMovieList()
-                let items = movies.map { MovieListItemViewModel(movie: $0) }
-                self.items.append(contentsOf: items)
+                
+                for movie in movies {
+                    let movieName = movie.movieName
+                    let openYear = String(movie.openDate.prefix(4))
+                    let tmdbs = try await moviesRepository.fetchMoviePoster(with: movieName, at: openYear)
+                    let tmdb = tmdbs.first
+                    
+                    let item = MovieListItemViewModel(movie: movie, tmdb: tmdb)
+                    items.append(item)
+                }
+                
                 output.send(.fetchDidSucceed)
             } catch {
                 if let networkError = error as? NetworkError {

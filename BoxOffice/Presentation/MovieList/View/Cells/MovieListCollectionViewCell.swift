@@ -57,26 +57,11 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
         return stackView
     }()
     
-    // MARK: - Internal Properties
+    // MARK: - Private Properties
     
-//    var movie: Movie? {
-//        didSet {
-//            guard let movie = movie else {
-//                return
-//            }
-//            
-//            let movieInfo = movie.movieInfo
-//            
-//            titleLabel.text = movieInfo.movieName
-//            openDateLabel.text = "개봉 \(movieInfo.openDate)"
-//            audienceAccLabel.text = "누적 관객수 \(movieInfo.audienceAcc)"
-//            
-//            posterRankLabel.text = movieInfo.rank
-//            posterNewLabelView.isHidden = movieInfo.rankOldAndNew == "NEW" ? false : true
-//            
-//            posterImageView.downloadTmdbImage(with: movie.tmdbInfo?.posterPath)
-//        }
-//    }
+    private let posterImageRepository: PosterImagesRepository = DefaultPosterImagesRepository(networkImageSerivce: NetworkImageService())
+    
+    // MARK: - Internal Properties
     
     var item: MovieListItemViewModel? {
         didSet {
@@ -89,6 +74,16 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
             audienceAccLabel.text = item.audienceAcc
             posterRankLabel.text = item.rank
             posterNewLabelView.isHidden = !item.isNew
+            
+            Task {
+                guard let posterPath = item.posterPath else {
+                    return
+                }
+                let imageData = try await posterImageRepository.fetchImage(with: posterPath)
+                DispatchQueue.main.async { [weak self] in
+                    self?.posterImageView.image = UIImage(data: imageData)
+                }
+            }
         }
     }
     

@@ -16,7 +16,12 @@ struct MovieListItemViewModel {
     let openDate: String
     let audienceAcc: String?
     
-    init(movie: Movie) {
+    let backdropPath: String?
+    let posterPath: String?
+    let tmdbId: Int?
+    let overview: String?
+    
+    init(movie: Movie, tmdb: Tmdb?) {
         self.rank = movie.rank
         self.isNew = movie.rankOldAndNew == "NEW" ? true : false
         self.movieCode = movie.movieCode
@@ -41,6 +46,19 @@ struct MovieListItemViewModel {
             }
         } else {
             self.audienceAcc = nil
+        }
+        
+        
+        if let tmdb = tmdb {
+            self.backdropPath = tmdb.backdropPath
+            self.posterPath = tmdb.posterPath
+            self.tmdbId = tmdb.id
+            self.overview = tmdb.overview
+        } else {
+            self.backdropPath = nil
+            self.posterPath = nil
+            self.tmdbId = nil
+            self.overview = nil
         }
     }
 }
