@@ -22,6 +22,20 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
     private let posterRankLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 48.0, weight: .bold)
+        label.layer.shadowColor = UIColor.black.cgColor
+        label.layer.shadowRadius = 2.0
+        label.layer.shadowOpacity = 0.8
+        label.layer.shadowOffset = CGSize(width: 3, height: 3)
+        return label
+    }()
+    
+    private let posterRankIntenLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 24.0, weight: .semibold)
+        label.layer.shadowColor = UIColor.black.cgColor
+        label.layer.shadowRadius = 2.0
+        label.layer.shadowOpacity = 0.8
+        label.layer.shadowOffset = CGSize(width: 3, height: 3)
         return label
     }()
         
@@ -72,7 +86,10 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
             titleLabel.text = item.movieName
             openDateLabel.text = item.openDate
             audienceAccLabel.text = item.audienceAcc
+            
             posterRankLabel.text = item.rank
+            posterRankIntenLabel.textColor = item.isRankIntenUp ? .systemRed : .systemBlue
+            posterRankIntenLabel.text = item.rankInten
             posterNewLabelView.isHidden = !item.isNew
             
             Task {
@@ -110,6 +127,7 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
     private func setupViews() {
         setupPosterImageView()
         setupPosterRankLabel()
+        setupPosterRankIntenLabel()
         setupPosterNewLabelView()
         
         setupTitleLabel()
@@ -133,6 +151,15 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             posterRankLabel.leadingAnchor.constraint(equalTo: posterImageView.leadingAnchor, constant: 4.0),
             posterRankLabel.bottomAnchor.constraint(equalTo: posterImageView.bottomAnchor),
+        ])
+    }
+    
+    private func setupPosterRankIntenLabel() {
+        posterImageView.addSubview(posterRankIntenLabel)
+        posterRankIntenLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            posterRankIntenLabel.centerYAnchor.constraint(equalTo: posterRankLabel.centerYAnchor),
+            posterRankIntenLabel.leadingAnchor.constraint(equalTo: posterRankLabel.trailingAnchor),
         ])
     }
     

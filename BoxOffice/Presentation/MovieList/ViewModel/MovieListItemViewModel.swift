@@ -10,6 +10,7 @@ import Foundation
 struct MovieListItemViewModel {
     let rank: String
     let rankInten: String?
+    let isRankIntenUp: Bool
     let isNew: Bool
     let movieCode: String
     let movieName: String
@@ -30,12 +31,15 @@ struct MovieListItemViewModel {
         
         if let rankIntenNum = Int(movie.rankInten), rankIntenNum != 0 {
             if rankIntenNum < 0 {
-                self.rankInten = "▼\(movie.rankInten.replacingOccurrences(of: "-", with: ""))"
+                self.rankInten = "↓\(movie.rankInten.replacingOccurrences(of: "-", with: ""))"
+                self.isRankIntenUp = false
             } else {
-                self.rankInten = "▲\(movie.rankInten)"
+                self.rankInten = "↑\(movie.rankInten)"
+                self.isRankIntenUp = true
             }
         } else {
             self.rankInten = nil
+            self.isRankIntenUp = false
         }
         
         if let audienceAccNum = Int(movie.audienceAcc) {
