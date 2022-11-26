@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol MovieListTableViewCellDelegate: AnyObject {
+    func didSelectItemAt(indexPath: IndexPath)
+}
+
 final class MovieListTableViewCell: UITableViewCell {
     static let identifier = String(describing: MovieListTableViewCell.self)
     
@@ -25,6 +29,8 @@ final class MovieListTableViewCell: UITableViewCell {
     }()
         
     // MARK: - Internal Properties
+    
+    weak var delegate: MovieListTableViewCellDelegate?
     
     var items: [MovieListItemViewModel] = [] {
         didSet {
@@ -88,6 +94,6 @@ extension MovieListTableViewCell: UICollectionViewDataSource {
 
 extension MovieListTableViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        print(indexPath.item)
+        delegate?.didSelectItemAt(indexPath: indexPath)
     }
 }

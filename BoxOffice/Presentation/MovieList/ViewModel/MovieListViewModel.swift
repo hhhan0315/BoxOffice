@@ -10,8 +10,8 @@ import Combine
 
 protocol MovieListViewModelInput {
     func viewDidLoad()
-//    func didSelectItem()
     func didSelectButton(_ kobisRequestType: KobisRequestType)
+    func didSelectItem(_ indexPath: IndexPath)
 }
 
 protocol MovieListViewModelOutput {
@@ -31,6 +31,11 @@ final class MovieListViewModel: MovieListViewModelInput, MovieListViewModelOutpu
     
     func didSelectButton(_ kobisRequestType: KobisRequestType) {
         fetchMovies(with: kobisRequestType)
+    }
+    
+    func didSelectItem(_ indexPath: IndexPath) {
+//        print(items[indexPath.item])
+        // MovieDetailVC 전환
     }
     
     // MARK: - Output

@@ -146,6 +146,7 @@ extension MovieListViewController: UITableViewDataSource {
             return .init()
         }
         cell.items = viewModel.items
+        cell.delegate = self
         return cell
     }
 }
@@ -155,5 +156,13 @@ extension MovieListViewController: UITableViewDataSource {
 extension MovieListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 300
+    }
+}
+
+// MARK: - MovieListTableViewCellDelegate
+
+extension MovieListViewController: MovieListTableViewCellDelegate {
+    func didSelectItemAt(indexPath: IndexPath) {
+        viewModel.didSelectItem(indexPath)
     }
 }
