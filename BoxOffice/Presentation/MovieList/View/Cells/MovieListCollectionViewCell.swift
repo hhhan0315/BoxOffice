@@ -12,34 +12,7 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
     
     // MARK: - View Define
     
-    private let posterImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.layer.cornerRadius = 10
-        imageView.clipsToBounds = true
-        return imageView
-    }()
-    
-    private let posterRankLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 48.0, weight: .bold)
-        label.layer.shadowColor = UIColor.black.cgColor
-        label.layer.shadowRadius = 2.0
-        label.layer.shadowOpacity = 0.8
-        label.layer.shadowOffset = CGSize(width: 3, height: 3)
-        return label
-    }()
-    
-    private let posterRankIntenLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 24.0, weight: .semibold)
-        label.layer.shadowColor = UIColor.black.cgColor
-        label.layer.shadowRadius = 2.0
-        label.layer.shadowOpacity = 0.8
-        label.layer.shadowOffset = CGSize(width: 3, height: 3)
-        return label
-    }()
-        
-    private let posterNewLabelView = MoviePosterNewLabelView()
+    private let moviePosterView = MoviePosterView()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -83,24 +56,10 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
                 return
             }
             
+            moviePosterView.item = item
             titleLabel.text = item.movieName
             openDateLabel.text = item.openDate
             audienceAccLabel.text = item.audienceAcc
-            
-            posterRankLabel.text = item.rank
-            posterRankIntenLabel.textColor = item.isRankIntenUp ? .systemRed : .systemBlue
-            posterRankIntenLabel.text = item.rankInten
-            posterNewLabelView.isHidden = !item.isNew
-            
-            Task {
-                guard let posterPath = item.posterPath else {
-                    return
-                }
-                let imageData = try await posterImageRepository.fetchImage(with: posterPath)
-                DispatchQueue.main.async { [weak self] in
-                    self?.posterImageView.image = UIImage(data: imageData)
-                }
-            }
         }
     }
     
@@ -116,59 +75,28 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
+//    override func prepareForReuse() {
+//        super.prepareForReuse()
         
-        posterImageView.image = nil
-    }
+//        posterImageView.image = nil
+//    }
     
     // MARK: - Layout
     
     private func setupViews() {
-        setupPosterImageView()
-        setupPosterRankLabel()
-        setupPosterRankIntenLabel()
-        setupPosterNewLabelView()
-        
+        setupMoviePosterView()
         setupTitleLabel()
         setupLabelStackView()
     }
     
-    private func setupPosterImageView() {
-        contentView.addSubview(posterImageView)
-        posterImageView.translatesAutoresizingMaskIntoConstraints = false
+    private func setupMoviePosterView() {
+        contentView.addSubview(moviePosterView)
+        moviePosterView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            posterImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            posterImageView.widthAnchor.constraint(equalToConstant: 140.0),
-            posterImageView.heightAnchor.constraint(equalToConstant: 210.0)
-        ])
-    }
-    
-    private func setupPosterRankLabel() {
-        posterImageView.addSubview(posterRankLabel)
-        posterRankLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            posterRankLabel.leadingAnchor.constraint(equalTo: posterImageView.leadingAnchor, constant: 4.0),
-            posterRankLabel.bottomAnchor.constraint(equalTo: posterImageView.bottomAnchor),
-        ])
-    }
-    
-    private func setupPosterRankIntenLabel() {
-        posterImageView.addSubview(posterRankIntenLabel)
-        posterRankIntenLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            posterRankIntenLabel.centerYAnchor.constraint(equalTo: posterRankLabel.centerYAnchor),
-            posterRankIntenLabel.leadingAnchor.constraint(equalTo: posterRankLabel.trailingAnchor),
-        ])
-    }
-    
-    private func setupPosterNewLabelView() {
-        posterImageView.addSubview(posterNewLabelView)
-        posterNewLabelView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            posterNewLabelView.topAnchor.constraint(equalTo: posterImageView.topAnchor, constant: 4.0),
-            posterNewLabelView.trailingAnchor.constraint(equalTo: posterImageView.trailingAnchor, constant: -4.0),
+            moviePosterView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            moviePosterView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            moviePosterView.widthAnchor.constraint(equalToConstant: 140.0),
+            moviePosterView.heightAnchor.constraint(equalToConstant: 210.0)
         ])
     }
     
@@ -176,7 +104,7 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: posterImageView.bottomAnchor),
+            titleLabel.topAnchor.constraint(equalTo: moviePosterView.bottomAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             titleLabel.heightAnchor.constraint(equalToConstant: 40.0),

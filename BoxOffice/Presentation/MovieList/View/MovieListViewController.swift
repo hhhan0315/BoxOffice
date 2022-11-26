@@ -163,6 +163,11 @@ extension MovieListViewController: UITableViewDelegate {
 
 extension MovieListViewController: MovieListTableViewCellDelegate {
     func didSelectItemAt(indexPath: IndexPath) {
-        viewModel.didSelectItem(indexPath)
+//        viewModel.didSelectItem(indexPath)
+        let movieListItemViewModel = viewModel.items[indexPath.item]
+        let moviesRepository = DefaultMoviesRepository(networkService: NetworkService())
+        let movieDetailViewModel = MovieDetailViewModel(movieListItemViewModel: movieListItemViewModel, moviesRepository: moviesRepository)
+        let movieDetailViewController = MovieDetailViewController(viewModel: movieDetailViewModel)
+        navigationController?.pushViewController(movieDetailViewController, animated: true)
     }
 }

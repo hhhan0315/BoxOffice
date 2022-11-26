@@ -51,11 +51,12 @@ struct MovieDetailResponseDTO: Decodable {
 
 extension MovieDetailResponseDTO.MovieInfoResultDTO.MovieInfoDTO {
     func toDomain() -> MovieDetail {
-        return .init(showTime: showTm,
-                     genres: genres.map { $0.genreNm },
-                     directors: directors.map { $0.peopleNm },
-                     actors: actors.map { $0.peopleNm },
-                     watchGrade: audits.map { $0.watchGradeNm }
+        return .init(prdtYear: prdtYear,
+                     showTime: showTm,
+                     genreNames: genres.map { $0.genreNm },
+                     directorNames: directors.map { $0.peopleNm },
+                     actorNames: actors.map { $0.peopleNm },
+                     watchGradeNames: audits.map { $0.watchGradeNm }
         )
     }
 }
