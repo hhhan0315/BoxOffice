@@ -11,13 +11,8 @@ final class MovieBackdropView: UIView {
     
     private let imageView: UIImageView = {
         let imageView = UIImageView()
-        return imageView
-    }()
-    
-    private let blackImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.backgroundColor = .black
-        imageView.layer.opacity = 0.3
+        imageView.contentMode = .scaleAspectFit
+        imageView.layer.opacity = 0.7
         return imageView
     }()
     
@@ -53,7 +48,6 @@ final class MovieBackdropView: UIView {
     
     private func setupViews() {
         setupImageView()
-        setupBlackImageView()
     }
     
     private func setupImageView() {
@@ -64,17 +58,6 @@ final class MovieBackdropView: UIView {
             imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
             imageView.heightAnchor.constraint(equalToConstant: 220),
-        ])
-    }
-    
-    private func setupBlackImageView() {
-        addSubview(blackImageView)
-        blackImageView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            blackImageView.topAnchor.constraint(equalTo: topAnchor),
-            blackImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            blackImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            blackImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
     }
 }

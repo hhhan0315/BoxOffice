@@ -13,8 +13,35 @@ final class MovieDetailViewController: UIViewController {
     // MARK: - View Define
     
     private let movieBackdropView = MovieBackdropView()
+        
+    private let posterImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.layer.cornerRadius = 10
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
     
-    private let moviePosterView = MoviePosterView()
+    private let movieNameLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 17.0, weight: .semibold)
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    private let movieNameEnglishLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 15.0, weight: .semibold)
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    private lazy var labelStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [movieNameLabel, movieNameEnglishLabel])
+        stackView.axis = .vertical
+        stackView.spacing = 5
+        return stackView
+    }()
     
     private let activityIndicatorView: UIActivityIndicatorView = {
         let activityIndicatorView = UIActivityIndicatorView(style: .large)
@@ -54,8 +81,11 @@ final class MovieDetailViewController: UIViewController {
         view.backgroundColor = .systemBackground
         
         setupNavigation()
+        
         setupMovieBackdropView()
-        setupMoviePosterView()
+        setupPosterImageView()
+        setupLabelStackView()
+        
         setupAcitivityIndicatorView()
     }
     
@@ -71,21 +101,28 @@ final class MovieDetailViewController: UIViewController {
             movieBackdropView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             movieBackdropView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             movieBackdropView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            movieBackdropView.heightAnchor.constraint(equalToConstant: 350.0),
+            movieBackdropView.heightAnchor.constraint(equalToConstant: 320.0),
         ])
     }
     
-    private func setupMoviePosterView() {
-        movieBackdropView.addSubview(moviePosterView)
-        moviePosterView.translatesAutoresizingMaskIntoConstraints = false
+    private func setupPosterImageView() {
+        movieBackdropView.addSubview(posterImageView)
+        posterImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-//            moviePosterView.topAnchor.constraint(equalTo: movieBackdropView.bottomAnchor),
-//            moviePosterView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            
-            moviePosterView.leadingAnchor.constraint(equalTo: movieBackdropView.leadingAnchor, constant: 16.0),
-            moviePosterView.bottomAnchor.constraint(equalTo: movieBackdropView.bottomAnchor, constant: -16.0),
-            moviePosterView.widthAnchor.constraint(equalToConstant: 120.0),
-            moviePosterView.heightAnchor.constraint(equalToConstant: 180.0),
+            posterImageView.leadingAnchor.constraint(equalTo: movieBackdropView.leadingAnchor, constant: 16.0),
+            posterImageView.bottomAnchor.constraint(equalTo: movieBackdropView.bottomAnchor, constant: -16.0),
+            posterImageView.widthAnchor.constraint(equalToConstant: 120.0),
+            posterImageView.heightAnchor.constraint(equalToConstant: 180.0),
+        ])
+    }
+    
+    private func setupLabelStackView() {
+        movieBackdropView.addSubview(labelStackView)
+        labelStackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            labelStackView.leadingAnchor.constraint(equalTo: posterImageView.trailingAnchor, constant: 16.0),
+            labelStackView.bottomAnchor.constraint(equalTo: posterImageView.bottomAnchor),
+            labelStackView.trailingAnchor.constraint(equalTo: movieBackdropView.trailingAnchor, constant: -16.0),
         ])
     }
     
@@ -104,15 +141,27 @@ final class MovieDetailViewController: UIViewController {
         viewModel.$item
             .receive(on: DispatchQueue.main)
             .sink { [weak self] item in
-                self?.navigationItem.title = item?.movieName
                 self?.movieBackdropView.item = item
-                self?.moviePosterView.item = item
+                self?.movieNameLabel.text = item?.movieName
+                
+                Task {
+                    guard let posterPath = item?.posterPath else {
+                        return
+                    }
+                    guard let imageData = try await self?.posterImageRepository.fetchImage(with: posterPath) else {
+                        return
+                    }
+                    DispatchQueue.main.async { [weak self] in
+                        self?.posterImageView.image = UIImage(data: imageData)
+                    }
+                }
             }
             .store(in: &cancellables)
         
         viewModel.$itemDetail
             .receive(on: DispatchQueue.main)
             .sink { [weak self] itemDetail in
+                self?.movieNameEnglishLabel.text = itemDetail?.movieNameEnglishAndPrdtYear
             }
             .store(in: &cancellables)
         
