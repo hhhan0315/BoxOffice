@@ -8,6 +8,7 @@
 import Foundation
 
 struct MovieDetail {
+    let movieNameEnglish: String
     let prdtYear: String
     let showTime: String
     let genreNames: [String]

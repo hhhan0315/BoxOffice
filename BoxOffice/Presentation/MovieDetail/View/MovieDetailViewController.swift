@@ -12,6 +12,8 @@ final class MovieDetailViewController: UIViewController {
     
     // MARK: - View Define
     
+    private let movieBackdropView = MovieBackdropView()
+    
     private let moviePosterView = MoviePosterView()
     
     private let activityIndicatorView: UIActivityIndicatorView = {
@@ -21,6 +23,7 @@ final class MovieDetailViewController: UIViewController {
     
     // MARK: - Private Properties
     
+    private let posterImageRepository: PosterImagesRepository = DefaultPosterImagesRepository(networkImageSerivce: NetworkImageService())
     private let viewModel: MovieDetailViewModel
     private var cancellables = Set<AnyCancellable>()
     
@@ -51,6 +54,7 @@ final class MovieDetailViewController: UIViewController {
         view.backgroundColor = .systemBackground
         
         setupNavigation()
+        setupMovieBackdropView()
         setupMoviePosterView()
         setupAcitivityIndicatorView()
     }
@@ -60,14 +64,28 @@ final class MovieDetailViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: nil)
     }
     
+    private func setupMovieBackdropView() {
+        view.addSubview(movieBackdropView)
+        movieBackdropView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            movieBackdropView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            movieBackdropView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            movieBackdropView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            movieBackdropView.heightAnchor.constraint(equalToConstant: 350.0),
+        ])
+    }
+    
     private func setupMoviePosterView() {
-        view.addSubview(moviePosterView)
+        movieBackdropView.addSubview(moviePosterView)
         moviePosterView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            moviePosterView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            moviePosterView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            moviePosterView.widthAnchor.constraint(equalToConstant: 200.0),
-            moviePosterView.heightAnchor.constraint(equalToConstant: 300.0),
+//            moviePosterView.topAnchor.constraint(equalTo: movieBackdropView.bottomAnchor),
+//            moviePosterView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            
+            moviePosterView.leadingAnchor.constraint(equalTo: movieBackdropView.leadingAnchor, constant: 16.0),
+            moviePosterView.bottomAnchor.constraint(equalTo: movieBackdropView.bottomAnchor, constant: -16.0),
+            moviePosterView.widthAnchor.constraint(equalToConstant: 120.0),
+            moviePosterView.heightAnchor.constraint(equalToConstant: 180.0),
         ])
     }
     
@@ -87,6 +105,7 @@ final class MovieDetailViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] item in
                 self?.navigationItem.title = item?.movieName
+                self?.movieBackdropView.item = item
                 self?.moviePosterView.item = item
             }
             .store(in: &cancellables)

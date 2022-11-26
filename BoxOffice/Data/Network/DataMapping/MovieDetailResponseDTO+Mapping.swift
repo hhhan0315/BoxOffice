@@ -51,7 +51,8 @@ struct MovieDetailResponseDTO: Decodable {
 
 extension MovieDetailResponseDTO.MovieInfoResultDTO.MovieInfoDTO {
     func toDomain() -> MovieDetail {
-        return .init(prdtYear: prdtYear,
+        return .init(movieNameEnglish: movieNmEn,
+                     prdtYear: prdtYear,
                      showTime: showTm,
                      genreNames: genres.map { $0.genreNm },
                      directorNames: directors.map { $0.peopleNm },

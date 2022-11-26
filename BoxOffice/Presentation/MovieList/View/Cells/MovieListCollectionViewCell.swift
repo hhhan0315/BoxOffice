@@ -17,14 +17,14 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 16.0, weight: .bold)
+        label.font = .systemFont(ofSize: 15.0, weight: .bold)
         return label
     }()
     
     private let openDateLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 15.0, weight: .semibold)
+        label.font = .systemFont(ofSize: 13.0, weight: .semibold)
         label.textColor = .lightGray
         return label
     }()
@@ -32,7 +32,7 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
     private let audienceAccLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 15.0, weight: .semibold)
+        label.font = .systemFont(ofSize: 13.0, weight: .semibold)
         label.textColor = .lightGray
         return label
     }()

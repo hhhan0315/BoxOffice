@@ -8,6 +8,7 @@
 import Foundation
 
 final class MovieDetailItemViewModel {
+    let movieNameEnglish: String
     let prdtYear: String
     let showTime: String
     let genreNames: String
@@ -16,6 +17,7 @@ final class MovieDetailItemViewModel {
     let watchGradeName: String
     
     init(movieDetail: MovieDetail) {
+        self.movieNameEnglish = movieDetail.movieNameEnglish
         self.prdtYear = movieDetail.prdtYear
         self.showTime = "\(movieDetail.showTime)분"
         self.genreNames = movieDetail.genreNames.joined(separator: "/")
