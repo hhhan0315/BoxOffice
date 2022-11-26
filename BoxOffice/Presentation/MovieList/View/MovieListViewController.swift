@@ -61,7 +61,7 @@ final class MovieListViewController: UIViewController {
     
     private func setupNavigation() {
         navigationItem.title = "Box Office"
-        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.backButtonTitle = ""
     }
     
     private func setupButtonStackView() {

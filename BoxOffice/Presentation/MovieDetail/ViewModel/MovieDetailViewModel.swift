@@ -12,7 +12,8 @@ protocol MovieDetailViewModelInput {
 }
 
 protocol MovieDetailViewModelOutput {
-    var item: MovieDetailItemViewModel? { get }
+    var item: MovieListItemViewModel? { get }
+    var itemDetail: MovieDetailItemViewModel? { get }
     var loading: Bool { get }
     var errorMessage: String? { get }
 }
@@ -34,7 +35,8 @@ final class MovieDetailViewModel: MovieDetailViewModelInput, MovieDetailViewMode
     
     // MARK: - Output
     
-    @Published var item: MovieDetailItemViewModel? = nil
+    @Published var item: MovieListItemViewModel? = nil
+    @Published var itemDetail: MovieDetailItemViewModel? = nil
     @Published var loading: Bool = false
     @Published var errorMessage: String? = nil
     
@@ -44,10 +46,11 @@ final class MovieDetailViewModel: MovieDetailViewModelInput, MovieDetailViewMode
                 self.loading = true
                 
                 let movieDetail = try await moviesRepository.fetchMovieDetail(with: movieCode)
-                let item = MovieDetailItemViewModel(movieListItemViewModel: self.movieListItemViewModel, movieDetail: movieDetail)
+                let itemDetail = MovieDetailItemViewModel(movieDetail: movieDetail)
                 
                 self.loading = false
-                self.item = item
+                self.item = movieListItemViewModel
+                self.itemDetail = itemDetail
             } catch {
                 if let networkError = error as? NetworkError {
                     errorMessage = networkError.rawValue

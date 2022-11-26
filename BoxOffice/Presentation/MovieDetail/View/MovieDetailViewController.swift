@@ -12,6 +12,8 @@ final class MovieDetailViewController: UIViewController {
     
     // MARK: - View Define
     
+    private let moviePosterView = MoviePosterView()
+    
     private let activityIndicatorView: UIActivityIndicatorView = {
         let activityIndicatorView = UIActivityIndicatorView(style: .large)
         return activityIndicatorView
@@ -49,12 +51,24 @@ final class MovieDetailViewController: UIViewController {
         view.backgroundColor = .systemBackground
         
         setupNavigation()
+        setupMoviePosterView()
         setupAcitivityIndicatorView()
     }
     
     private func setupNavigation() {
-//        navigationItem.title =
         navigationController?.navigationBar.tintColor = .white
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: nil)
+    }
+    
+    private func setupMoviePosterView() {
+        view.addSubview(moviePosterView)
+        moviePosterView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            moviePosterView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            moviePosterView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            moviePosterView.widthAnchor.constraint(equalToConstant: 200.0),
+            moviePosterView.heightAnchor.constraint(equalToConstant: 300.0),
+        ])
     }
     
     private func setupAcitivityIndicatorView() {
@@ -72,8 +86,14 @@ final class MovieDetailViewController: UIViewController {
         viewModel.$item
             .receive(on: DispatchQueue.main)
             .sink { [weak self] item in
-//                print(item)
-//                self?.tableView.reloadData()
+                self?.navigationItem.title = item?.movieName
+                self?.moviePosterView.item = item
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$itemDetail
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] itemDetail in
             }
             .store(in: &cancellables)
         

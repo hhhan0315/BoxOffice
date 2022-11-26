@@ -22,6 +22,8 @@ final class MoviePosterNewLabelView: UIView {
         backgroundColor = .black
         layer.opacity = 0.7
         
+        isHidden = true
+        
         setupNewLabel()
     }
     
