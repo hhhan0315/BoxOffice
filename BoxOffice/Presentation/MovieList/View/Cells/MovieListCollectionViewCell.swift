@@ -13,30 +13,36 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
     // MARK: - View Define
         
     private let posterImageView: UIImageView = {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [UIColor.clear.cgColor, UIColor.black.cgColor]
+        gradientLayer.locations = [0.7 , 1]
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: 140, height: 210)
+        
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 10
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFit
+        imageView.layer.addSublayer(gradientLayer)
         return imageView
     }()
     
     private let posterRankLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 48.0, weight: .bold)
-        label.layer.shadowColor = UIColor.black.cgColor
-        label.layer.shadowRadius = 2.0
-        label.layer.shadowOpacity = 0.8
-        label.layer.shadowOffset = CGSize(width: 3, height: 3)
+        label.font = .systemFont(ofSize: 42.0, weight: .bold)
+//        label.layer.shadowColor = UIColor.black.cgColor
+//        label.layer.shadowRadius = 2.0
+//        label.layer.shadowOpacity = 0.8
+//        label.layer.shadowOffset = CGSize(width: 3, height: 3)
         return label
     }()
     
     private let posterRankIntenLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 24.0, weight: .semibold)
-        label.layer.shadowColor = UIColor.black.cgColor
-        label.layer.shadowRadius = 2.0
-        label.layer.shadowOpacity = 0.8
-        label.layer.shadowOffset = CGSize(width: 3, height: 3)
+        label.font = .systemFont(ofSize: 17.0, weight: .semibold)
+//        label.layer.shadowColor = UIColor.black.cgColor
+//        label.layer.shadowRadius = 2.0
+//        label.layer.shadowOpacity = 0.8
+//        label.layer.shadowOffset = CGSize(width: 3, height: 3)
         return label
     }()
         
@@ -45,7 +51,7 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 15.0, weight: .bold)
+        label.font = .systemFont(ofSize: 15.0, weight: .semibold)
         return label
     }()
     
@@ -132,7 +138,7 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
         setupPosterNewLabelView()
         
         setupTitleLabel()
-        setupLabelStackView()
+//        setupLabelStackView()
     }
     
     private func setupPosterImageView() {
@@ -141,8 +147,8 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             posterImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            posterImageView.widthAnchor.constraint(equalToConstant: 140.0),
-            posterImageView.heightAnchor.constraint(equalToConstant: 210.0)
+            posterImageView.widthAnchor.constraint(equalToConstant: 140), // 65 130
+            posterImageView.heightAnchor.constraint(equalToConstant: 210), // 65  195
         ])
     }
     
@@ -159,8 +165,9 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
         posterImageView.addSubview(posterRankIntenLabel)
         posterRankIntenLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            posterRankIntenLabel.centerYAnchor.constraint(equalTo: posterRankLabel.centerYAnchor),
+//            posterRankIntenLabel.centerYAnchor.constraint(equalTo: posterRankLabel.centerYAnchor),
             posterRankIntenLabel.leadingAnchor.constraint(equalTo: posterRankLabel.trailingAnchor),
+            posterRankIntenLabel.bottomAnchor.constraint(equalTo: posterRankLabel.bottomAnchor, constant: -6.0),
         ])
     }
     
