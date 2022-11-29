@@ -29,7 +29,9 @@ final class MovieListViewController: UIViewController {
     
     // MARK: - Private Properties
     
-    private let viewModel = MovieListViewModel()
+    private let viewModel = MovieListViewModel(
+        fetchMoviesUseCase: DefaultFetchMoviesUseCase(moviesRepository: DefaultMoviesRepository(networkService: NetworkService())),
+        fetchTmdbUseCase: DefaultFetchTmdbUseCase(moviesRepository: DefaultMoviesRepository(networkService: NetworkService())))
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - View LifeCycle
@@ -127,10 +129,10 @@ final class MovieListViewController: UIViewController {
 
 extension MovieListViewController: MovieListButtonStackViewDelegate {
     func didSelectButton(tag: Int) {
-        guard let kobisRequestType = KobisRequestType(rawValue: tag) else {
+        guard let kobisWeekType = KobisWeekType(rawValue: tag) else {
             return
         }
-        viewModel.didSelectButton(kobisRequestType)
+        viewModel.didSelectButton(with: kobisWeekType)
     }
 }
 

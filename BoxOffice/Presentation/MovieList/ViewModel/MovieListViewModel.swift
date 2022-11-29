@@ -10,7 +10,7 @@ import Combine
 
 protocol MovieListViewModelInput {
     func viewDidLoad()
-    func didSelectButton(_ kobisRequestType: KobisRequestType)
+    func didSelectButton(with kobisWeekType: KobisWeekType)
 //    func didSelectItem(_ indexPath: IndexPath)
 }
 
@@ -21,7 +21,13 @@ protocol MovieListViewModelOutput {
 }
 
 final class MovieListViewModel: MovieListViewModelInput, MovieListViewModelOutput {
-    private let moviesRepository: MoviesRepository = DefaultMoviesRepository(networkService: NetworkService())
+    private let fetchMoviesUseCase: FetchMoviesUseCase
+    private let fetchTmdbUseCase: FetchTmdbUseCase
+    
+    init(fetchMoviesUseCase: FetchMoviesUseCase, fetchTmdbUseCase: FetchTmdbUseCase) {
+        self.fetchMoviesUseCase = fetchMoviesUseCase
+        self.fetchTmdbUseCase = fetchTmdbUseCase
+    }
     
     // MARK: - Input
     
@@ -29,8 +35,8 @@ final class MovieListViewModel: MovieListViewModelInput, MovieListViewModelOutpu
         fetchMovies(with: .daily)
     }
     
-    func didSelectButton(_ kobisRequestType: KobisRequestType) {
-        fetchMovies(with: kobisRequestType)
+    func didSelectButton(with kobisWeekType: KobisWeekType) {
+        fetchMovies(with: kobisWeekType)
     }
     
 //    func didSelectItem(_ indexPath: IndexPath) {
@@ -39,39 +45,28 @@ final class MovieListViewModel: MovieListViewModelInput, MovieListViewModelOutpu
 //    }
     
     // MARK: - Output
-
+    
     @Published var items: [MovieListItemViewModel] = []
     @Published var loading: Bool = false
     @Published var errorMessage: String? = nil
     
-    private func fetchMovies(with kobisRequestType: KobisRequestType) {
+    private func fetchMovies(with kobisWeekType: KobisWeekType) {
+        items.removeAll()
+        loading = true
+        
         Task {
             do {
-                items.removeAll()
-                loading = true
-                
-                var movies: [Movie] = []
-                
-                if kobisRequestType == .daily {
-                    movies = try await moviesRepository.fetchDailyMovieList()
-                } else {
-                    movies = try await moviesRepository.fetchWeeklyMovieList(with: kobisRequestType)
-                }
-                
-                var tempItems: [MovieListItemViewModel] = []
-                
-                for movie in movies {
-                    let movieName = movie.movieName
-                    let openYear = String(movie.openDate.prefix(4))
-                    let tmdbs = try await moviesRepository.fetchMoviePoster(with: movieName, at: openYear)
-                    let tmdb = tmdbs.first
-                    
-                    let item = MovieListItemViewModel(movie: movie, tmdb: tmdb)
-                    tempItems.append(item)
-                }
+                let movies = try await fetchMoviesUseCase.execute(kobisWeekType: kobisWeekType)
+                var items = movies.map { MovieListItemViewModel(movie: $0) }
                 
                 loading = false
-                items.append(contentsOf: tempItems)
+                self.items = items
+                
+                let tmdbs = try await fetchTmdbUseCase.execute(movies: movies)
+                for (index, tmdb) in tmdbs.enumerated() {
+                    items[index].tmdb = tmdb
+                }
+                self.items = items
             } catch {
                 if let networkError = error as? NetworkError {
                     errorMessage = networkError.rawValue

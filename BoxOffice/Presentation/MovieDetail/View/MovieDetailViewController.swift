@@ -142,19 +142,19 @@ final class MovieDetailViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] item in
                 self?.movieBackdropView.item = item
-                self?.movieNameLabel.text = item?.movieName
+//                self?.movieNameLabel.text = item?.movieName
                 
-                Task {
-                    guard let posterPath = item?.posterPath else {
-                        return
-                    }
-                    guard let imageData = try await self?.posterImageRepository.fetchImage(with: posterPath) else {
-                        return
-                    }
-                    DispatchQueue.main.async { [weak self] in
-                        self?.posterImageView.image = UIImage(data: imageData)
-                    }
-                }
+//                Task {
+//                    guard let posterPath = item?.posterPath else {
+//                        return
+//                    }
+//                    guard let imageData = try await self?.posterImageRepository.fetchImage(with: posterPath) else {
+//                        return
+//                    }
+//                    DispatchQueue.main.async { [weak self] in
+//                        self?.posterImageView.image = UIImage(data: imageData)
+//                    }
+//                }
             }
             .store(in: &cancellables)
         

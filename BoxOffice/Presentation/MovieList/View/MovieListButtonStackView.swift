@@ -23,25 +23,25 @@ final class MovieListButtonStackView: UIStackView {
     private let dailyButton: UIButton = {
         let button = MovieListMenuButton(title: ButtonTitle.daily.rawValue)
         button.isSelected = true
-        button.tag = KobisRequestType.daily.rawValue
+        button.tag = KobisWeekType.daily.rawValue
         return button
     }()
     
     private let weekButton: UIButton = {
         let button = MovieListMenuButton(title: ButtonTitle.week.rawValue)
-        button.tag = KobisRequestType.week.rawValue
+        button.tag = KobisWeekType.week.rawValue
         return button
     }()
     
     private let weekendButton: UIButton = {
         let button = MovieListMenuButton(title: ButtonTitle.weekend.rawValue)
-        button.tag = KobisRequestType.weekend.rawValue
+        button.tag = KobisWeekType.weekend.rawValue
         return button
     }()
     
     private let weekDaysButton: UIButton = {
         let button = MovieListMenuButton(title: ButtonTitle.weekdays.rawValue)
-        button.tag = KobisRequestType.weekdays.rawValue
+        button.tag = KobisWeekType.weekdays.rawValue
         return button
     }()
     

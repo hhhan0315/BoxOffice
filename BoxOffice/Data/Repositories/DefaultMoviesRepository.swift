@@ -23,9 +23,9 @@ extension DefaultMoviesRepository: MoviesRepository {
         return movies
     }
     
-    func fetchWeeklyMovieList(with kobisRequestType: KobisRequestType) async throws -> [Movie] {
+    func fetchWeeklyMovieList(with kobisWeekType: KobisWeekType) async throws -> [Movie] {
         let oneWeekAgo = Date.oneWeekAge.toString(.yyyyMMdd)
-        let weeklyMoviesResponseDTO = try await networkService.request(api: KobisAPI.getWeeklyBoxOfficeList(date: oneWeekAgo, kobisRequestType: kobisRequestType), dataType: WeeklyMoviesResponseDTO.self)
+        let weeklyMoviesResponseDTO = try await networkService.request(api: KobisAPI.getWeeklyBoxOfficeList(date: oneWeekAgo, kobisWeekType: kobisWeekType), dataType: WeeklyMoviesResponseDTO.self)
         let movies = weeklyMoviesResponseDTO.boxOfficeResult.weeklyBoxOfficeList.map { $0.toDomain() }
         return movies
     }

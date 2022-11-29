@@ -30,7 +30,7 @@ final class MovieDetailViewModel: MovieDetailViewModelInput, MovieDetailViewMode
     // MARK: - Input
     
     func viewDidLoad() {
-        fetchMovieDetail(with: movieListItemViewModel.movieCode)
+//        fetchMovieDetail(with: movieListItemViewModel.movieCode)
     }
     
     // MARK: - Output

@@ -24,15 +24,15 @@ final class MovieBackdropView: UIView {
                 return
             }
             
-            Task {
-                guard let backdropPath = item.backdropPath else {
-                    return
-                }
-                let imageData = try await posterImageRepository.fetchImage(with: backdropPath)
-                DispatchQueue.main.async { [weak self] in
-                    self?.imageView.image = UIImage(data: imageData)
-                }
-            }
+//            Task {
+//                guard let backdropPath = item.backdropPath else {
+//                    return
+//                }
+//                let imageData = try await posterImageRepository.fetchImage(with: backdropPath)
+//                DispatchQueue.main.async { [weak self] in
+//                    self?.imageView.image = UIImage(data: imageData)
+//                }
+//            }
         }
     }
 

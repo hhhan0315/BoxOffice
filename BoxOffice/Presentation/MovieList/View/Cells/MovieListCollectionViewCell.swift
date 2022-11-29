@@ -11,7 +11,7 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
     static let identifier = String(describing: MovieListCollectionViewCell.self)
     
     // MARK: - View Define
-        
+    
     private let posterImageView: UIImageView = {
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [UIColor.clear.cgColor, UIColor.black.cgColor]
@@ -29,23 +29,15 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
     private let posterRankLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 42.0, weight: .bold)
-//        label.layer.shadowColor = UIColor.black.cgColor
-//        label.layer.shadowRadius = 2.0
-//        label.layer.shadowOpacity = 0.8
-//        label.layer.shadowOffset = CGSize(width: 3, height: 3)
         return label
     }()
     
     private let posterRankIntenLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17.0, weight: .semibold)
-//        label.layer.shadowColor = UIColor.black.cgColor
-//        label.layer.shadowRadius = 2.0
-//        label.layer.shadowOpacity = 0.8
-//        label.layer.shadowOffset = CGSize(width: 3, height: 3)
         return label
     }()
-        
+    
     private let posterNewLabelView = MoviePosterNewLabelView()
     
     private let titleLabel: UILabel = {
@@ -90,17 +82,17 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
                 return
             }
             
-            titleLabel.text = item.movieName
-            openDateLabel.text = item.openDate
-            audienceAccLabel.text = item.audienceAcc
+            titleLabel.text = item.movieItem.movieName
+//            openDateLabel.text = item.movieItem.openDate
+//            audienceAccLabel.text = item.movieItem.audienceAcc
             
-            posterRankLabel.text = item.rank
-            posterRankIntenLabel.textColor = item.isRankIntenUp ? .systemRed : .systemBlue
-            posterRankIntenLabel.text = item.rankInten
-            posterNewLabelView.isHidden = !item.isNew
+            posterRankLabel.text = item.movieItem.rank
+            posterRankIntenLabel.textColor = item.movieItem.isRankIntenUp ? .systemRed : .systemBlue
+            posterRankIntenLabel.text = item.movieItem.rankInten
+            posterNewLabelView.isHidden = !item.movieItem.isNew
             
             Task {
-                guard let posterPath = item.posterPath else {
+                guard let posterPath = item.tmdb?.posterPath else {
                     return
                 }
                 let imageData = try await posterImageRepository.fetchImage(with: posterPath)
@@ -138,7 +130,7 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
         setupPosterNewLabelView()
         
         setupTitleLabel()
-//        setupLabelStackView()
+        //        setupLabelStackView()
     }
     
     private func setupPosterImageView() {
@@ -147,8 +139,8 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             posterImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            posterImageView.widthAnchor.constraint(equalToConstant: 140), // 65 130
-            posterImageView.heightAnchor.constraint(equalToConstant: 210), // 65  195
+            posterImageView.widthAnchor.constraint(equalToConstant: 140),
+            posterImageView.heightAnchor.constraint(equalToConstant: 210),
         ])
     }
     
@@ -165,7 +157,7 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
         posterImageView.addSubview(posterRankIntenLabel)
         posterRankIntenLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-//            posterRankIntenLabel.centerYAnchor.constraint(equalTo: posterRankLabel.centerYAnchor),
+            //            posterRankIntenLabel.centerYAnchor.constraint(equalTo: posterRankLabel.centerYAnchor),
             posterRankIntenLabel.leadingAnchor.constraint(equalTo: posterRankLabel.trailingAnchor),
             posterRankIntenLabel.bottomAnchor.constraint(equalTo: posterRankLabel.bottomAnchor, constant: -6.0),
         ])

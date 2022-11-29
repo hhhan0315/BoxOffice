@@ -8,61 +8,69 @@
 import Foundation
 
 struct MovieListItemViewModel {
-    let rank: String
-    let rankInten: String?
-    let isRankIntenUp: Bool
-    let isNew: Bool
-    let movieCode: String
-    let movieName: String
-    let openDate: String
-    let audienceAcc: String?
     
-    let backdropPath: String?
-    let posterPath: String?
-    let tmdbId: Int?
-    let overview: String?
+    var movieItem: MovieItem
+    var tmdb: Tmdb?
     
-    init(movie: Movie, tmdb: Tmdb?) {
-        self.rank = movie.rank
-        self.isNew = movie.rankOldAndNew == "NEW" ? true : false
-        self.movieCode = movie.movieCode
-        self.movieName = movie.movieName
-        self.openDate = "개봉 \(movie.openDate.replacingOccurrences(of: "-", with: "."))"
+    struct MovieItem {
+        let rank: String
+        var rankInten: String?
+        var isRankIntenUp: Bool
+        let isNew: Bool
+        let movieCode: String
+        let movieName: String
+        let openDate: String
+        var audienceAcc: String?
+    }
+    
+    init(movie: Movie) {
+        self.movieItem = .init(rank: movie.rank,
+                               rankInten: nil,
+                               isRankIntenUp: false,
+                               isNew: movie.rankOldAndNew == "NEW" ? true : false,
+                               movieCode: movie.movieCode,
+                               movieName: movie.movieName,
+                               openDate: "개봉 \(movie.openDate.replacingOccurrences(of: "-", with: "."))",
+                               audienceAcc: nil)
         
+        self.movieItem.rankInten = setupRankIntenNum(with: movie)
+        self.movieItem.isRankIntenUp = setupIsRankIntenUp(with: movie)
+        self.movieItem.audienceAcc = setupAudienceAcc(with: movie)
+    }
+    
+    private func setupRankIntenNum(with movie: Movie) -> String? {
         if let rankIntenNum = Int(movie.rankInten), rankIntenNum != 0 {
             if rankIntenNum < 0 {
-                self.rankInten = "↓\(movie.rankInten.replacingOccurrences(of: "-", with: ""))"
-                self.isRankIntenUp = false
+                return "↓\(movie.rankInten.replacingOccurrences(of: "-", with: ""))"
             } else {
-                self.rankInten = "↑\(movie.rankInten)"
-                self.isRankIntenUp = true
+                return "↑\(movie.rankInten)"
             }
         } else {
-            self.rankInten = nil
-            self.isRankIntenUp = false
+            return nil
         }
-        
+    }
+    
+    private func setupIsRankIntenUp(with movie: Movie) -> Bool {
+        if let rankIntenNum = Int(movie.rankInten), rankIntenNum != 0 {
+            if rankIntenNum < 0 {
+                return false
+            } else {
+                return true
+            }
+        } else {
+            return false
+        }
+    }
+    
+    private func setupAudienceAcc(with movie: Movie) -> String? {
         if let audienceAccNum = Int(movie.audienceAcc) {
             if audienceAccNum < 10_000 {
-                self.audienceAcc = "누적 \(movie.audienceAcc)"
+                return "누적 \(movie.audienceAcc)"
             } else {
-                self.audienceAcc = "누적 \(audienceAccNum / 10_000)만"
+                return "누적 \(audienceAccNum / 10_000)만"
             }
         } else {
-            self.audienceAcc = nil
-        }
-        
-        
-        if let tmdb = tmdb {
-            self.backdropPath = tmdb.backdropPath
-            self.posterPath = tmdb.posterPath
-            self.tmdbId = tmdb.id
-            self.overview = tmdb.overview
-        } else {
-            self.backdropPath = nil
-            self.posterPath = nil
-            self.tmdbId = nil
-            self.overview = nil
+            return nil
         }
     }
 }
