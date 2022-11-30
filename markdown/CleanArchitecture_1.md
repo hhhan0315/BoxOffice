@@ -31,3 +31,4 @@
 
 - 그림 링크 : https://tigi44.github.io/ios/iOS,-Swift-Clean-Architecture-with-MVVM-DesignPattern-on-iOS/
 - 핵심은 `내부에 있는 계층이 외부에 있는 계층을 알지 못한다`.
+- Domain은 Presentation, Data를 절대 직접 참조하지 않는다.
