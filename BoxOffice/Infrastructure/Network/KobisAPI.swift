@@ -15,9 +15,9 @@ enum KobisWeekType: Int {
 }
 
 enum KobisAPI: TargetType {
-    case getDailyBoxOfficeList(date: String)
-    case getWeeklyBoxOfficeList(date: String, kobisWeekType: KobisWeekType)
-    case getMovieInfo(movieCode: String)
+    case getDailyBoxOfficeList(DailyMoviesRequestDTO)
+    case getWeeklyBoxOfficeList(WeeklyMoviesRequestDTO)
+    case getMovieInfo(MovieDetailRequestDTO)
     
     var method: HTTPMethod {
         return .get
@@ -40,21 +40,21 @@ enum KobisAPI: TargetType {
     
     var query: [String: String]? {
         switch self {
-        case let .getDailyBoxOfficeList(date):
+        case let .getDailyBoxOfficeList(dailyMoviesRequestDTO):
             return [
-                "key": Secrets.kobisKey,
-                "targetDt": date
+                "key": dailyMoviesRequestDTO.key,
+                "targetDt": dailyMoviesRequestDTO.targetDt
             ]
-        case let .getWeeklyBoxOfficeList(date, kobisWeekType):
+        case let .getWeeklyBoxOfficeList(weeklyMoviesRequestDTO):
             return [
-                "key": Secrets.kobisKey,
-                "targetDt": date,
-                "weekGb": "\(kobisWeekType.rawValue)"
+                "key": weeklyMoviesRequestDTO.key,
+                "targetDt": weeklyMoviesRequestDTO.targetDt,
+                "weekGb": "\(weeklyMoviesRequestDTO.weekGb.rawValue)"
             ]
-        case let .getMovieInfo(movieCode):
+        case let .getMovieInfo(movieDetailRequestDTO):
             return [
-                "key": Secrets.kobisKey,
-                "movieCd": movieCode
+                "key": movieDetailRequestDTO.key,
+                "movieCd": movieDetailRequestDTO.movieCd
             ]
         }
     }

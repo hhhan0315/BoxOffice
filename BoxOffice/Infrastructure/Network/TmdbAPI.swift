@@ -8,7 +8,7 @@
 import Foundation
 
 enum TmdbAPI: TargetType {
-    case getSearchMovie(movieName: String, openYear: String)
+    case getSearchMovie(MoviePosterRequestDTO)
     
     var method: HTTPMethod {
         return .get
@@ -27,13 +27,13 @@ enum TmdbAPI: TargetType {
     
     var query: [String : String]? {
         switch self {
-        case let .getSearchMovie(movieName, openYear):
+        case let .getSearchMovie(moviePosterRequestDTO):
             return [
-                "api_key": Secrets.tmdbKey,
-                "language": "ko",
-                "query": movieName,
-                "region": "KR",
-                "year": openYear,
+                "api_key": moviePosterRequestDTO.apiKey,
+                "language": moviePosterRequestDTO.language,
+                "query": moviePosterRequestDTO.query,
+                "region": moviePosterRequestDTO.region,
+                "year": moviePosterRequestDTO.year,
             ]
         }
     }
