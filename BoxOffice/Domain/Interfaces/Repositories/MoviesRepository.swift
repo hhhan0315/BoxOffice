@@ -8,8 +8,8 @@
 import Foundation
 
 protocol MoviesRepository {
-    func fetchDailyMovieList() async throws -> [Movie]
-    func fetchWeeklyMovieList(with kobisWeekType: KobisWeekType) async throws -> [Movie]
+    func fetchDailyMovieList() async throws -> [BoxOfficeList]
+    func fetchWeeklyMovieList(with kobisWeekType: KobisWeekType) async throws -> [BoxOfficeList]
     func fetchMovieDetail(with movieCode: String) async throws -> MovieDetail
     func fetchMoviePoster(with movieName: String, at openYear: String) async throws -> [Tmdb]
 }

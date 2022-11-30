@@ -8,49 +8,50 @@
 import Foundation
 
 struct MovieListItemViewModel {
+    let rank: String
+    var rankInten: String? = nil
+    var isRankIntenUp: Bool = false
+    var isNew: Bool = false
+//    let movieCode: String
+    let movieName: String
+    let openDate: String
+    var audienceAcc: String? = nil
     
-    var movieItem: MovieItem
-    var tmdb: Tmdb?
-    
-    struct MovieItem {
-        let rank: String
-        var rankInten: String?
-        var isRankIntenUp: Bool
-        let isNew: Bool
-        let movieCode: String
-        let movieName: String
-        let openDate: String
-        var audienceAcc: String?
-    }
+//    let backdropPath: String?
+    let posterPath: String?
+//    let id: Int?
+//    let overview: String?
     
     init(movie: Movie) {
-        self.movieItem = .init(rank: movie.rank,
-                               rankInten: nil,
-                               isRankIntenUp: false,
-                               isNew: movie.rankOldAndNew == "NEW" ? true : false,
-                               movieCode: movie.movieCode,
-                               movieName: movie.movieName,
-                               openDate: "개봉 \(movie.openDate.replacingOccurrences(of: "-", with: "."))",
-                               audienceAcc: nil)
+        self.rank = movie.boxOfficeList.rank
+//        self.movieCode = movie.boxOfficeList.movieCode
+        self.movieName = movie.boxOfficeList.movieName
+        self.openDate = "\(movie.boxOfficeList.openDate.replacingOccurrences(of: "-", with: ".")) 개봉"
         
-        self.movieItem.rankInten = setupRankIntenNum(with: movie)
-        self.movieItem.isRankIntenUp = setupIsRankIntenUp(with: movie)
-        self.movieItem.audienceAcc = setupAudienceAcc(with: movie)
+//        self.backdropPath = movie.tmdb?.backdropPath
+        self.posterPath = movie.tmdb?.posterPath
+//        self.id = movie.tmdb?.id
+//        self.overview = movie.tmdb?.overview
+        
+        self.rankInten = setupRankInten(with: movie.boxOfficeList)
+        self.isRankIntenUp = setupIsRankIntenUp(with: movie.boxOfficeList)
+        self.isNew = movie.boxOfficeList.rankOldAndNew == "NEW" ? true : false
+        self.audienceAcc = setupAudienceAcc(with: movie.boxOfficeList)
     }
     
-    private func setupRankIntenNum(with movie: Movie) -> String? {
-        if let rankIntenNum = Int(movie.rankInten), rankIntenNum != 0 {
+    private func setupRankInten(with boxOfficeList: BoxOfficeList) -> String? {
+        if let rankIntenNum = Int(boxOfficeList.rankInten), rankIntenNum != 0 {
             if rankIntenNum < 0 {
-                return "↓\(movie.rankInten.replacingOccurrences(of: "-", with: ""))"
+                return "↓\(boxOfficeList.rankInten.replacingOccurrences(of: "-", with: ""))"
             } else {
-                return "↑\(movie.rankInten)"
+                return "↑\(boxOfficeList.rankInten)"
             }
         } else {
             return nil
         }
     }
     
-    private func setupIsRankIntenUp(with movie: Movie) -> Bool {
+    private func setupIsRankIntenUp(with movie: BoxOfficeList) -> Bool {
         if let rankIntenNum = Int(movie.rankInten), rankIntenNum != 0 {
             if rankIntenNum < 0 {
                 return false
@@ -62,7 +63,7 @@ struct MovieListItemViewModel {
         }
     }
     
-    private func setupAudienceAcc(with movie: Movie) -> String? {
+    private func setupAudienceAcc(with movie: BoxOfficeList) -> String? {
         if let audienceAccNum = Int(movie.audienceAcc) {
             if audienceAccNum < 10_000 {
                 return "누적 \(movie.audienceAcc)"

@@ -11,12 +11,11 @@
 - 하지만 만약 기능적으로 추가할 기능이 많아진다면 ViewModel에서의 코드의 양이 많아지는 문제가 발생할 수 있을 것이라고 생각했으며 이러한 문제를 해결하기 위해 아키텍쳐에 대한 공부가 필요하다고 생각했다.
 
 # 설명
-<img src="https://github.com/hhhan0315/BoxOffice/blob/main/screenshot/CleanArchitecture_1.png">
+<img src="https://github.com/hhhan0315/BoxOffice/blob/main/screenshot/CleanArchitecture_1.png" width="30%">
+
 - 그림 링크 : https://jeonyeohun.tistory.com/305
 - UI, API, DB 부분은 단위 테스트할 수 없는 영역이다.
 - UI는 UIViewController가 담당한다.
-
-<br>
 
 - Presentation
     - 화면에 필요한 데이터 담당
@@ -28,7 +27,10 @@
     - 외부에서 데이터를 가져오는 역할 (네트워크 등)
     - Repository : 외부의 데이터를 가져오는 역할
 
-<img src="https://github.com/hhhan0315/BoxOffice/blob/main/screenshot/CleanArchitecture_2.png">
+<img src="https://github.com/hhhan0315/BoxOffice/blob/main/screenshot/CleanArchitecture_2.png" width="30%">
+
 - 그림 링크 : https://tigi44.github.io/ios/iOS,-Swift-Clean-Architecture-with-MVVM-DesignPattern-on-iOS/
 - 핵심은 `내부에 있는 계층이 외부에 있는 계층을 알지 못한다`.
+
+# 앱 적용
 

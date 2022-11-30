@@ -14,6 +14,7 @@ struct WeeklyMoviesResponseDTO: Decodable {
 extension WeeklyMoviesResponseDTO {
     struct BoxOfficeResultDTO: Decodable {
         let boxofficeType: String
+        let showRange: String
         let weeklyBoxOfficeList: [BoxOfficeListDTO]
         
         struct BoxOfficeListDTO: Decodable {
@@ -29,7 +30,7 @@ extension WeeklyMoviesResponseDTO {
 }
 
 extension WeeklyMoviesResponseDTO.BoxOfficeResultDTO.BoxOfficeListDTO {
-    func toDomain() -> Movie {
+    func toDomain() -> BoxOfficeList {
         return .init(rank: rank,
                      rankInten: rankInten,
                      rankOldAndNew: rankOldAndNew,

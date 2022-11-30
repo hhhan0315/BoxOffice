@@ -29,9 +29,7 @@ final class MovieListViewController: UIViewController {
     
     // MARK: - Private Properties
     
-    private let viewModel = MovieListViewModel(
-        fetchMoviesUseCase: DefaultFetchMoviesUseCase(moviesRepository: DefaultMoviesRepository(networkService: NetworkService())),
-        fetchTmdbUseCase: DefaultFetchTmdbUseCase(moviesRepository: DefaultMoviesRepository(networkService: NetworkService())))
+    private let viewModel = MovieListViewModel(movieListUseCase: DefaultMovieListUseCase(moviesRepository: DefaultMoviesRepository(networkService: NetworkService())))
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - View LifeCycle

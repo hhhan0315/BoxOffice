@@ -21,12 +21,10 @@ protocol MovieListViewModelOutput {
 }
 
 final class MovieListViewModel: MovieListViewModelInput, MovieListViewModelOutput {
-    private let fetchMoviesUseCase: FetchMoviesUseCase
-    private let fetchTmdbUseCase: FetchTmdbUseCase
+    private let movieListUseCase: MovieListUseCase
     
-    init(fetchMoviesUseCase: FetchMoviesUseCase, fetchTmdbUseCase: FetchTmdbUseCase) {
-        self.fetchMoviesUseCase = fetchMoviesUseCase
-        self.fetchTmdbUseCase = fetchTmdbUseCase
+    init(movieListUseCase: MovieListUseCase) {
+        self.movieListUseCase = movieListUseCase
     }
     
     // MARK: - Input
@@ -50,26 +48,23 @@ final class MovieListViewModel: MovieListViewModelInput, MovieListViewModelOutpu
     @Published var loading: Bool = false
     @Published var errorMessage: String? = nil
     
+    private var movies: [Movie] = []
+    
     private func fetchMovies(with kobisWeekType: KobisWeekType) {
-        items.removeAll()
-        loading = true
-        
         Task {
             do {
-                let movies = try await fetchMoviesUseCase.execute(kobisWeekType: kobisWeekType)
-                var items = movies.map { MovieListItemViewModel(movie: $0) }
+                items.removeAll()
+                loading = true
                 
+                let movies = try await movieListUseCase.execute(with: kobisWeekType)
+                let items = movies.map { MovieListItemViewModel(movie: $0) }
+                
+                self.items = items
+                self.movies = movies
                 loading = false
-                self.items = items
-                
-                let tmdbs = try await fetchTmdbUseCase.execute(movies: movies)
-                for (index, tmdb) in tmdbs.enumerated() {
-                    items[index].tmdb = tmdb
-                }
-                self.items = items
             } catch {
                 if let networkError = error as? NetworkError {
-                    errorMessage = networkError.rawValue
+                    self.errorMessage = networkError.rawValue
                 }
             }
         }

@@ -64,7 +64,7 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
     }()
     
     private lazy var labelStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [openDateLabel, audienceAccLabel])
+        let stackView = UIStackView(arrangedSubviews: [titleLabel, openDateLabel, audienceAccLabel])
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
         return stackView
@@ -82,17 +82,17 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
                 return
             }
             
-            titleLabel.text = item.movieItem.movieName
-//            openDateLabel.text = item.movieItem.openDate
-//            audienceAccLabel.text = item.movieItem.audienceAcc
+            titleLabel.text = item.movieName
+            openDateLabel.text = item.openDate
+            audienceAccLabel.text = item.audienceAcc
             
-            posterRankLabel.text = item.movieItem.rank
-            posterRankIntenLabel.textColor = item.movieItem.isRankIntenUp ? .systemRed : .systemBlue
-            posterRankIntenLabel.text = item.movieItem.rankInten
-            posterNewLabelView.isHidden = !item.movieItem.isNew
+            posterRankLabel.text = item.rank
+            posterRankIntenLabel.textColor = item.isRankIntenUp ? .systemRed : .systemBlue
+            posterRankIntenLabel.text = item.rankInten
+            posterNewLabelView.isHidden = !item.isNew
             
             Task {
-                guard let posterPath = item.tmdb?.posterPath else {
+                guard let posterPath = item.posterPath else {
                     return
                 }
                 let imageData = try await posterImageRepository.fetchImage(with: posterPath)
@@ -128,9 +128,7 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
         setupPosterRankLabel()
         setupPosterRankIntenLabel()
         setupPosterNewLabelView()
-        
-        setupTitleLabel()
-        //        setupLabelStackView()
+        setupLabelStackView()
     }
     
     private func setupPosterImageView() {
@@ -172,22 +170,11 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    private func setupTitleLabel() {
-        contentView.addSubview(titleLabel)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: posterImageView.bottomAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            titleLabel.heightAnchor.constraint(equalToConstant: 40.0),
-        ])
-    }
-    
     private func setupLabelStackView() {
         contentView.addSubview(labelStackView)
         labelStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            labelStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
+            labelStackView.topAnchor.constraint(equalTo: posterImageView.bottomAnchor),
             labelStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             labelStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             labelStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
