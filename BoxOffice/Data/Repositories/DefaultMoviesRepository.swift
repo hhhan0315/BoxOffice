@@ -19,15 +19,15 @@ extension DefaultMoviesRepository: MoviesRepository {
     func fetchDailyMovieList() async throws -> [BoxOfficeList] {
         let yesterday = Date.yesterday.toString(.yyyyMMdd)
         let dailyMoviesResponseDTO = try await networkService.request(api: KobisAPI.getDailyBoxOfficeList(date: yesterday), dataType: DailyMoviesResponseDTO.self)
-        let movies = dailyMoviesResponseDTO.boxOfficeResult.dailyBoxOfficeList.map { $0.toDomain() }
-        return movies
+        let boxOfficeLists = dailyMoviesResponseDTO.boxOfficeResult.dailyBoxOfficeList.map { $0.toDomain() }
+        return boxOfficeLists
     }
     
     func fetchWeeklyMovieList(with kobisWeekType: KobisWeekType) async throws -> [BoxOfficeList] {
         let oneWeekAgo = Date.oneWeekAge.toString(.yyyyMMdd)
         let weeklyMoviesResponseDTO = try await networkService.request(api: KobisAPI.getWeeklyBoxOfficeList(date: oneWeekAgo, kobisWeekType: kobisWeekType), dataType: WeeklyMoviesResponseDTO.self)
-        let movies = weeklyMoviesResponseDTO.boxOfficeResult.weeklyBoxOfficeList.map { $0.toDomain() }
-        return movies
+        let boxOfficeLists = weeklyMoviesResponseDTO.boxOfficeResult.weeklyBoxOfficeList.map { $0.toDomain() }
+        return boxOfficeLists
     }
     
     func fetchMovieDetail(with movieCode: String) async throws -> MovieDetail {
