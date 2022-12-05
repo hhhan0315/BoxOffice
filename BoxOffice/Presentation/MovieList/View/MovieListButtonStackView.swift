@@ -52,28 +52,37 @@ final class MovieListButtonStackView: UIStackView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        buttons = [dailyButton, weekButton, weekendButton, weekDaysButton]
-        
-        buttons.forEach {
-            addArrangedSubview($0)
-            $0.addTarget(self, action: #selector(didTapButton(_:)), for: .touchUpInside)
-        }
-        
         axis = .horizontal
         distribution = .fillEqually
+        
+        setupButtons()
     }
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc private func didTapButton(_ button: UIButton) {
-        buttons.forEach {
-            $0.isSelected = false
+    private func setupButtons() {
+        buttons = [dailyButton, weekButton, weekendButton, weekDaysButton]
+        
+        let actionHandler: (UIAction) -> Void = { [weak self] action in
+            self?.buttons.forEach {
+                $0.isSelected = false
+            }
+            
+            guard let button = action.sender as? UIButton else {
+                return
+            }
+            
+            button.isSelected = true
+            self?.delegate?.didSelectButton(tag: button.tag)
         }
         
-        button.isSelected = true
+        let action = UIAction(handler: actionHandler)
         
-        delegate?.didSelectButton(tag: button.tag)
+        buttons.forEach {
+            addArrangedSubview($0)
+            $0.addAction(action, for: .touchUpInside)
+        }
     }
 }
