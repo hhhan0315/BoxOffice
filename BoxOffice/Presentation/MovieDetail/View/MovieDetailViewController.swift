@@ -90,7 +90,6 @@ final class MovieDetailViewController: UIViewController {
     }
     
     private func setupNavigation() {
-        navigationController?.navigationBar.tintColor = .white
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: nil)
     }
     

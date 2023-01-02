@@ -21,9 +21,9 @@ final class MovieListMenuButton: UIButton {
         
         setTitle(title, for: .normal)
         setTitleColor(.systemGray3, for: .normal)
-        setTitleColor(.white, for: .selected)
+        setTitleColor(.label, for: .selected)
         
-        titleLabel?.font = .systemFont(ofSize: 18.0, weight: .bold)
+        titleLabel?.font = .systemFont(ofSize: 24.0, weight: .bold)
     }
     
     required init?(coder: NSCoder) {

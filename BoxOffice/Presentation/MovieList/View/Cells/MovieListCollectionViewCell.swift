@@ -22,6 +22,7 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
         imageView.layer.cornerRadius = 10
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFit
+        imageView.backgroundColor = .black
         imageView.layer.addSublayer(gradientLayer)
         return imageView
     }()
@@ -29,6 +30,7 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
     private let posterRankLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 42.0, weight: .bold)
+        label.textColor = .systemBackground
         return label
     }()
     
