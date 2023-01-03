@@ -166,8 +166,8 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
         posterImageView.addSubview(posterNewLabelView)
         posterNewLabelView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            posterNewLabelView.topAnchor.constraint(equalTo: posterImageView.topAnchor, constant: 4.0),
-            posterNewLabelView.trailingAnchor.constraint(equalTo: posterImageView.trailingAnchor, constant: -4.0),
+            posterNewLabelView.topAnchor.constraint(equalTo: posterImageView.topAnchor, constant: 8.0),
+            posterNewLabelView.trailingAnchor.constraint(equalTo: posterImageView.trailingAnchor, constant: -8.0),
         ])
     }
     

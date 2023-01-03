@@ -12,7 +12,8 @@ final class MoviePosterNewLabelView: UIView {
     private let newLabel: UILabel = {
         let label = UILabel()
         label.text = "NEW"
-        label.font = .systemFont(ofSize: 12.0, weight: .semibold)
+        label.font = .systemFont(ofSize: 14.0, weight: .bold)
+        label.textColor = .red
         return label
     }()
     
@@ -20,7 +21,7 @@ final class MoviePosterNewLabelView: UIView {
         super.init(frame: frame)
         
         backgroundColor = .black
-        layer.opacity = 0.7
+        layer.opacity = 0.8
         
         isHidden = true
         
@@ -36,9 +37,9 @@ final class MoviePosterNewLabelView: UIView {
         newLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             newLabel.topAnchor.constraint(equalTo: topAnchor, constant: 4.0),
-            newLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8.0),
+            newLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4.0),
             newLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4.0),
-            newLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8.0),
+            newLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -4.0),
         ])
     }
 }
