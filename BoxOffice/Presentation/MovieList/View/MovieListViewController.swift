@@ -14,12 +14,22 @@ final class MovieListViewController: UIViewController {
     
     private let buttonStackView = MovieListButtonStackView()
     
-    private let tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.register(MovieListTableViewCell.self, forCellReuseIdentifier: MovieListTableViewCell.identifier)
-        tableView.isScrollEnabled = false
-        tableView.separatorStyle = .none
-        return tableView
+    private let collectionView: UICollectionView = {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(140), heightDimension: .absolute(280))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .continuous
+        section.interGroupSpacing = 10
+        
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.register(MovieListCollectionViewCell.self, forCellWithReuseIdentifier: MovieListCollectionViewCell.identifier)
+        return collectionView
     }()
     
     private let activityIndicatorView: UIActivityIndicatorView = {
@@ -33,14 +43,14 @@ final class MovieListViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - View LifeCycle
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         buttonStackView.delegate = self
         
-        tableView.dataSource = self
-        tableView.delegate = self
+        collectionView.dataSource = self
+        collectionView.delegate = self
         
         setupViews()
         bind()
@@ -53,15 +63,9 @@ final class MovieListViewController: UIViewController {
     private func setupViews() {
         view.backgroundColor = .systemBackground
         
-        setupNavigation()
         setupButtonStackView()
         setupTableView()
         setupAcitivityIndicatorView()
-    }
-    
-    private func setupNavigation() {
-        navigationItem.title = "Box Office"
-        navigationItem.backButtonTitle = ""
     }
     
     private func setupButtonStackView() {
@@ -69,20 +73,20 @@ final class MovieListViewController: UIViewController {
         buttonStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             buttonStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            buttonStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 8.0),
-            buttonStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -8.0),
+            buttonStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            buttonStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
             buttonStackView.heightAnchor.constraint(equalToConstant: 44.0),
         ])
     }
     
     private func setupTableView() {
-        view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(collectionView)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: buttonStackView.bottomAnchor, constant: 8.0),
-            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 8.0),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -8.0),
+            collectionView.topAnchor.constraint(equalTo: buttonStackView.bottomAnchor, constant: 10),
+            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
         ])
     }
     
@@ -101,7 +105,7 @@ final class MovieListViewController: UIViewController {
         viewModel.$items
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.tableView.reloadData()
+                self?.collectionView.reloadData()
             }
             .store(in: &cancellables)
         
@@ -125,6 +129,8 @@ final class MovieListViewController: UIViewController {
     }
 }
 
+// MARK: - MovieListButtonStackViewDelegate
+
 extension MovieListViewController: MovieListButtonStackViewDelegate {
     func didSelectButton(tag: Int) {
         guard let kobisWeekType = KobisWeekType(rawValue: tag) else {
@@ -136,38 +142,39 @@ extension MovieListViewController: MovieListButtonStackViewDelegate {
 
 // MARK: - UITableViewDataSource
 
-extension MovieListViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+extension MovieListViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return viewModel.items.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieListTableViewCell.identifier, for: indexPath) as? MovieListTableViewCell else {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieListCollectionViewCell.identifier, for: indexPath) as? MovieListCollectionViewCell else {
             return .init()
         }
-        cell.items = viewModel.items
-        cell.delegate = self
+        
+        let item = viewModel.items[indexPath.item]
+        cell.item = item
         return cell
     }
 }
 
 // MARK: - UITableViewDelegate
 
-extension MovieListViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 280
+extension MovieListViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print(indexPath.item)
     }
 }
 
 // MARK: - MovieListTableViewCellDelegate
 
-extension MovieListViewController: MovieListTableViewCellDelegate {
-    func didSelectItemAt(indexPath: IndexPath) {
-//        viewModel.didSelectItem(indexPath)
-        let movieListItemViewModel = viewModel.items[indexPath.item]
-        let moviesRepository = DefaultMoviesRepository(networkService: NetworkService())
-        let movieDetailViewModel = MovieDetailViewModel(movieListItemViewModel: movieListItemViewModel, moviesRepository: moviesRepository)
-        let movieDetailViewController = MovieDetailViewController(viewModel: movieDetailViewModel)
-        navigationController?.pushViewController(movieDetailViewController, animated: true)
-    }
-}
+//extension MovieListViewController: MovieListTableViewCellDelegate {
+//    func didSelectItemAt(indexPath: IndexPath) {
+////        viewModel.didSelectItem(indexPath)
+//        let movieListItemViewModel = viewModel.items[indexPath.item]
+//        let moviesRepository = DefaultMoviesRepository(networkService: NetworkService())
+//        let movieDetailViewModel = MovieDetailViewModel(movieListItemViewModel: movieListItemViewModel, moviesRepository: moviesRepository)
+//        let movieDetailViewController = MovieDetailViewController(viewModel: movieDetailViewModel)
+//        navigationController?.pushViewController(movieDetailViewController, animated: true)
+//    }
+//}

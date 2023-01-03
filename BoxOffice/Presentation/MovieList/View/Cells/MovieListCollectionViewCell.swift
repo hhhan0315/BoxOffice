@@ -148,7 +148,7 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
         posterImageView.addSubview(posterRankLabel)
         posterRankLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            posterRankLabel.leadingAnchor.constraint(equalTo: posterImageView.leadingAnchor, constant: 4.0),
+            posterRankLabel.leadingAnchor.constraint(equalTo: posterImageView.leadingAnchor, constant: 8.0),
             posterRankLabel.bottomAnchor.constraint(equalTo: posterImageView.bottomAnchor),
         ])
     }
@@ -157,7 +157,6 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
         posterImageView.addSubview(posterRankIntenLabel)
         posterRankIntenLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            //            posterRankIntenLabel.centerYAnchor.constraint(equalTo: posterRankLabel.centerYAnchor),
             posterRankIntenLabel.leadingAnchor.constraint(equalTo: posterRankLabel.trailingAnchor),
             posterRankIntenLabel.bottomAnchor.constraint(equalTo: posterRankLabel.bottomAnchor, constant: -6.0),
         ])
