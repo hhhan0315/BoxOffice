@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		013BD1CC29640DDE00C7EA52 /* MovieListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013BD1CB29640DDE00C7EA52 /* MovieListHeaderView.swift */; };
 		01904893292E505D003B5FD0 /* MoviesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01904892292E505D003B5FD0 /* MoviesRepository.swift */; };
 		0190489A292E7CAB003B5FD0 /* MovieDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01904899292E7CAB003B5FD0 /* MovieDetail.swift */; };
 		0190489C292E7E23003B5FD0 /* BoxOfficeList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0190489B292E7E23003B5FD0 /* BoxOfficeList.swift */; };
@@ -50,6 +51,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		013BD1CB29640DDE00C7EA52 /* MovieListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieListHeaderView.swift; sourceTree = "<group>"; };
 		01904892292E505D003B5FD0 /* MoviesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesRepository.swift; sourceTree = "<group>"; };
 		01904899292E7CAB003B5FD0 /* MovieDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetail.swift; sourceTree = "<group>"; };
 		0190489B292E7E23003B5FD0 /* BoxOfficeList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoxOfficeList.swift; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 			isa = PBXGroup;
 			children = (
 				01E9A045292FC52200962F7C /* MovieListButtonStackView.swift */,
+				013BD1CB29640DDE00C7EA52 /* MovieListHeaderView.swift */,
 				01AE58632926388F00B409D8 /* MovieListMenuButton.swift */,
 				01F6E9772925C6D500770A4A /* MovieListViewController.swift */,
 				01D807C0292CC26700B12962 /* MoviePosterNewLabelView.swift */,
@@ -436,6 +439,7 @@
 				01AE58642926388F00B409D8 /* MovieListMenuButton.swift in Sources */,
 				019048A2292F4F7F003B5FD0 /* DefaultMoviesRepository.swift in Sources */,
 				019806A129290A5D004639A0 /* TargetType.swift in Sources */,
+				013BD1CC29640DDE00C7EA52 /* MovieListHeaderView.swift in Sources */,
 				01E9A046292FC52200962F7C /* MovieListButtonStackView.swift in Sources */,
 				019806B1292B9C99004639A0 /* Date+Extension.swift in Sources */,
 				019048B1292F6FFD003B5FD0 /* MoviePosterResponseDTO+Mapping.swift in Sources */,

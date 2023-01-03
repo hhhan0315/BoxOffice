@@ -15,20 +15,38 @@ final class MovieListViewController: UIViewController {
     private let buttonStackView = MovieListButtonStackView()
     
     private let collectionView: UICollectionView = {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(1.0)
+        )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(140), heightDimension: .absolute(280))
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .absolute(140),
+            heightDimension: .absolute(280)
+        )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        let headerSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(44)
+        )
+        let headerSupplementary = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
         section.interGroupSpacing = 10
+        section.boundarySupplementaryItems = [headerSupplementary]
         
         let layout = UICollectionViewCompositionalLayout(section: section)
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(MovieListCollectionViewCell.self, forCellWithReuseIdentifier: MovieListCollectionViewCell.identifier)
+        collectionView.register(MovieListHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: MovieListHeaderView.identifier)
         return collectionView
     }()
     
@@ -156,6 +174,20 @@ extension MovieListViewController: UICollectionViewDataSource {
         cell.item = item
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MovieListHeaderView.identifier, for: indexPath) as? MovieListHeaderView else {
+                return .init()
+            }
+            headerView.isHidden = activityIndicatorView.isAnimating ? true : false
+            headerView.delegate = self
+            return headerView
+        default:
+            return .init()
+        }
+    }
 }
 
 // MARK: - UITableViewDelegate
@@ -163,6 +195,14 @@ extension MovieListViewController: UICollectionViewDataSource {
 extension MovieListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print(indexPath.item)
+    }
+}
+
+// MARK: - MovieListHeaderViewDelegate
+
+extension MovieListViewController: MovieListHeaderViewDelegate {
+    func didSelect() {
+        print(#function)
     }
 }
 

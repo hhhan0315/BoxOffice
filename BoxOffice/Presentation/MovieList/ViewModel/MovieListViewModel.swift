@@ -59,9 +59,9 @@ final class MovieListViewModel: MovieListViewModelInput, MovieListViewModelOutpu
                 let movies = try await movieListUseCase.execute(with: kobisWeekType)
                 let items = movies.map { MovieListItemViewModel(movie: $0) }
                 
+                loading = false
                 self.items = items
                 self.movies = movies
-                loading = false
             } catch {
                 if let networkError = error as? NetworkError {
                     self.errorMessage = networkError.rawValue
