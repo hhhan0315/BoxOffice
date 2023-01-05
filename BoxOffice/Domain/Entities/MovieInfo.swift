@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MovieDetail {
+struct MovieInfo {
     let movieName: String
     let movieNameEnglish: String
     let showTime: String

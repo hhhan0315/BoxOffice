@@ -9,6 +9,6 @@ import Foundation
 
 struct Movie {
     let boxOfficeList: BoxOfficeList
-    var movieDetail: MovieDetail?
+    var movieInfo: MovieInfo?
     var tmdb: Tmdb?
 }

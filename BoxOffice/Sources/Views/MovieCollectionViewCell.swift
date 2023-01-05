@@ -1,5 +1,5 @@
 //
-//  MovieListCollectionViewCell.swift
+//  MovieCollectionViewCell.swift
 //  BoxOffice
 //
 //  Created by rae on 2022/11/17.
@@ -7,8 +7,11 @@
 
 import UIKit
 
-final class MovieListCollectionViewCell: UICollectionViewCell {
-    static let identifier = String(describing: MovieListCollectionViewCell.self)
+import ReactorKit
+import RxSwift
+
+final class MovieCollectionViewCell: UICollectionViewCell, View {
+    static let identifier = String(describing: MovieCollectionViewCell.self)
     
     // MARK: - View Define
     
@@ -30,7 +33,7 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
     private let posterRankLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 42.0, weight: .bold)
-        label.textColor = .systemBackground
+        label.textColor = .white
         return label
     }()
     
@@ -53,7 +56,7 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 13.0, weight: .semibold)
-        label.textColor = .lightGray
+        label.textColor = .systemGray
         return label
     }()
     
@@ -61,7 +64,7 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 13.0, weight: .semibold)
-        label.textColor = .lightGray
+        label.textColor = .systemGray
         return label
     }()
     
@@ -72,37 +75,19 @@ final class MovieListCollectionViewCell: UICollectionViewCell {
         return stackView
     }()
     
-    // MARK: - Private Properties
+    // MARK: - Bind
     
-    private let posterImageRepository: PosterImagesRepository = DefaultPosterImagesRepository(networkImageSerivce: NetworkImageService())
+    var disposeBag = DisposeBag()
     
-    // MARK: - Internal Properties
-    
-    var item: MovieListItemViewModel? {
-        didSet {
-            guard let item = item else {
-                return
-            }
-            
-            titleLabel.text = item.movieName
-            openDateLabel.text = item.openDate
-            audienceAccLabel.text = item.audienceAcc
-            
-            posterRankLabel.text = item.rank
-            posterRankIntenLabel.textColor = item.isRankIntenUp ? .systemRed : .systemBlue
-            posterRankIntenLabel.text = item.rankInten
-            posterNewLabelView.isHidden = !item.isNew
-            
-            Task {
-                guard let posterPath = item.posterPath else {
-                    return
-                }
-                let imageData = try await posterImageRepository.fetchImage(with: posterPath)
-                DispatchQueue.main.async { [weak self] in
-                    self?.posterImageView.image = UIImage(data: imageData)
-                }
-            }
-        }
+    func bind(reactor: MovieCollectionViewCellReactor) {
+        self.posterRankLabel.text = reactor.currentState.rank
+        self.posterRankIntenLabel.text = reactor.currentState.rankInten
+        self.posterRankIntenLabel.textColor = reactor.currentState.isRankIntenUp ? .systemRed : .systemBlue
+        self.posterNewLabelView.isHidden = !reactor.currentState.isNew
+        
+        self.titleLabel.text = reactor.currentState.movieName
+        self.openDateLabel.text = reactor.currentState.openDate
+        self.audienceAccLabel.text = reactor.currentState.audienceAcc
     }
     
     // MARK: - View LifeCycle
