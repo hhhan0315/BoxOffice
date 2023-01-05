@@ -136,7 +136,7 @@ final class MovieListViewController: UIViewController, View {
         
         setupButtonStackView()
         setupCollectionView()
-        setupAcitivityIndicatorView()
+        setupActivityIndicatorView()
     }
     
     private func setupButtonStackView() {
@@ -161,7 +161,7 @@ final class MovieListViewController: UIViewController, View {
         ])
     }
     
-    private func setupAcitivityIndicatorView() {
+    private func setupActivityIndicatorView() {
         view.addSubview(activityIndicatorView)
         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

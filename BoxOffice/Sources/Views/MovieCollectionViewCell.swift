@@ -39,7 +39,7 @@ final class MovieCollectionViewCell: UICollectionViewCell, View {
     
     private let posterRankIntenLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 17.0, weight: .semibold)
+        label.font = .systemFont(ofSize: 20.0, weight: .semibold)
         return label
     }()
     
@@ -80,10 +80,27 @@ final class MovieCollectionViewCell: UICollectionViewCell, View {
     var disposeBag = DisposeBag()
     
     func bind(reactor: MovieCollectionViewCellReactor) {
+        // Action
+        Observable.just(())
+            .map { Reactor.Action.viewDidLoad }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        // State
+        reactor.state.compactMap { $0.posterPath }
+            .distinctUntilChanged()
+            .observe(on: MainScheduler.instance)
+            .flatMap({ posterPath in
+                NetworkImageService().execute(with: posterPath)
+            })
+            .map { UIImage(data: $0) }
+            .bind(to: self.posterImageView.rx.image)
+            .disposed(by: disposeBag)
+        
         self.posterRankLabel.text = reactor.currentState.rank
         self.posterRankIntenLabel.text = reactor.currentState.rankInten
         self.posterRankIntenLabel.textColor = reactor.currentState.isRankIntenUp ? .systemRed : .systemBlue
-        self.posterNewLabelView.isHidden = !reactor.currentState.isNew
+        self.posterNewLabelView.isHidden = reactor.currentState.isNew ? false : true
         
         self.titleLabel.text = reactor.currentState.movieName
         self.openDateLabel.text = reactor.currentState.openDate
@@ -142,8 +159,8 @@ final class MovieCollectionViewCell: UICollectionViewCell, View {
         posterImageView.addSubview(posterRankIntenLabel)
         posterRankIntenLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            posterRankIntenLabel.leadingAnchor.constraint(equalTo: posterRankLabel.trailingAnchor),
-            posterRankIntenLabel.bottomAnchor.constraint(equalTo: posterRankLabel.bottomAnchor, constant: -6.0),
+            posterRankIntenLabel.leadingAnchor.constraint(equalTo: posterRankLabel.trailingAnchor, constant: 4.0),
+            posterRankIntenLabel.bottomAnchor.constraint(equalTo: posterRankLabel.bottomAnchor, constant: -8.0),
         ])
     }
     
@@ -160,7 +177,7 @@ final class MovieCollectionViewCell: UICollectionViewCell, View {
         contentView.addSubview(labelStackView)
         labelStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            labelStackView.topAnchor.constraint(equalTo: posterImageView.bottomAnchor),
+            labelStackView.topAnchor.constraint(equalTo: posterImageView.bottomAnchor, constant: 8.0),
             labelStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             labelStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             labelStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
