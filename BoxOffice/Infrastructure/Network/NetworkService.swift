@@ -7,6 +7,8 @@
 
 import Foundation
 
+import RxSwift
+
 enum NetworkError: String, Error {
     case invalidURLRequest = "URLRequest가 유효하지 않습니다."
     case sessionError = "네트워크 통신에 문제가 있습니다."
@@ -20,56 +22,32 @@ enum NetworkError: String, Error {
 }
 
 final class NetworkService {
-    private let urlSession: URLSession
-    
-    init(urlSession: URLSession = URLSession.shared) {
-        self.urlSession = urlSession
-    }
-    
-    private func makeURLRequest(with api: TargetType) -> URLRequest? {
-        guard var urlComponents = URLComponents(string: api.baseURL + api.path) else {
-            return nil
-        }
-        
-        urlComponents.queryItems = api.query?.map { URLQueryItem(name: $0.key, value: $0.value) }
-        
-        guard let url = urlComponents.url else {
-            return nil
-        }
-        
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = api.method.rawValue
-        urlRequest.allHTTPHeaderFields = api.headers
-        
-        return urlRequest
-    }
-    
-    func request<T: Decodable>(api: TargetType,
-                               dataType: T.Type) async throws -> T {
-        guard let urlRequest = makeURLRequest(with: api) else {
-            throw NetworkError.invalidURLRequest
-        }
-                
-        let (data, response) = try await urlSession.data(for: urlRequest)
-        
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw NetworkError.responseIsNil
-        }
-        
-        switch httpResponse.statusCode {
-        case (200...299):
-            do {
-                let decodeData = try JSONDecoder().decode(T.self, from: data)
-                return decodeData
-            } catch {
-                throw NetworkError.decodeError
+    func execute<T: Decodable>(urlRequest: URLRequest?) -> Observable<T> {
+        return Observable.create { observer in
+            guard let urlRequest = urlRequest else {
+                observer.onError(NetworkError.invalidURLRequest)
+                return Disposables.create()
             }
-        case (400...499):
-            throw NetworkError.status_400
-        case (500...599):
-            throw NetworkError.status_500
-        default:
-            throw NetworkError.unexpectedResponse
+            
+            let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+                guard let data = data else {
+                    observer.onError(NetworkError.unexpectedData)
+                    return
+                }
+                
+                guard let decodedData = try? JSONDecoder().decode(T.self, from: data) else {
+                    observer.onError(NetworkError.decodeError)
+                    return
+                }
+                
+                observer.onNext(decodedData)
+                observer.onCompleted()
+            }
+            task.resume()
+            
+            return Disposables.create {
+                task.cancel()
+            }
         }
     }
 }

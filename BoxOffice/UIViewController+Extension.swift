@@ -8,8 +8,10 @@
 import UIKit
 
 extension UIViewController {
-    func showAlert(title: String = "에러 발생",
-                   message: String?) {
+    func showAlert(
+        title: String = "에러 발생",
+        message: String?
+    ) {
         guard let message = message else {
             return
         }

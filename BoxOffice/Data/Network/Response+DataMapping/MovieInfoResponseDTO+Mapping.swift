@@ -1,5 +1,5 @@
 //
-//  MovieDetailResponseDTO+Mapping.swift
+//  MovieInfoResponseDTO+Mapping.swift
 //  BoxOffice
 //
 //  Created by rae on 2022/11/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MovieDetailResponseDTO: Decodable {
+struct MovieInfoResponseDTO: Decodable {
     let movieInfoResult: MovieInfoResultDTO
     
     struct MovieInfoResultDTO: Decodable {
@@ -54,8 +54,8 @@ struct MovieDetailResponseDTO: Decodable {
     }
 }
 
-extension MovieDetailResponseDTO.MovieInfoResultDTO.MovieInfoDTO {
-    func toDomain() -> MovieDetail {
+extension MovieInfoResponseDTO.MovieInfoResultDTO.MovieInfoDTO {
+    func toDomain() -> MovieInfo {
         return .init(movieName: movieNm,
                      movieNameEnglish: movieNmEn,
                      showTime: showTm,

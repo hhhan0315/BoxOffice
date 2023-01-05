@@ -1,5 +1,5 @@
 //
-//  MoviePosterResponseDTO+Mapping.swift
+//  MovieTmdbResponseDTO+Mapping.swift
 //  BoxOffice
 //
 //  Created by rae on 2022/11/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MoviePosterResponseDTO: Decodable {
+struct MovieTmdbResponseDTO: Decodable {
     let results: [ResultDTO]
     
     struct ResultDTO: Decodable {
@@ -24,7 +24,7 @@ struct MoviePosterResponseDTO: Decodable {
     }
 }
 
-extension MoviePosterResponseDTO.ResultDTO {
+extension MovieTmdbResponseDTO.ResultDTO {
     func toDomain() -> Tmdb {
         return .init(backdropPath: backdropPath,
                      posterPath: posterPath,

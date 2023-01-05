@@ -1,5 +1,5 @@
 //
-//  DailyMoviesResponseDTO+Mapping.swift
+//  WeeklyBoxOfficeListResponseDTO+Mapping.swift
 //  BoxOffice
 //
 //  Created by rae on 2022/11/24.
@@ -7,15 +7,15 @@
 
 import Foundation
 
-struct DailyMoviesResponseDTO: Decodable {
+struct WeeklyBoxOfficeListResponseDTO: Decodable {
     let boxOfficeResult: BoxOfficeResultDTO
 }
 
-extension DailyMoviesResponseDTO {
+extension WeeklyBoxOfficeListResponseDTO {
     struct BoxOfficeResultDTO: Decodable {
         let boxofficeType: String
         let showRange: String
-        let dailyBoxOfficeList: [BoxOfficeListDTO]
+        let weeklyBoxOfficeList: [BoxOfficeListDTO]
         
         struct BoxOfficeListDTO: Decodable {
             let rank: String
@@ -29,7 +29,7 @@ extension DailyMoviesResponseDTO {
     }
 }
 
-extension DailyMoviesResponseDTO.BoxOfficeResultDTO.BoxOfficeListDTO {
+extension WeeklyBoxOfficeListResponseDTO.BoxOfficeResultDTO.BoxOfficeListDTO {
     func toDomain() -> BoxOfficeList {
         return .init(rank: rank,
                      rankInten: rankInten,
