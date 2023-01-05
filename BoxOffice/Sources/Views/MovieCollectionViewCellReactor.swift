@@ -12,11 +12,11 @@ import RxSwift
 
 final class MovieCollectionViewCellReactor: Reactor {
     enum Action {
-        
+        case viewDidLoad
     }
     
     enum Mutation {
-        
+        case requestMovieTmdb(Tmdb)
     }
     
     struct State {
@@ -27,11 +27,15 @@ final class MovieCollectionViewCellReactor: Reactor {
         var movieName: String?
         var openDate: String?
         var audienceAcc: String?
+        
+        var posterPath: String?
     }
     
+    private let boxOfficeList: BoxOfficeList
     var initialState: State = State()
     
     init(boxOfficeList: BoxOfficeList) {
+        self.boxOfficeList = boxOfficeList
         self.initialState = State(
             rank: boxOfficeList.rank,
             rankInten: self.setupRankInten(with: boxOfficeList),
@@ -44,11 +48,28 @@ final class MovieCollectionViewCellReactor: Reactor {
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
-        
+        switch action {
+        case .viewDidLoad:
+            return Observable.concat([
+                TmdbRepository().getMovieTmdbResponse(
+                    movieName: self.boxOfficeList.movieName,
+                    openYear: String(self.boxOfficeList.openDate.prefix(4))
+                )
+                .compactMap { $0.results.first?.toDomain() }
+                    .map { Mutation.requestMovieTmdb($0) },
+            ])
+        }
     }
     
     func reduce(state: State, mutation: Mutation) -> State {
+        var newState = state
         
+        switch mutation {
+        case .requestMovieTmdb(let tmdb):
+            newState.posterPath = "https://image.tmdb.org/t/p/w500\(tmdb.posterPath ?? "")"
+        }
+        
+        return newState
     }
     
     private func setupRankInten(with boxOfficeList: BoxOfficeList) -> String? {
@@ -73,9 +94,9 @@ final class MovieCollectionViewCellReactor: Reactor {
     private func setupAudienceAcc(with boxOfficeList: BoxOfficeList) -> String? {
         if let audienceAccNum = Int(boxOfficeList.audienceAcc) {
             if audienceAccNum < 10_000 {
-                return "누적 \(boxOfficeList.audienceAcc)"
+                return "누적 \(boxOfficeList.audienceAcc)명"
             }
-            return "누적 \(audienceAccNum / 10_000)만"
+            return "누적 \(audienceAccNum / 10_000)만명"
         }
         return nil
     }

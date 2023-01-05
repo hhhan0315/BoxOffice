@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct Movie {
-    let boxOfficeList: BoxOfficeList
-    var movieInfo: MovieInfo?
-    var tmdb: Tmdb?
-}
+//struct Movie {
+//    let boxOfficeList: BoxOfficeList
+//    var movieInfo: MovieInfo?
+//    var tmdb: Tmdb?
+//}
