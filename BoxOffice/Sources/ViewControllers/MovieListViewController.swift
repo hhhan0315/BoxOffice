@@ -79,7 +79,7 @@ final class MovieListViewController: UIViewController, View {
     }()
     
     // MARK: - Bind
-        
+    
     var disposeBag = DisposeBag()
     
     func bind(reactor: MovieListReactor) {
@@ -135,12 +135,12 @@ final class MovieListViewController: UIViewController, View {
                 self.showAlert(message: networkError.element?.rawValue)
             }
             .disposed(by: disposeBag)
-                
+        
         // View
         self.collectionView.rx.itemSelected
             .subscribe { indexPath in
-//                let movieInfoViewController = MovieInfoViewController()
-//                self.navigationController?.pushViewController(movieInfoViewController, animated: true)
+                let movieInfoViewController = MovieInfoViewController()
+                self.navigationController?.pushViewController(movieInfoViewController, animated: true)
             }
             .disposed(by: disposeBag)
     }
@@ -207,43 +207,3 @@ final class MovieListViewController: UIViewController, View {
         buttons.filter { $0.tag != kobisWeekType?.rawValue }.forEach { $0.isSelected = false }
     }
 }
-
-// MARK: - UITableViewDataSource
-
-//extension MovieListViewController: UICollectionViewDataSource {
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return viewModel.items.count
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieListCollectionViewCell.identifier, for: indexPath) as? MovieListCollectionViewCell else {
-//            return .init()
-//        }
-//
-//        let item = viewModel.items[indexPath.item]
-//        cell.item = item
-//        return cell
-//    }
-
-//    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-//        switch kind {
-//        case UICollectionView.elementKindSectionHeader:
-//            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MovieListHeaderView.identifier, for: indexPath) as? MovieListHeaderView else {
-//                return .init()
-//            }
-//            headerView.isHidden = activityIndicatorView.isAnimating ? true : false
-//            headerView.delegate = self
-//            return headerView
-//        default:
-//            return .init()
-//        }
-//    }
-//}
-
-// MARK: - MovieListHeaderViewDelegate
-
-//extension MovieListViewController: MovieListHeaderViewDelegate {
-//    func didSelect() {
-//        print(#function)
-//    }
-//}
