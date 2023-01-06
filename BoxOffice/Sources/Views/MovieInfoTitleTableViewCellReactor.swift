@@ -1,5 +1,5 @@
 //
-//  MovieInfoTableViewCellReactor.swift
+//  MovieInfoTitleTableViewCellReactor.swift
 //  BoxOffice
 //
 //  Created by rae on 2023/01/06.
@@ -9,7 +9,7 @@ import Foundation
 
 import ReactorKit
 
-final class MovieInfoTableViewCellReactor: Reactor {
+final class MovieInfoTitleTableViewCellReactor: Reactor {
     enum Action {
         
     }
@@ -33,15 +33,15 @@ final class MovieInfoTableViewCellReactor: Reactor {
             return
         }
         
-        self.initialState.movieName = movieInfo.movieName
-        self.initialState.movieEnglishName = movieInfo.movieNameEnglish
-        self.initialState.info = "\(movieInfo.prdtYear) • \(movieInfo.nationNames.joined(separator: "/")) • \(movieInfo.genreNames.joined(separator: "/"))"
+        initialState.movieName = movieInfo.movieName
+        initialState.movieEnglishName = movieInfo.movieNameEnglish
+        initialState.info = "\(movieInfo.prdtYear) • \(movieInfo.nationNames.joined(separator: "/")) • \(movieInfo.genreNames.joined(separator: "/"))"
         
         guard let tmdb = tmdb else {
             return
         }
         
-        self.initialState.posterPath = tmdb.posterPath
+        initialState.posterPath = tmdb.posterPath
     }
     
     func mutate(action: Action) -> Observable<Mutation> {

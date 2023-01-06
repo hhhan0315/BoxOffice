@@ -1,5 +1,5 @@
 //
-//  MovieInfoTableViewCell.swift
+//  MovieInfoTitleTableViewCell.swift
 //  BoxOffice
 //
 //  Created by rae on 2023/01/06.
@@ -9,8 +9,8 @@ import UIKit
 
 import ReactorKit
 
-final class MovieInfoTableViewCell: UITableViewCell, View {
-    static let identifier = String(describing: MovieInfoTableViewCell.self)
+final class MovieInfoTitleTableViewCell: UITableViewCell, View {
+    static let identifier = String(describing: MovieInfoTitleTableViewCell.self)
     
     private let posterImageView: UIImageView = {
         let imageView = UIImageView()
@@ -53,7 +53,7 @@ final class MovieInfoTableViewCell: UITableViewCell, View {
     
     var disposeBag = DisposeBag()
     
-    func bind(reactor: MovieInfoTableViewCellReactor) {
+    func bind(reactor: MovieInfoTitleTableViewCellReactor) {
         // Action
         
         // State
