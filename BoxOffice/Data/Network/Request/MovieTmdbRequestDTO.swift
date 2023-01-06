@@ -11,6 +11,4 @@ struct MovieTmdbRequestDTO {
     let apiKey: String
     let language: String = "ko"
     let query: String
-    let region: String = "KR"
-    let year: String
 }

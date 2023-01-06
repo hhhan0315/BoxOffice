@@ -113,17 +113,18 @@ final class MovieListViewController: UIViewController, View {
         
         reactor.state.map { $0.buttonDidSelected }
             .distinctUntilChanged()
+            .compactMap { $0 }
             .subscribe { kobisWeekType in
                 self.setupButtonIsSelected(with: kobisWeekType.element)
             }
             .disposed(by: disposeBag)
         
-        reactor.state.map { $0.movieCellReactors }
+        reactor.state.map { $0.boxOfficeLists }
             .bind(to: self.collectionView.rx.items(
                 cellIdentifier: MovieCollectionViewCell.identifier,
                 cellType: MovieCollectionViewCell.self)
-            ) { index, cellReactor, cell in
-                cell.reactor = cellReactor
+            ) { index, boxOfficeList, cell in
+                cell.reactor = MovieCollectionViewCellReactor(boxOfficeList: boxOfficeList)
             }
             .disposed(by: disposeBag)
         
@@ -139,7 +140,9 @@ final class MovieListViewController: UIViewController, View {
         // View
         self.collectionView.rx.itemSelected
             .subscribe { indexPath in
+                let boxOfficeList = reactor.currentState.boxOfficeLists[indexPath.element?.item ?? 0]
                 let movieInfoViewController = MovieInfoViewController()
+                movieInfoViewController.reactor = MovieInfoReactor(boxOfficeList: boxOfficeList)
                 self.navigationController?.pushViewController(movieInfoViewController, animated: true)
             }
             .disposed(by: disposeBag)

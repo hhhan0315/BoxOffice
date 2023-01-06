@@ -51,8 +51,7 @@ final class MovieCollectionViewCellReactor: Reactor {
         switch action {
         case .viewDidLoad:
             return TmdbRepository().getMovieTmdbResponse(
-                movieName: self.boxOfficeList.movieName,
-                openYear: String(self.boxOfficeList.openDate.prefix(4))
+                movieName: self.boxOfficeList.movieName
             )
             .compactMap { $0.results.first?.toDomain() }
             .map { .requestMovieTmdb($0) }

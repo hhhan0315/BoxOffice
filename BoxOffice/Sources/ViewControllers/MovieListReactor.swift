@@ -21,14 +21,14 @@ final class MovieListReactor: Reactor {
     enum Mutation {
         case setLoading(Bool)
         case setButtonDidSelected(KobisWeekType)
-        case requestBoxOfficeList([MovieCollectionViewCellReactor])
+        case requestBoxOfficeLists([BoxOfficeList])
         case showAlertMessage(NetworkError?)
     }
     
     struct State {
         var isLoading: Bool?
-        var buttonDidSelected: KobisWeekType = .daily
-        var movieCellReactors: [MovieCollectionViewCellReactor] = []
+        var buttonDidSelected: KobisWeekType?
+        var boxOfficeLists: [BoxOfficeList] = []
         var networkError: NetworkError?
     }
     
@@ -37,26 +37,7 @@ final class MovieListReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .dailyButtonDidTap:
-            return Observable.concat([
-                Observable.just(Mutation.requestBoxOfficeList([])),
-                
-                Observable.just(Mutation.setLoading(true)),
-                
-                Observable.just(Mutation.setButtonDidSelected(.daily)),
-                
-                KobisRepository().getDailyBoxOfficeListResponse()
-                    .map { $0.boxOfficeResult.dailyBoxOfficeList.map { $0.toDomain() } }
-                    .map { $0.map { MovieCollectionViewCellReactor(boxOfficeList: $0) } }
-                    .map { Mutation.requestBoxOfficeList($0) },
-                
-                Observable.just(Mutation.setLoading(false))
-            ])
-            .catch { error in
-                    .concat([
-                        Observable.just(Mutation.showAlertMessage(error as? NetworkError)),
-                        Observable.just(Mutation.setLoading(false))
-                    ])
-            }
+            return self.setupWeekButtonDidTap(with: .daily)
             
         case .weekButtonDidTap:
             return self.setupWeekButtonDidTap(with: .week)
@@ -66,7 +47,6 @@ final class MovieListReactor: Reactor {
             
         case .weekdaysButtonDidTap:
             return self.setupWeekButtonDidTap(with: .weekdays)
-            
         }
     }
     
@@ -80,8 +60,8 @@ final class MovieListReactor: Reactor {
         case .setButtonDidSelected(let kobisWeekType):
             newState.buttonDidSelected = kobisWeekType
             
-        case .requestBoxOfficeList(let movieCellReactors):
-            newState.movieCellReactors = movieCellReactors
+        case .requestBoxOfficeLists(let boxOfficeLists):
+            newState.boxOfficeLists = boxOfficeLists
             
         case .showAlertMessage(let networkError):
             newState.networkError = networkError
@@ -92,16 +72,13 @@ final class MovieListReactor: Reactor {
     
     private func setupWeekButtonDidTap(with kobisWeekType: KobisWeekType) -> Observable<Mutation> {
         return Observable.concat([
-            Observable.just(Mutation.requestBoxOfficeList([])),
+            Observable.just(Mutation.requestBoxOfficeLists([])),
             
             Observable.just(Mutation.setLoading(true)),
             
             Observable.just(Mutation.setButtonDidSelected(kobisWeekType)),
             
-            KobisRepository().getWeeklyBoxOfficeListResponse(with: kobisWeekType)
-                .map { $0.boxOfficeResult.weeklyBoxOfficeList.map { $0.toDomain() } }
-                .map { $0.map { MovieCollectionViewCellReactor(boxOfficeList: $0) } }
-                .map { Mutation.requestBoxOfficeList($0) },
+            self.setupBoxOfficeListResponse(with: kobisWeekType),
             
             Observable.just(Mutation.setLoading(false))
         ])
@@ -110,6 +87,19 @@ final class MovieListReactor: Reactor {
                     Observable.just(Mutation.showAlertMessage(error as? NetworkError)),
                     Observable.just(Mutation.setLoading(false))
                 ])
+        }
+    }
+    
+    private func setupBoxOfficeListResponse(with kobisWeekType: KobisWeekType) -> Observable<Mutation> {
+        switch kobisWeekType {
+        case .daily:
+            return KobisRepository().getDailyBoxOfficeListResponse()
+                .map { $0.boxOfficeResult.dailyBoxOfficeList.map { $0.toDomain() } }
+                .map { Mutation.requestBoxOfficeLists($0) }
+        case .week, .weekend, .weekdays:
+            return KobisRepository().getWeeklyBoxOfficeListResponse(with: kobisWeekType)
+                .map { $0.boxOfficeResult.weeklyBoxOfficeList.map { $0.toDomain() } }
+                .map { Mutation.requestBoxOfficeLists($0) }
         }
     }
 }

@@ -34,8 +34,6 @@ extension TmdbAPI: TargetType {
                 "api_key": parameters.apiKey,
                 "language": parameters.language,
                 "query": parameters.query,
-                "region": parameters.region,
-                "year": parameters.year,
             ]
         }
     }
