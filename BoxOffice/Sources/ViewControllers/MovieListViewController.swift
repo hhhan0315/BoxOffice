@@ -17,30 +17,30 @@ final class MovieListViewController: UIViewController, View {
     
     private let dailyButton: UIButton = {
         let button = MovieListMenuButton(title: "일별")
-//        button.tag = KobisWeekType.daily.rawValue
+        button.tag = KobisWeekType.daily.rawValue
         return button
     }()
     
     private let weekButton: UIButton = {
         let button = MovieListMenuButton(title: "주간")
-//        button.tag = KobisWeekType.week.rawValue
+        button.tag = KobisWeekType.week.rawValue
         return button
     }()
     
     private let weekendButton: UIButton = {
         let button = MovieListMenuButton(title: "주말")
-//        button.tag = KobisWeekType.weekend.rawValue
+        button.tag = KobisWeekType.weekend.rawValue
         return button
     }()
     
-    private let weekDaysButton: UIButton = {
+    private let weekdaysButton: UIButton = {
         let button = MovieListMenuButton(title: "주중")
-//        button.tag = KobisWeekType.weekdays.rawValue
+        button.tag = KobisWeekType.weekdays.rawValue
         return button
     }()
     
     private lazy var buttonStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [dailyButton, weekButton, weekendButton, weekDaysButton])
+        let stackView = UIStackView(arrangedSubviews: [dailyButton, weekButton, weekendButton, weekdaysButton])
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         return stackView
@@ -84,13 +84,38 @@ final class MovieListViewController: UIViewController, View {
     
     func bind(reactor: MovieListReactor) {
         // Action
-//        reactor.action.onNext(.viewDidLoad)
+        self.dailyButton.rx.tap
+            .map { Reactor.Action.dailyButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        self.weekButton.rx.tap
+            .map { Reactor.Action.weekButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        self.weekendButton.rx.tap
+            .map { Reactor.Action.weekendButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        self.weekdaysButton.rx.tap
+            .map { Reactor.Action.weekdaysButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
         
         // State
         reactor.state.map { $0.isLoading }
             .distinctUntilChanged()
             .compactMap { $0 }
             .bind(to: self.activityIndicatorView.rx.isAnimating)
+            .disposed(by: disposeBag)
+        
+        reactor.state.map { $0.buttonDidSelected }
+            .distinctUntilChanged()
+            .subscribe { kobisWeekType in
+                self.setupButtonIsSelected(with: kobisWeekType.element)
+            }
             .disposed(by: disposeBag)
         
         reactor.state.map { $0.movieCellReactors }
@@ -129,7 +154,7 @@ final class MovieListViewController: UIViewController, View {
         
         setupViews()
         
-        reactor?.action.onNext(.viewDidLoad)
+        reactor?.action.onNext(.dailyButtonDidTap)
     }
     
     // MARK: - Layout
@@ -171,6 +196,15 @@ final class MovieListViewController: UIViewController, View {
             activityIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
         ])
+    }
+    
+    // MARK: - Helper
+    
+    private func setupButtonIsSelected(with kobisWeekType: KobisWeekType?) {
+        let buttons = [dailyButton, weekButton, weekendButton, weekdaysButton]
+        
+        buttons.filter { $0.tag == kobisWeekType?.rawValue }.forEach { $0.isSelected = true }
+        buttons.filter { $0.tag != kobisWeekType?.rawValue }.forEach { $0.isSelected = false }
     }
 }
 
