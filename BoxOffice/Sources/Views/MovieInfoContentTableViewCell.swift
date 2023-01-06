@@ -71,6 +71,7 @@ final class MovieInfoContentTableViewCell: UITableViewCell, View {
         let stackView = UIStackView(arrangedSubviews: [directorLabel, showTimeLabel, watchGradeLabel])
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
+        stackView.alignment = .center
         return stackView
     }()
     
@@ -78,6 +79,7 @@ final class MovieInfoContentTableViewCell: UITableViewCell, View {
         let stackView = UIStackView(arrangedSubviews: [genreLabel, nationsLabel, prdtYearLabel])
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
+        stackView.alignment = .center
         return stackView
     }()
     

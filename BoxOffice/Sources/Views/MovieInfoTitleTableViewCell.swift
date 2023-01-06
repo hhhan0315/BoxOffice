@@ -45,7 +45,8 @@ final class MovieInfoTitleTableViewCell: UITableViewCell, View {
     private lazy var labelStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [nameLabel, englishNameLabel, infoLabel])
         stackView.axis = .vertical
-        stackView.distribution = .fillEqually
+        stackView.alignment = .center
+        stackView.distribution = .fillProportionally
         return stackView
     }()
     
