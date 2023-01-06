@@ -81,10 +81,7 @@ final class MovieCollectionViewCell: UICollectionViewCell, View {
     
     func bind(reactor: MovieCollectionViewCellReactor) {
         // Action
-        Observable.just(())
-            .map { Reactor.Action.viewDidLoad }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
+        reactor.action.onNext(.viewDidLoad)
         
         // State
         reactor.state.compactMap { $0.posterPath }

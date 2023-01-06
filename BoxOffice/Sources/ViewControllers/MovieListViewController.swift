@@ -17,26 +17,25 @@ final class MovieListViewController: UIViewController, View {
     
     private let dailyButton: UIButton = {
         let button = MovieListMenuButton(title: "일별")
-//        button.isSelected = true
-        button.tag = KobisWeekType.daily.rawValue
+//        button.tag = KobisWeekType.daily.rawValue
         return button
     }()
     
     private let weekButton: UIButton = {
         let button = MovieListMenuButton(title: "주간")
-        button.tag = KobisWeekType.week.rawValue
+//        button.tag = KobisWeekType.week.rawValue
         return button
     }()
     
     private let weekendButton: UIButton = {
         let button = MovieListMenuButton(title: "주말")
-        button.tag = KobisWeekType.weekend.rawValue
+//        button.tag = KobisWeekType.weekend.rawValue
         return button
     }()
     
     private let weekDaysButton: UIButton = {
         let button = MovieListMenuButton(title: "주중")
-        button.tag = KobisWeekType.weekdays.rawValue
+//        button.tag = KobisWeekType.weekdays.rawValue
         return button
     }()
     
@@ -85,19 +84,12 @@ final class MovieListViewController: UIViewController, View {
     
     func bind(reactor: MovieListReactor) {
         // Action
-        Observable.just(())
-            .map { Reactor.Action.viewDidLoad }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        
-        dailyButton.rx.tap
-            .map { Reactor.Action.dailyButtonDidTap }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
+//        reactor.action.onNext(.viewDidLoad)
         
         // State
         reactor.state.map { $0.isLoading }
             .distinctUntilChanged()
+            .compactMap { $0 }
             .bind(to: self.activityIndicatorView.rx.isAnimating)
             .disposed(by: disposeBag)
         
@@ -107,6 +99,15 @@ final class MovieListViewController: UIViewController, View {
                 cellType: MovieCollectionViewCell.self)
             ) { index, cellReactor, cell in
                 cell.reactor = cellReactor
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map { $0.networkError }
+            .observe(on: MainScheduler.instance)
+            .distinctUntilChanged()
+            .compactMap { $0 }
+            .subscribe { networkError in
+                self.showAlert(message: networkError.element?.rawValue)
             }
             .disposed(by: disposeBag)
                 
@@ -127,6 +128,8 @@ final class MovieListViewController: UIViewController, View {
         navigationItem.title = "박스오피스 순위"
         
         setupViews()
+        
+        reactor?.action.onNext(.viewDidLoad)
     }
     
     // MARK: - Layout
