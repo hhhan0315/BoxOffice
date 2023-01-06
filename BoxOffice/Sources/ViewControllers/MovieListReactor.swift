@@ -8,7 +8,6 @@
 import Foundation
 
 import ReactorKit
-import RxSwift
 
 final class MovieListReactor: Reactor {
     enum Action {

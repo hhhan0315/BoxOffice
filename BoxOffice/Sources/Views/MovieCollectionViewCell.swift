@@ -8,7 +8,6 @@
 import UIKit
 
 import ReactorKit
-import RxSwift
 
 final class MovieCollectionViewCell: UICollectionViewCell, View {
     static let identifier = String(describing: MovieCollectionViewCell.self)

@@ -36,4 +36,15 @@ final class KobisRepository {
         let urlRequest = api.urlRequest
         return networkService.execute(urlRequest: urlRequest)
     }
+    
+    func getMovieInfoResponse(with movieCode: String) -> Observable<MovieInfoResponseDTO> {
+        guard self.key.isEmpty == false else {
+            return Observable.error(NetworkError.invalidAPIKey)
+        }
+        
+        let request = MovieInfoRequestDTO(key: self.key, movieCd: movieCode)
+        let api = KobisAPI.getMovieInfo(request)
+        let urlRequest = api.urlRequest
+        return networkService.execute(urlRequest: urlRequest)
+    }
 }

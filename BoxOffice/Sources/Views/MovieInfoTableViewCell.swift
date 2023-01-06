@@ -14,27 +14,38 @@ final class MovieInfoTableViewCell: UITableViewCell, View {
     
     private let posterImageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.layer.cornerRadius = 10
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFit
+        imageView.backgroundColor = .black
         return imageView
     }()
-        
+    
     private let nameLabel: UILabel = {
         let label = UILabel()
+        label.numberOfLines = 0
+        label.font = .systemFont(ofSize: 22.0, weight: .bold)
         return label
     }()
     
     private let englishNameLabel: UILabel = {
         let label = UILabel()
+        label.numberOfLines = 0
+        label.font = .systemFont(ofSize: 16.0)
         return label
     }()
     
     private let infoLabel: UILabel = {
         let label = UILabel()
+        label.numberOfLines = 0
+        label.font = .systemFont(ofSize: 16.0)
         return label
     }()
     
     private lazy var labelStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [nameLabel, englishNameLabel, infoLabel])
         stackView.axis = .vertical
+        stackView.distribution = .fillEqually
         return stackView
     }()
     
@@ -43,7 +54,22 @@ final class MovieInfoTableViewCell: UITableViewCell, View {
     var disposeBag = DisposeBag()
     
     func bind(reactor: MovieInfoTableViewCellReactor) {
+        // Action
         
+        // State
+        reactor.state.compactMap { $0.posterPath }
+            .distinctUntilChanged()
+            .observe(on: MainScheduler.instance)
+            .flatMap({ posterPath in
+                NetworkImageService().execute(with: posterPath)
+            })
+            .map { UIImage(data: $0) }
+            .bind(to: self.posterImageView.rx.image)
+            .disposed(by: disposeBag)
+        
+        nameLabel.text = reactor.currentState.movieName
+        englishNameLabel.text = reactor.currentState.movieEnglishName
+        infoLabel.text = reactor.currentState.info
     }
     
     // MARK: - View LifeCycle
@@ -69,11 +95,11 @@ final class MovieInfoTableViewCell: UITableViewCell, View {
         contentView.addSubview(posterImageView)
         posterImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            posterImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            posterImageView.widthAnchor.constraint(equalToConstant: 140.0),
-            posterImageView.heightAnchor.constraint(equalToConstant: 210.0),
+            posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15.0),
+            posterImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10.0),
+            posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15.0),
+            posterImageView.widthAnchor.constraint(equalToConstant: 120.0),
+            posterImageView.heightAnchor.constraint(equalToConstant: 180.0),
         ])
     }
     
@@ -81,10 +107,10 @@ final class MovieInfoTableViewCell: UITableViewCell, View {
         contentView.addSubview(labelStackView)
         labelStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            labelStackView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            labelStackView.leadingAnchor.constraint(equalTo: posterImageView.trailingAnchor),
-            labelStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            labelStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            labelStackView.topAnchor.constraint(equalTo: posterImageView.topAnchor),
+            labelStackView.leadingAnchor.constraint(equalTo: posterImageView.trailingAnchor, constant: 10.0),
+            labelStackView.bottomAnchor.constraint(equalTo: posterImageView.bottomAnchor),
+            labelStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10.0),
         ])
     }
 }

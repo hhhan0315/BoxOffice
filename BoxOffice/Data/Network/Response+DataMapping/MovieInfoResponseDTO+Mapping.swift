@@ -65,6 +65,6 @@ extension MovieInfoResponseDTO.MovieInfoResultDTO.MovieInfoDTO {
                      genreNames: genres.map { $0.genreNm },
                      directorNames: directors.map { $0.peopleNm },
                      actorNames: actors.map { $0.peopleNm },
-                     watchGradeNames: audits.map { $0.watchGradeNm} )
+                     watchGradeNames: audits.map { $0.watchGradeNm } )
     }
 }

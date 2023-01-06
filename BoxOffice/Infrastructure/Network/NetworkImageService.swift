@@ -19,7 +19,7 @@ final class NetworkImageService {
     
     func execute(with urlString: String) -> Observable<Data> {
         return Observable.create { observer in
-            guard let url = URL(string: urlString) else {
+            guard let url = URL(string: "https://image.tmdb.org/t/p/w500\(urlString)") else {
                 observer.onError(NetworkError.invalidURLRequest)
                 return Disposables.create()
             }

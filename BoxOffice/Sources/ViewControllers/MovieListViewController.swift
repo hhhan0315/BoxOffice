@@ -8,7 +8,6 @@
 import UIKit
 
 import ReactorKit
-import RxSwift
 import RxCocoa
 
 final class MovieListViewController: UIViewController, View {

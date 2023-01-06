@@ -15,6 +15,10 @@ final class MovieInfoViewController: UIViewController, View {
     
     private let tableView: UITableView = {
         let tableView = UITableView()
+        tableView.register(
+            MovieInfoTableViewCell.self,
+            forCellReuseIdentifier: MovieInfoTableViewCell.identifier
+        )
         return tableView
     }()
     
@@ -27,9 +31,6 @@ final class MovieInfoViewController: UIViewController, View {
     
     enum TableViewSection: Int, CaseIterable {
         case info = 0
-        //        case review = 1
-        //        case overview = 2
-        //        case comments = 3
     }
     
     // MARK: - Bind
@@ -46,6 +47,14 @@ final class MovieInfoViewController: UIViewController, View {
             .bind(to: self.activityIndicatorView.rx.isAnimating)
             .disposed(by: disposeBag)
         
+        reactor.state.map { $0.movieInfo }
+            .observe(on: MainScheduler.instance)
+            .compactMap { $0 }
+            .subscribe { movieInfo in
+                self.tableView.reloadData()
+            }
+            .disposed(by: disposeBag)
+        
         // View
     }
     
@@ -55,6 +64,7 @@ final class MovieInfoViewController: UIViewController, View {
         super.viewDidLoad()
         
         tableView.dataSource = self
+        tableView.delegate = self
         
         setupViews()
         
@@ -100,23 +110,43 @@ extension MovieInfoViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-            //        case TableViewSection.comments.rawValue:
-            //            return 2
         default:
-            return 1
+            return self.activityIndicatorView.isAnimating ? 0 : 1
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case TableViewSection.info.rawValue:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieInfoTableViewCell.identifier, for: indexPath) as? MovieInfoTableViewCell else {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: MovieInfoTableViewCell.identifier,
+                for: indexPath
+            ) as? MovieInfoTableViewCell else {
                 return .init()
             }
+            
+            let movieInfo = reactor?.currentState.movieInfo
+            let tmdb = reactor?.currentState.tmdb
+            
+            cell.reactor = MovieInfoTableViewCellReactor(movieInfo: movieInfo, tmdb: tmdb)
+            cell.selectionStyle = .none
             
             return cell
         default:
             return .init()
+        }
+    }
+}
+
+// MARK: - UITableViewDelegate
+
+extension MovieInfoViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch indexPath.section {
+        case TableViewSection.info.rawValue:
+            return 210.0
+        default:
+            return UITableView.automaticDimension
         }
     }
 }

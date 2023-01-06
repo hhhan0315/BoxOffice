@@ -16,19 +16,21 @@ final class MovieInfoReactor: Reactor {
     
     enum Mutation {
         case setLoading(Bool)
+        case requestMovieInfo(MovieInfo)
+        case requestTmdb(Tmdb)
     }
     
     struct State {
         var isLoading: Bool?
-        var title: String?
+        var movieInfo: MovieInfo?
+        var tmdb: Tmdb?
     }
     
-    var initialState: State = State()
+    private let boxOfficeList: BoxOfficeList
+    let initialState: State = State()
     
     init(boxOfficeList: BoxOfficeList) {
-        self.initialState = State(
-            title: boxOfficeList.movieName
-        )
+        self.boxOfficeList = boxOfficeList
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
@@ -37,9 +39,13 @@ final class MovieInfoReactor: Reactor {
             return Observable.concat([
                 Observable.just(Mutation.setLoading(true)),
                 
-                Observable.empty()
-                    .delay(.seconds(5), scheduler: MainScheduler.instance),
-                // Repository Detail 정보
+                KobisRepository().getMovieInfoResponse(with: self.boxOfficeList.movieCode)
+                    .map { $0.movieInfoResult.movieInfo.toDomain() }
+                    .map { Mutation.requestMovieInfo($0) },
+                
+                TmdbRepository().getMovieTmdbResponse(movieName: self.boxOfficeList.movieName)
+                    .compactMap { $0.results.first?.toDomain() }
+                    .map { Mutation.requestTmdb($0) },
                 
                 Observable.just(Mutation.setLoading(false))
             ])
@@ -52,6 +58,12 @@ final class MovieInfoReactor: Reactor {
         switch mutation {
         case .setLoading(let isLoading):
             newState.isLoading = isLoading
+            
+        case .requestMovieInfo(let movieInfo):
+            newState.movieInfo = movieInfo
+            
+        case .requestTmdb(let tmdb):
+            newState.tmdb = tmdb
         }
         
         return newState

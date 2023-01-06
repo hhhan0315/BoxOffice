@@ -8,7 +8,6 @@
 import Foundation
 
 import ReactorKit
-import RxSwift
 
 final class MovieCollectionViewCellReactor: Reactor {
     enum Action {
@@ -16,7 +15,7 @@ final class MovieCollectionViewCellReactor: Reactor {
     }
     
     enum Mutation {
-        case requestMovieTmdb(Tmdb)
+        case requestTmdb(Tmdb)
     }
     
     struct State {
@@ -54,7 +53,7 @@ final class MovieCollectionViewCellReactor: Reactor {
                 movieName: self.boxOfficeList.movieName
             )
             .compactMap { $0.results.first?.toDomain() }
-            .map { .requestMovieTmdb($0) }
+            .map { Mutation.requestTmdb($0) }
         }
     }
     
@@ -62,8 +61,8 @@ final class MovieCollectionViewCellReactor: Reactor {
         var newState = state
         
         switch mutation {
-        case .requestMovieTmdb(let tmdb):
-            newState.posterPath = "https://image.tmdb.org/t/p/w500\(tmdb.posterPath ?? "")"
+        case .requestTmdb(let tmdb):
+            newState.posterPath = tmdb.posterPath
         }
         
         return newState
