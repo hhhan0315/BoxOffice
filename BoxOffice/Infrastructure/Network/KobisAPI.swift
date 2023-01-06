@@ -8,6 +8,7 @@
 import Foundation
 
 enum KobisWeekType: Int {
+    case daily = -1
     case week = 0
     case weekend = 1
     case weekdays = 2
