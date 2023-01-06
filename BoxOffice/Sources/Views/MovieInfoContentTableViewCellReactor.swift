@@ -25,6 +25,7 @@ final class MovieInfoContentTableViewCellReactor: Reactor {
         var genreNames: String?
         var nationNames: String?
         var prdtYear: String?
+        var actorNames: String?
         
         var overview: String?
     }
@@ -42,6 +43,7 @@ final class MovieInfoContentTableViewCellReactor: Reactor {
         initialState.genreNames = movieInfo.genreNames.joined(separator: "/")
         initialState.nationNames = movieInfo.nationNames.joined(separator: "/")
         initialState.prdtYear = movieInfo.prdtYear
+        initialState.actorNames = movieInfo.actorNames.joined(separator: " • ")
         
         guard let tmdb = tmdb else {
             return

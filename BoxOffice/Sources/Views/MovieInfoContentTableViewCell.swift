@@ -81,6 +81,13 @@ final class MovieInfoContentTableViewCell: UITableViewCell, View {
         return stackView
     }()
     
+    private let actorsLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        return label
+    }()
+    
     // MARK: - Bind
     
     var disposeBag = DisposeBag()
@@ -96,6 +103,7 @@ final class MovieInfoContentTableViewCell: UITableViewCell, View {
         genreLabel.attributedTitle(firstPart: "장르", secondPart: reactor.currentState.genreNames)
         nationsLabel.attributedTitle(firstPart: "제작 국가", secondPart: reactor.currentState.nationNames)
         prdtYearLabel.attributedTitle(firstPart: "제작 연도", secondPart: reactor.currentState.prdtYear)
+        actorsLabel.attributedTitle(firstPart: "출연", secondPart: reactor.currentState.actorNames)
     }
     
     // MARK: - View LifeCycle
@@ -117,6 +125,7 @@ final class MovieInfoContentTableViewCell: UITableViewCell, View {
         setupOverviewLabel()
         setupLabelStackView()
         setupSecondLabelStackView()
+        setupActorsLabel()
     }
     
     private func setupTitleLabel() {
@@ -156,7 +165,17 @@ final class MovieInfoContentTableViewCell: UITableViewCell, View {
             secondLabelStackView.topAnchor.constraint(equalTo: labelStackView.bottomAnchor, constant: 10.0),
             secondLabelStackView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             secondLabelStackView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            secondLabelStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10.0),
+        ])
+    }
+    
+    private func setupActorsLabel() {
+        contentView.addSubview(actorsLabel)
+        actorsLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            actorsLabel.topAnchor.constraint(equalTo: secondLabelStackView.bottomAnchor, constant: 10.0),
+            actorsLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            actorsLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            actorsLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10.0),
         ])
     }
 }
