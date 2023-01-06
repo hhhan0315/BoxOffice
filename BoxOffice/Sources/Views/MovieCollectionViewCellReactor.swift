@@ -50,14 +50,12 @@ final class MovieCollectionViewCellReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .viewDidLoad:
-            return Observable.concat([
-                TmdbRepository().getMovieTmdbResponse(
-                    movieName: self.boxOfficeList.movieName,
-                    openYear: String(self.boxOfficeList.openDate.prefix(4))
-                )
-                .compactMap { $0.results.first?.toDomain() }
-                    .map { Mutation.requestMovieTmdb($0) },
-            ])
+            return TmdbRepository().getMovieTmdbResponse(
+                movieName: self.boxOfficeList.movieName,
+                openYear: String(self.boxOfficeList.openDate.prefix(4))
+            )
+            .compactMap { $0.results.first?.toDomain() }
+            .map { .requestMovieTmdb($0) }
         }
     }
     

@@ -13,18 +13,18 @@ import RxSwift
 final class MovieListReactor: Reactor {
     enum Action {
         case viewDidLoad
-        case dailyButtonDidTap
     }
     
     enum Mutation {
         case setLoading(Bool)
-        case requestDailyBoxOfficeList([MovieCollectionViewCellReactor])
+        case requestBoxOfficeList([MovieCollectionViewCellReactor])
+        case showAlertMessage(NetworkError?)
     }
     
     struct State {
-        var isLoading: Bool = false
+        var isLoading: Bool?
         var movieCellReactors: [MovieCollectionViewCellReactor] = []
-        var dailyButtonIsSelected: Bool = false
+        var networkError: NetworkError?
     }
     
     let initialState: State = State()
@@ -33,18 +33,21 @@ final class MovieListReactor: Reactor {
         switch action {
         case .viewDidLoad:
             return Observable.concat([
-                Observable.just(.setLoading(true)),
+                Observable.just(Mutation.setLoading(true)),
                 
                 KobisRepository().getDailyBoxOfficeListResponse()
                     .map { $0.boxOfficeResult.dailyBoxOfficeList.map { $0.toDomain() } }
                     .map { $0.map { MovieCollectionViewCellReactor(boxOfficeList: $0) } }
-                    .map { Mutation.requestDailyBoxOfficeList($0) },
+                    .map { Mutation.requestBoxOfficeList($0) },
                 
-                Observable.just(.setLoading(false))
+                Observable.just(Mutation.setLoading(false))
             ])
-            
-        case .dailyButtonDidTap:
-            return Observable.just(.setLoading(false))
+            .catch { error in
+                    .concat([
+                        Observable.just(Mutation.showAlertMessage(error as? NetworkError)),
+                        Observable.just(Mutation.setLoading(false))
+                    ])
+            }
         }
     }
     
@@ -55,8 +58,11 @@ final class MovieListReactor: Reactor {
         case .setLoading(let isLoading):
             newState.isLoading = isLoading
             
-        case .requestDailyBoxOfficeList(let movieCellReactors):
+        case .requestBoxOfficeList(let movieCellReactors):
             newState.movieCellReactors = movieCellReactors
+            
+        case .showAlertMessage(let networkError):
+            newState.networkError = networkError
         }
         
         return newState

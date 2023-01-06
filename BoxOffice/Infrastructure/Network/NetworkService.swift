@@ -19,6 +19,7 @@ enum NetworkError: String, Error {
     case status_200 = "예상한 응답이 왔습니다."
     case status_400 = "잘못된 요청입니다."
     case status_500 = "서버 오류입니다."
+    case invalidAPIKey = "API Key가 존재하지 않습니다.\n Secrets에서 clientID를 추가해주세요."
 }
 
 final class NetworkService {
