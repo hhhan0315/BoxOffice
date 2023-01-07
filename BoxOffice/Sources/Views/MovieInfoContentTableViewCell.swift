@@ -15,7 +15,7 @@ final class MovieInfoContentTableViewCell: UITableViewCell, View {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "기본정보"
-        label.font = .systemFont(ofSize: 22.0, weight: .bold)
+        label.font = .systemFont(ofSize: 18.0, weight: .semibold)
         return label
     }()
     
@@ -67,6 +67,13 @@ final class MovieInfoContentTableViewCell: UITableViewCell, View {
         return label
     }()
     
+    private let actorsLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        return label
+    }()
+    
     private lazy var labelStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [directorLabel, showTimeLabel, watchGradeLabel])
         stackView.axis = .horizontal
@@ -83,11 +90,12 @@ final class MovieInfoContentTableViewCell: UITableViewCell, View {
         return stackView
     }()
     
-    private let actorsLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        return label
+    private lazy var thirdLabelStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [actorsLabel])
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        stackView.alignment = .center
+        return stackView
     }()
     
     // MARK: - Bind
@@ -124,10 +132,10 @@ final class MovieInfoContentTableViewCell: UITableViewCell, View {
     
     private func setupViews() {
         setupTitleLabel()
-        setupOverviewLabel()
+//        setupOverviewLabel()
         setupLabelStackView()
         setupSecondLabelStackView()
-        setupActorsLabel()
+        setupThirdLabelStackView()
     }
     
     private func setupTitleLabel() {
@@ -140,21 +148,21 @@ final class MovieInfoContentTableViewCell: UITableViewCell, View {
         ])
     }
     
-    private func setupOverviewLabel() {
-        contentView.addSubview(overviewLabel)
-        overviewLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            overviewLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10.0),
-            overviewLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            overviewLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-        ])
-    }
+//    private func setupOverviewLabel() {
+//        contentView.addSubview(overviewLabel)
+//        overviewLabel.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            overviewLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10.0),
+//            overviewLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+//            overviewLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+//        ])
+//    }
     
     private func setupLabelStackView() {
         contentView.addSubview(labelStackView)
         labelStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            labelStackView.topAnchor.constraint(equalTo: overviewLabel.bottomAnchor, constant: 10.0),
+            labelStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10.0),
             labelStackView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             labelStackView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
         ])
@@ -170,14 +178,14 @@ final class MovieInfoContentTableViewCell: UITableViewCell, View {
         ])
     }
     
-    private func setupActorsLabel() {
-        contentView.addSubview(actorsLabel)
-        actorsLabel.translatesAutoresizingMaskIntoConstraints = false
+    private func setupThirdLabelStackView() {
+        contentView.addSubview(thirdLabelStackView)
+        thirdLabelStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            actorsLabel.topAnchor.constraint(equalTo: secondLabelStackView.bottomAnchor, constant: 10.0),
-            actorsLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            actorsLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            actorsLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10.0),
+            thirdLabelStackView.topAnchor.constraint(equalTo: secondLabelStackView.bottomAnchor, constant: 10.0),
+            thirdLabelStackView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            thirdLabelStackView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            thirdLabelStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10.0),
         ])
     }
 }

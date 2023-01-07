@@ -139,7 +139,10 @@ final class MovieListViewController: UIViewController, View {
         // View
         self.collectionView.rx.itemSelected
             .subscribe { indexPath in
-                let boxOfficeList = reactor.currentState.boxOfficeLists[indexPath.element?.item ?? 0]
+                guard let item = indexPath.element?.item else {
+                    return
+                }
+                let boxOfficeList = reactor.currentState.boxOfficeLists[item]
                 let movieInfoViewController = MovieInfoViewController()
                 movieInfoViewController.reactor = MovieInfoReactor(boxOfficeList: boxOfficeList)
                 self.navigationController?.pushViewController(movieInfoViewController, animated: true)
@@ -153,6 +156,7 @@ final class MovieListViewController: UIViewController, View {
         super.viewDidLoad()
         
         navigationItem.title = "박스오피스 순위"
+        navigationItem.backButtonTitle = ""
         
         setupViews()
         

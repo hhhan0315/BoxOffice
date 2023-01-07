@@ -36,16 +36,16 @@ final class MovieListReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .dailyButtonDidTap:
-            return self.setupWeekButtonDidTap(with: .daily)
+            return self.setupButtonDidTap(with: .daily)
             
         case .weekButtonDidTap:
-            return self.setupWeekButtonDidTap(with: .week)
+            return self.setupButtonDidTap(with: .week)
             
         case .weekendButtonDidTap:
-            return self.setupWeekButtonDidTap(with: .weekend)
+            return self.setupButtonDidTap(with: .weekend)
             
         case .weekdaysButtonDidTap:
-            return self.setupWeekButtonDidTap(with: .weekdays)
+            return self.setupButtonDidTap(with: .weekdays)
         }
     }
     
@@ -69,7 +69,7 @@ final class MovieListReactor: Reactor {
         return newState
     }
     
-    private func setupWeekButtonDidTap(with kobisWeekType: KobisWeekType) -> Observable<Mutation> {
+    private func setupButtonDidTap(with kobisWeekType: KobisWeekType) -> Observable<Mutation> {
         return Observable.concat([
             Observable.just(Mutation.requestBoxOfficeLists([])),
             

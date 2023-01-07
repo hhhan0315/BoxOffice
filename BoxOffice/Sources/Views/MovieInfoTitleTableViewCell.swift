@@ -12,6 +12,20 @@ import ReactorKit
 final class MovieInfoTitleTableViewCell: UITableViewCell, View {
     static let identifier = String(describing: MovieInfoTitleTableViewCell.self)
     
+    private let backdropImageView: UIImageView = {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [UIColor.black.cgColor, UIColor.black.cgColor]
+        gradientLayer.locations = [0, 1]
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 210)
+        gradientLayer.opacity = 0.3
+        
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.backgroundColor = .black
+        imageView.layer.addSublayer(gradientLayer)
+        return imageView
+    }()
+    
     private let posterImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 10
@@ -19,35 +33,6 @@ final class MovieInfoTitleTableViewCell: UITableViewCell, View {
         imageView.contentMode = .scaleAspectFit
         imageView.backgroundColor = .black
         return imageView
-    }()
-    
-    private let nameLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 22.0, weight: .bold)
-        return label
-    }()
-    
-    private let englishNameLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 16.0)
-        return label
-    }()
-    
-    private let infoLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 16.0)
-        return label
-    }()
-    
-    private lazy var labelStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [nameLabel, englishNameLabel, infoLabel])
-        stackView.axis = .vertical
-        stackView.alignment = .center
-        stackView.distribution = .fillProportionally
-        return stackView
     }()
     
     // MARK: - Bind
@@ -61,16 +46,18 @@ final class MovieInfoTitleTableViewCell: UITableViewCell, View {
         reactor.state.compactMap { $0.posterPath }
             .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
-            .flatMap({ posterPath in
-                NetworkImageService().execute(with: posterPath)
-            })
+            .flatMap { NetworkImageService().execute(with: $0) }
             .map { UIImage(data: $0) }
             .bind(to: self.posterImageView.rx.image)
             .disposed(by: disposeBag)
         
-        nameLabel.text = reactor.currentState.movieName
-        englishNameLabel.text = reactor.currentState.movieEnglishName
-        infoLabel.text = reactor.currentState.info
+        reactor.state.compactMap { $0.backdropPath }
+            .distinctUntilChanged()
+            .observe(on: MainScheduler.instance)
+            .flatMap { NetworkImageService().execute(with: $0) }
+            .map { UIImage(data: $0) }
+            .bind(to: self.backdropImageView.rx.image)
+            .disposed(by: disposeBag)
     }
     
     // MARK: - View LifeCycle
@@ -88,12 +75,23 @@ final class MovieInfoTitleTableViewCell: UITableViewCell, View {
     // MARK: - Layout
     
     private func setupViews() {
+        setupBackdropImageView()
         setupPosterImageView()
-        setupLabelStackView()
+    }
+    
+    private func setupBackdropImageView() {
+        contentView.addSubview(backdropImageView)
+        backdropImageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            backdropImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            backdropImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            backdropImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            backdropImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+        ])
     }
     
     private func setupPosterImageView() {
-        contentView.addSubview(posterImageView)
+        backdropImageView.addSubview(posterImageView)
         posterImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15.0),
@@ -101,17 +99,6 @@ final class MovieInfoTitleTableViewCell: UITableViewCell, View {
             posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15.0),
             posterImageView.widthAnchor.constraint(equalToConstant: 120.0),
             posterImageView.heightAnchor.constraint(equalToConstant: 180.0),
-        ])
-    }
-    
-    private func setupLabelStackView() {
-        contentView.addSubview(labelStackView)
-        labelStackView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            labelStackView.topAnchor.constraint(equalTo: posterImageView.topAnchor),
-            labelStackView.leadingAnchor.constraint(equalTo: posterImageView.trailingAnchor, constant: 10.0),
-            labelStackView.bottomAnchor.constraint(equalTo: posterImageView.bottomAnchor),
-            labelStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10.0),
         ])
     }
 }

@@ -14,10 +14,8 @@ final class MovieInfoViewController: UIViewController, View {
     // MARK: - View Define
     
     private let tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .grouped)
-        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 5))
-        tableView.sectionHeaderHeight = 0
-        tableView.sectionFooterHeight = 5
+        let tableView = UITableView(frame: .zero, style: .plain)
+        tableView.separatorInset = .zero
         tableView.register(
             MovieInfoTitleTableViewCell.self,
             forCellReuseIdentifier: MovieInfoTitleTableViewCell.identifier
@@ -60,6 +58,12 @@ final class MovieInfoViewController: UIViewController, View {
             .subscribe { _ in
                 self.tableView.reloadData()
             }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map { $0.movieInfo?.movieName }
+            .distinctUntilChanged()
+            .compactMap { $0 }
+            .bind(to: navigationItem.rx.title)
             .disposed(by: disposeBag)
         
         // View

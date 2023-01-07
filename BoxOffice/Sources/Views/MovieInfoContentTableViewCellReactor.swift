@@ -43,7 +43,12 @@ final class MovieInfoContentTableViewCellReactor: Reactor {
         initialState.genreNames = movieInfo.genreNames.joined(separator: "/")
         initialState.nationNames = movieInfo.nationNames.joined(separator: "/")
         initialState.prdtYear = movieInfo.prdtYear
-        initialState.actorNames = movieInfo.actorNames.joined(separator: " • ")
+        
+        if movieInfo.actorNames.count > 5 {
+            initialState.actorNames = movieInfo.actorNames[0..<5].joined(separator: " • ")
+        } else {
+            initialState.actorNames = movieInfo.actorNames.joined(separator: " • ")
+        }
         
         guard let tmdb = tmdb else {
             return
