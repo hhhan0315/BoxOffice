@@ -28,6 +28,10 @@ final class MovieInfoViewController: UIViewController, View {
             MovieInfoOverviewTableViewCell.self,
             forCellReuseIdentifier: MovieInfoOverviewTableViewCell.identifier
         )
+        tableView.register(
+            MovieInfoReviewTableViewCell.self,
+            forCellReuseIdentifier: MovieInfoReviewTableViewCell.identifier
+        )
         return tableView
     }()
     
@@ -42,6 +46,7 @@ final class MovieInfoViewController: UIViewController, View {
         case title = 0
         case content = 1
         case overview = 2
+        case review = 3
     }
     
     // MARK: - Bind
@@ -50,6 +55,11 @@ final class MovieInfoViewController: UIViewController, View {
     
     func bind(reactor: MovieInfoReactor) {
         // Action
+        navigationItem.rightBarButtonItem?.rx.tap
+            .subscribe { _ in
+                // 화면 이동
+            }
+            .disposed(by: disposeBag)
         
         // State
         reactor.state.map { $0.isLoading }
@@ -78,6 +88,8 @@ final class MovieInfoViewController: UIViewController, View {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "리뷰 작성", style: .plain, target: self, action: nil)
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -125,10 +137,7 @@ extension MovieInfoViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        default:
-            return self.activityIndicatorView.isAnimating ? 0 : 1
-        }
+        return self.activityIndicatorView.isAnimating ? 0 : 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -177,6 +186,22 @@ extension MovieInfoViewController: UITableViewDataSource {
             let tmdb = reactor?.currentState.tmdb
             
             cell.reactor = MovieInfoOverviewTableViewCellReactor(movieInfo: movieInfo, tmdb: tmdb)
+            cell.selectionStyle = .none
+            
+            return cell
+            
+        case TableViewSection.review.rawValue:
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: MovieInfoReviewTableViewCell.identifier,
+                for: indexPath
+            ) as? MovieInfoReviewTableViewCell else {
+                return .init()
+            }
+            
+            let movieInfo = reactor?.currentState.movieInfo
+            let tmdb = reactor?.currentState.tmdb
+            
+            cell.reactor = MovieInfoReviewTableViewCellReactor(movieInfo: movieInfo, tmdb: tmdb)
             cell.selectionStyle = .none
             
             return cell

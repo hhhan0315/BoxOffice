@@ -1,5 +1,5 @@
 //
-//  MovieInfoOverviewTableViewCell.swift
+//  MovieInfoReviewTableViewCell.swift
 //  BoxOffice
 //
 //  Created by rae on 2023/01/07.
@@ -9,31 +9,29 @@ import UIKit
 
 import ReactorKit
 
-final class MovieInfoOverviewTableViewCell: UITableViewCell, View {
-    static let identifier = String(describing: MovieInfoOverviewTableViewCell.self)
+final class MovieInfoReviewTableViewCell: UITableViewCell, View {
+    static let identifier = String(describing: MovieInfoReviewTableViewCell.self)
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "줄거리"
+        label.text = "리뷰"
         label.font = .systemFont(ofSize: 18.0, weight: .semibold)
         return label
     }()
     
-    private let overviewLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 0
-        return label
+    private let tableView: UITableView = {
+        let tableView = UITableView()
+        return tableView
     }()
     
     // MARK: - Bind
     
     var disposeBag = DisposeBag()
     
-    func bind(reactor: MovieInfoOverviewTableViewCellReactor) {
+    func bind(reactor: MovieInfoReviewTableViewCellReactor) {
         // Action
         
         // State
-        overviewLabel.text = reactor.currentState.overview
     }
     
     // MARK: - View LifeCycle
@@ -52,7 +50,7 @@ final class MovieInfoOverviewTableViewCell: UITableViewCell, View {
     
     private func setupViews() {
         setupTitleLabel()
-        setupOverviewLabel()
+        setupTableView()
     }
     
     private func setupTitleLabel() {
@@ -65,14 +63,14 @@ final class MovieInfoOverviewTableViewCell: UITableViewCell, View {
         ])
     }
     
-    private func setupOverviewLabel() {
-        contentView.addSubview(overviewLabel)
-        overviewLabel.translatesAutoresizingMaskIntoConstraints = false
+    private func setupTableView() {
+        contentView.addSubview(tableView)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            overviewLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10.0),
-            overviewLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            overviewLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            overviewLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10.0),
+            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10.0),
+            tableView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10.0),
         ])
     }
 }
