@@ -19,12 +19,6 @@ final class MovieInfoContentTableViewCell: UITableViewCell, View {
         return label
     }()
     
-    private let overviewLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 0
-        return label
-    }()
-    
     private let directorLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
@@ -106,7 +100,6 @@ final class MovieInfoContentTableViewCell: UITableViewCell, View {
         // Action
         
         // State
-        overviewLabel.text = reactor.currentState.overview
         directorLabel.attributedTitle(firstPart: "감독", secondPart: reactor.currentState.directorName)
         showTimeLabel.attributedTitle(firstPart: "상영 시간", secondPart: reactor.currentState.showTime)
         watchGradeLabel.attributedTitle(firstPart: "연령 등급", secondPart: reactor.currentState.watchGradeName)
@@ -132,7 +125,6 @@ final class MovieInfoContentTableViewCell: UITableViewCell, View {
     
     private func setupViews() {
         setupTitleLabel()
-//        setupOverviewLabel()
         setupLabelStackView()
         setupSecondLabelStackView()
         setupThirdLabelStackView()
@@ -147,16 +139,6 @@ final class MovieInfoContentTableViewCell: UITableViewCell, View {
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10.0),
         ])
     }
-    
-//    private func setupOverviewLabel() {
-//        contentView.addSubview(overviewLabel)
-//        overviewLabel.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            overviewLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10.0),
-//            overviewLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-//            overviewLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-//        ])
-//    }
     
     private func setupLabelStackView() {
         contentView.addSubview(labelStackView)

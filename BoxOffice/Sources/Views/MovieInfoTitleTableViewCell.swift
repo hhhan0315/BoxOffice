@@ -21,6 +21,7 @@ final class MovieInfoTitleTableViewCell: UITableViewCell, View {
         
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         imageView.backgroundColor = .black
         imageView.layer.addSublayer(gradientLayer)
         return imageView

@@ -26,8 +26,6 @@ final class MovieInfoContentTableViewCellReactor: Reactor {
         var nationNames: String?
         var prdtYear: String?
         var actorNames: String?
-        
-        var overview: String?
     }
     
     var initialState: State = State()
@@ -49,12 +47,6 @@ final class MovieInfoContentTableViewCellReactor: Reactor {
         } else {
             initialState.actorNames = movieInfo.actorNames.joined(separator: " • ")
         }
-        
-        guard let tmdb = tmdb else {
-            return
-        }
-        
-        initialState.overview = tmdb.overview
     }
     
     func mutate(action: Action) -> Observable<Mutation> {

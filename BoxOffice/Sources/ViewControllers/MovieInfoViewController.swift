@@ -24,6 +24,10 @@ final class MovieInfoViewController: UIViewController, View {
             MovieInfoContentTableViewCell.self,
             forCellReuseIdentifier: MovieInfoContentTableViewCell.identifier
         )
+        tableView.register(
+            MovieInfoOverviewTableViewCell.self,
+            forCellReuseIdentifier: MovieInfoOverviewTableViewCell.identifier
+        )
         return tableView
     }()
     
@@ -37,6 +41,7 @@ final class MovieInfoViewController: UIViewController, View {
     enum TableViewSection: Int, CaseIterable {
         case title = 0
         case content = 1
+        case overview = 2
     }
     
     // MARK: - Bind
@@ -159,6 +164,23 @@ extension MovieInfoViewController: UITableViewDataSource {
             cell.selectionStyle = .none
             
             return cell
+            
+        case TableViewSection.overview.rawValue:
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: MovieInfoOverviewTableViewCell.identifier,
+                for: indexPath
+            ) as? MovieInfoOverviewTableViewCell else {
+                return .init()
+            }
+            
+            let movieInfo = reactor?.currentState.movieInfo
+            let tmdb = reactor?.currentState.tmdb
+            
+            cell.reactor = MovieInfoOverviewTableViewCellReactor(movieInfo: movieInfo, tmdb: tmdb)
+            cell.selectionStyle = .none
+            
+            return cell
+            
         default:
             return .init()
         }
