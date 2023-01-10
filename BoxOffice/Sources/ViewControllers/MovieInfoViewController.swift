@@ -162,6 +162,7 @@ extension MovieInfoViewController: UITableViewDataSource {
             
             cell.reactor = MovieInfoOverviewTableViewCellReactor(movieInfo: movieInfo, tmdb: tmdb)
             cell.selectionStyle = .none
+            cell.delegate = self
             
             return cell
             
@@ -198,6 +199,23 @@ extension MovieInfoViewController: UITableViewDelegate {
         default:
             return UITableView.automaticDimension
         }
+    }
+}
+
+// MARK: - MovieInfoReviewTableViewCellDelegate
+
+extension MovieInfoViewController: MovieInfoOverviewTableViewCellDelegate {
+    func overviewLabelDidChange(cell: MovieInfoOverviewTableViewCell) {
+        self.tableView.beginUpdates()
+        
+        if cell.moreButton.isSelected {
+            cell.overviewLabel.numberOfLines = 2
+        } else {
+            cell.overviewLabel.numberOfLines = 0
+        }
+        cell.moreButton.isSelected.toggle()
+        
+        self.tableView.endUpdates()
     }
 }
 

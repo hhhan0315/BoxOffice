@@ -9,6 +9,10 @@ import UIKit
 
 import ReactorKit
 
+protocol MovieInfoOverviewTableViewCellDelegate: AnyObject {
+    func overviewLabelDidChange(cell: MovieInfoOverviewTableViewCell)
+}
+
 final class MovieInfoOverviewTableViewCell: UITableViewCell, View {
     static let identifier = String(describing: MovieInfoOverviewTableViewCell.self)
     
@@ -19,19 +23,44 @@ final class MovieInfoOverviewTableViewCell: UITableViewCell, View {
         return label
     }()
     
-    private let overviewLabel: UILabel = {
+    let overviewLabel: UILabel = {
         let label = UILabel()
-        label.numberOfLines = 0
+        label.numberOfLines = 2
         label.font = .systemFont(ofSize: 15.0)
         return label
     }()
     
+    let moreButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setTitleColor(.gray, for: .normal)
+        button.setTitle("더보기", for: .normal)
+        button.setTitle("접기", for: .selected)
+        button.titleLabel?.font = .systemFont(ofSize: 15.0)
+        return button
+    }()
+    
+    private lazy var stackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [titleLabel, overviewLabel, moreButton])
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        stackView.distribution = .equalSpacing
+        stackView.alignment = .leading
+        return stackView
+    }()
+    
     // MARK: - Bind
+    
+    weak var delegate: MovieInfoOverviewTableViewCellDelegate?
     
     var disposeBag = DisposeBag()
     
     func bind(reactor: MovieInfoOverviewTableViewCellReactor) {
         // Action
+        moreButton.rx.tap
+            .subscribe { _ in
+                self.delegate?.overviewLabelDidChange(cell: self)
+            }
+            .disposed(by: disposeBag)
         
         // State
         overviewLabel.text = reactor.currentState.overview
@@ -52,28 +81,17 @@ final class MovieInfoOverviewTableViewCell: UITableViewCell, View {
     // MARK: - Layout
     
     private func setupViews() {
-        setupTitleLabel()
-        setupOverviewLabel()
+        setupStackView()
     }
     
-    private func setupTitleLabel() {
-        contentView.addSubview(titleLabel)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+    private func setupStackView() {
+        contentView.addSubview(stackView)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10.0),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10.0),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10.0),
-        ])
-    }
-    
-    private func setupOverviewLabel() {
-        contentView.addSubview(overviewLabel)
-        overviewLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            overviewLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10.0),
-            overviewLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            overviewLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            overviewLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10.0),
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10.0),
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10.0),
+            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10.0),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10.0),
         ])
     }
 }
