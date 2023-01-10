@@ -15,13 +15,14 @@ final class MovieInfoOverviewTableViewCell: UITableViewCell, View {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "줄거리"
-        label.font = .systemFont(ofSize: 18.0, weight: .semibold)
+        label.font = .systemFont(ofSize: 16.0, weight: .semibold)
         return label
     }()
     
     private let overviewLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
+        label.font = .systemFont(ofSize: 15.0)
         return label
     }()
     

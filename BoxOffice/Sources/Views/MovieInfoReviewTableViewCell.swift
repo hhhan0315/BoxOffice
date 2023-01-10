@@ -9,14 +9,30 @@ import UIKit
 
 import ReactorKit
 
+protocol MovieInfoReviewTableViewCellDelegate: AnyObject {
+    func reviewButtonDidTap()
+}
+
 final class MovieInfoReviewTableViewCell: UITableViewCell, View {
     static let identifier = String(describing: MovieInfoReviewTableViewCell.self)
     
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "리뷰"
-        label.font = .systemFont(ofSize: 18.0, weight: .semibold)
+        label.font = .systemFont(ofSize: 16.0, weight: .semibold)
         return label
+    }()
+    
+    private let reviewButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("리뷰 작성", for: .normal)
+        return button
+    }()
+    
+    private lazy var headerStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [titleLabel, reviewButton])
+        stackView.axis = .horizontal
+        return stackView
     }()
     
     private let tableView: UITableView = {
@@ -26,10 +42,17 @@ final class MovieInfoReviewTableViewCell: UITableViewCell, View {
     
     // MARK: - Bind
     
+    weak var delegate: MovieInfoReviewTableViewCellDelegate?
+    
     var disposeBag = DisposeBag()
     
     func bind(reactor: MovieInfoReviewTableViewCellReactor) {
         // Action
+        reviewButton.rx.tap
+            .subscribe { _ in
+                self.delegate?.reviewButtonDidTap()
+            }
+            .disposed(by: disposeBag)
         
         // State
     }
@@ -49,17 +72,17 @@ final class MovieInfoReviewTableViewCell: UITableViewCell, View {
     // MARK: - Layout
     
     private func setupViews() {
-        setupTitleLabel()
+        setupHeaderStackView()
         setupTableView()
     }
     
-    private func setupTitleLabel() {
-        contentView.addSubview(titleLabel)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+    private func setupHeaderStackView() {
+        contentView.addSubview(headerStackView)
+        headerStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10.0),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10.0),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10.0),
+            headerStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10.0),
+            headerStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10.0),
+            headerStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10.0),
         ])
     }
     

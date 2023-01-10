@@ -14,10 +14,9 @@ final class MovieInfoTitleTableViewCell: UITableViewCell, View {
     
     private let backdropImageView: UIImageView = {
         let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = [UIColor.black.cgColor, UIColor.black.cgColor]
-        gradientLayer.locations = [0, 1]
+        gradientLayer.colors = [UIColor.clear.cgColor, UIColor.black.cgColor]
+        gradientLayer.locations = [0.2, 1]
         gradientLayer.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 210)
-        gradientLayer.opacity = 0.3
         
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -34,6 +33,30 @@ final class MovieInfoTitleTableViewCell: UITableViewCell, View {
         imageView.contentMode = .scaleAspectFit
         imageView.backgroundColor = .black
         return imageView
+    }()
+    
+    private let movieNameLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .systemBackground
+        label.numberOfLines = 0
+        label.font = UIFont.systemFont(ofSize: 16.0, weight: .semibold)
+        return label
+    }()
+    
+    private let movieEnglishNameLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .gray
+        label.numberOfLines = 0
+        label.font = UIFont.systemFont(ofSize: 14.0)
+        return label
+    }()
+    
+    private let infoLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .lightGray
+        label.numberOfLines = 0
+        label.font = UIFont.systemFont(ofSize: 14.0)
+        return label
     }()
     
     // MARK: - Bind
@@ -59,6 +82,10 @@ final class MovieInfoTitleTableViewCell: UITableViewCell, View {
             .map { UIImage(data: $0) }
             .bind(to: self.backdropImageView.rx.image)
             .disposed(by: disposeBag)
+        
+        self.movieNameLabel.text = reactor.currentState.movieName
+        self.movieEnglishNameLabel.text = reactor.currentState.movieEnglishName
+        self.infoLabel.text = reactor.currentState.info
     }
     
     // MARK: - View LifeCycle
@@ -78,6 +105,9 @@ final class MovieInfoTitleTableViewCell: UITableViewCell, View {
     private func setupViews() {
         setupBackdropImageView()
         setupPosterImageView()
+        setupInfoLabel()
+        setupMovieEnglishNameLabel()
+        setupMovieNameLabel()
     }
     
     private func setupBackdropImageView() {
@@ -100,6 +130,36 @@ final class MovieInfoTitleTableViewCell: UITableViewCell, View {
             posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15.0),
             posterImageView.widthAnchor.constraint(equalToConstant: 120.0),
             posterImageView.heightAnchor.constraint(equalToConstant: 180.0),
+        ])
+    }
+    
+    private func setupInfoLabel() {
+        backdropImageView.addSubview(infoLabel)
+        infoLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            infoLabel.leadingAnchor.constraint(equalTo: posterImageView.trailingAnchor, constant: 10.0),
+            infoLabel.bottomAnchor.constraint(equalTo: posterImageView.bottomAnchor),
+            infoLabel.trailingAnchor.constraint(equalTo: backdropImageView.trailingAnchor, constant: -10.0),
+        ])
+    }
+    
+    private func setupMovieEnglishNameLabel() {
+        backdropImageView.addSubview(movieEnglishNameLabel)
+        movieEnglishNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            movieEnglishNameLabel.leadingAnchor.constraint(equalTo: infoLabel.leadingAnchor),
+            movieEnglishNameLabel.bottomAnchor.constraint(equalTo: infoLabel.topAnchor, constant: -5.0),
+            movieEnglishNameLabel.trailingAnchor.constraint(equalTo: infoLabel.trailingAnchor),
+        ])
+    }
+    
+    private func setupMovieNameLabel() {
+        backdropImageView.addSubview(movieNameLabel)
+        movieNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            movieNameLabel.leadingAnchor.constraint(equalTo: infoLabel.leadingAnchor),
+            movieNameLabel.bottomAnchor.constraint(equalTo: movieEnglishNameLabel.topAnchor, constant: -5.0),
+            movieNameLabel.trailingAnchor.constraint(equalTo: infoLabel.trailingAnchor),
         ])
     }
 }

@@ -21,10 +21,6 @@ final class MovieInfoViewController: UIViewController, View {
             forCellReuseIdentifier: MovieInfoTitleTableViewCell.identifier
         )
         tableView.register(
-            MovieInfoContentTableViewCell.self,
-            forCellReuseIdentifier: MovieInfoContentTableViewCell.identifier
-        )
-        tableView.register(
             MovieInfoOverviewTableViewCell.self,
             forCellReuseIdentifier: MovieInfoOverviewTableViewCell.identifier
         )
@@ -44,9 +40,9 @@ final class MovieInfoViewController: UIViewController, View {
     
     enum TableViewSection: Int, CaseIterable {
         case title = 0
-        case content = 1
-        case overview = 2
-        case review = 3
+//        case content = 1
+        case overview = 1
+        case review = 2
     }
     
     // MARK: - Bind
@@ -55,11 +51,6 @@ final class MovieInfoViewController: UIViewController, View {
     
     func bind(reactor: MovieInfoReactor) {
         // Action
-        navigationItem.rightBarButtonItem?.rx.tap
-            .subscribe { _ in
-                // 화면 이동
-            }
-            .disposed(by: disposeBag)
         
         // State
         reactor.state.map { $0.isLoading }
@@ -89,7 +80,7 @@ final class MovieInfoViewController: UIViewController, View {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "리뷰 작성", style: .plain, target: self, action: nil)
+        navigationItem.backButtonTitle = ""
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -158,22 +149,6 @@ extension MovieInfoViewController: UITableViewDataSource {
             
             return cell
             
-        case TableViewSection.content.rawValue:
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: MovieInfoContentTableViewCell.identifier,
-                for: indexPath
-            ) as? MovieInfoContentTableViewCell else {
-                return .init()
-            }
-            
-            let movieInfo = reactor?.currentState.movieInfo
-            let tmdb = reactor?.currentState.tmdb
-            
-            cell.reactor = MovieInfoContentTableViewCellReactor(movieInfo: movieInfo, tmdb: tmdb)
-            cell.selectionStyle = .none
-            
-            return cell
-            
         case TableViewSection.overview.rawValue:
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: MovieInfoOverviewTableViewCell.identifier,
@@ -203,6 +178,7 @@ extension MovieInfoViewController: UITableViewDataSource {
             
             cell.reactor = MovieInfoReviewTableViewCellReactor(movieInfo: movieInfo, tmdb: tmdb)
             cell.selectionStyle = .none
+            cell.delegate = self
             
             return cell
             
@@ -222,5 +198,16 @@ extension MovieInfoViewController: UITableViewDelegate {
         default:
             return UITableView.automaticDimension
         }
+    }
+}
+
+// MARK: - MovieInfoReviewTableViewCellDelegate
+
+extension MovieInfoViewController: MovieInfoReviewTableViewCellDelegate {
+    func reviewButtonDidTap() {
+        // boxOfficeList의 MovieCode가 필요함
+        let reviewViewController = ReviewViewController()
+        reviewViewController.reactor = ReviewReactor()
+        navigationController?.pushViewController(reviewViewController, animated: true)
     }
 }
