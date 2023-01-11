@@ -37,7 +37,7 @@ final class MovieInfoTitleTableViewCell: UITableViewCell, View {
     
     private let movieNameLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .systemBackground
+        label.textColor = .white
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: 16.0, weight: .semibold)
         return label

@@ -23,14 +23,14 @@ final class MovieInfoOverviewTableViewCell: UITableViewCell, View {
         return label
     }()
     
-    let overviewLabel: UILabel = {
+    private let overviewLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 2
         label.font = .systemFont(ofSize: 15.0)
         return label
     }()
     
-    let moreButton: UIButton = {
+    private let moreButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitleColor(.gray, for: .normal)
         button.setTitle("더보기", for: .normal)
@@ -40,7 +40,7 @@ final class MovieInfoOverviewTableViewCell: UITableViewCell, View {
     }()
     
     private lazy var stackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [titleLabel, overviewLabel, moreButton])
+        let stackView = UIStackView(arrangedSubviews: [overviewLabel, moreButton])
         stackView.axis = .vertical
         stackView.spacing = 10
         stackView.distribution = .equalSpacing
@@ -66,6 +66,11 @@ final class MovieInfoOverviewTableViewCell: UITableViewCell, View {
         overviewLabel.text = reactor.currentState.overview
     }
     
+    func setupExpand() {
+        self.overviewLabel.numberOfLines = self.moreButton.isSelected ? 2 : 0
+        self.moreButton.isSelected.toggle()
+    }
+    
     // MARK: - View LifeCycle
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -81,17 +86,28 @@ final class MovieInfoOverviewTableViewCell: UITableViewCell, View {
     // MARK: - Layout
     
     private func setupViews() {
+        setupTitleLabel()
         setupStackView()
+    }
+    
+    private func setupTitleLabel() {
+        contentView.addSubview(titleLabel)
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10.0),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10.0),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10.0),
+        ])
     }
     
     private func setupStackView() {
         contentView.addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10.0),
-            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10.0),
+            stackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10.0),
+            stackView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10.0),
-            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10.0),
+            stackView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
         ])
     }
 }

@@ -206,16 +206,9 @@ extension MovieInfoViewController: UITableViewDelegate {
 
 extension MovieInfoViewController: MovieInfoOverviewTableViewCellDelegate {
     func overviewLabelDidChange(cell: MovieInfoOverviewTableViewCell) {
-        self.tableView.beginUpdates()
-        
-        if cell.moreButton.isSelected {
-            cell.overviewLabel.numberOfLines = 2
-        } else {
-            cell.overviewLabel.numberOfLines = 0
+        self.tableView.performBatchUpdates {
+            cell.setupExpand()
         }
-        cell.moreButton.isSelected.toggle()
-        
-        self.tableView.endUpdates()
     }
 }
 
