@@ -14,6 +14,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
+//        let reviewViewController = ReviewViewController()
+//        reviewViewController.reactor = ReviewReactor()
+//        let nav = UINavigationController(rootViewController: reviewViewController)
+//        window.rootViewController = nav
+        
         let movieListViewController = MovieListViewController()
         movieListViewController.reactor = MovieListReactor()
         window.rootViewController = UINavigationController(rootViewController: movieListViewController)

@@ -8,6 +8,7 @@
 import Foundation
 
 struct Review: Codable {
+    let rating: Int
     let userName: String
     let password: String
     let content: String

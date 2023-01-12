@@ -40,7 +40,7 @@ final class MovieInfoOverviewTableViewCell: UITableViewCell, View {
     }()
     
     private lazy var stackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [overviewLabel, moreButton])
+        let stackView = UIStackView(arrangedSubviews: [titleLabel, overviewLabel, moreButton])
         stackView.axis = .vertical
         stackView.spacing = 10
         stackView.distribution = .equalSpacing
@@ -86,28 +86,22 @@ final class MovieInfoOverviewTableViewCell: UITableViewCell, View {
     // MARK: - Layout
     
     private func setupViews() {
-        setupTitleLabel()
         setupStackView()
     }
     
-    private func setupTitleLabel() {
-        contentView.addSubview(titleLabel)
+    private func setupStackView() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10.0),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10.0),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10.0),
+            titleLabel.heightAnchor.constraint(equalToConstant: 30.0),
         ])
-    }
-    
-    private func setupStackView() {
+        
         contentView.addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10.0),
-            stackView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10.0),
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10.0),
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10.0),
-            stackView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10.0),
         ])
     }
 }
