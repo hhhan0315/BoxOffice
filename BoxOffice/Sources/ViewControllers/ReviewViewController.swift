@@ -12,13 +12,13 @@ import ReactorKit
 final class ReviewViewController: UIViewController, View {
     
     // MARK: - View Define
-        
+    
     private let ratingTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "별점"
         return label
     }()
-        
+    
     private let userNameTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "아이디"
@@ -57,6 +57,19 @@ final class ReviewViewController: UIViewController, View {
         return stackView
     }()
     
+    private let passwordInfoLabel: UILabel = {
+        let label = UILabel()
+        label.text = """
+        6 - 20자리
+        알파벳, 숫자, 특수문자 각 1개 이상 포함
+        사용 가능한 특수문자: !, @, #, $
+        """
+        label.numberOfLines = 0
+        label.font = .systemFont(ofSize: 13.0)
+        label.textColor = .systemRed
+        return label
+    }()
+    
     private let textViewPlaceHolder = "내용을 입력해주세요."
     
     private lazy var contentTextView: UITextView = {
@@ -75,14 +88,31 @@ final class ReviewViewController: UIViewController, View {
     
     func bind(reactor: ReviewReactor) {
         // Action
-        navigationItem.rightBarButtonItem?.rx.tap
-            .subscribe { _ in
-                print("확인")
-                // MovieCode를 가지고 리뷰 목록 저장 후 dismiss
-            }
+        self.userNameTextField.rx.text
+            .compactMap { $0 }
+            .map { Reactor.Action.inputUserName($0) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        self.passwordTextField.rx.text
+            .compactMap { $0 }
+            .map { Reactor.Action.inputPassword($0) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        self.contentTextView.rx.text
+            .compactMap { $0 }
+            .filter { $0 != self.textViewPlaceHolder }
+            .map { Reactor.Action.inputContent($0) }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
         // State
+        reactor.state.map { $0.submitValid }
+            .subscribe { submitValid in
+                self.navigationItem.rightBarButtonItem?.isEnabled = submitValid
+            }
+            .disposed(by: disposeBag)
         
         // View
     }
@@ -103,6 +133,12 @@ final class ReviewViewController: UIViewController, View {
     private func setupNavigationItem() {
         navigationItem.title = "리뷰 작성"
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "확인", style: .plain, target: nil, action: nil)
+        navigationItem.rightBarButtonItem?.isEnabled = false
+        navigationItem.rightBarButtonItem?.rx.tap
+            .subscribe { _ in
+                // MovieCode를 가지고 리뷰 목록 저장 후 dismiss
+            }
+            .disposed(by: disposeBag)
     }
     
     // MARK: - Layout
@@ -112,6 +148,7 @@ final class ReviewViewController: UIViewController, View {
         
         setupUserNameStackView()
         setupPasswordStackView()
+        setupPasswordInfoLabel()
         setupContentTextView()
     }
     
@@ -145,14 +182,24 @@ final class ReviewViewController: UIViewController, View {
         ])
     }
     
+    private func setupPasswordInfoLabel() {
+        view.addSubview(passwordInfoLabel)
+        passwordInfoLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            passwordInfoLabel.topAnchor.constraint(equalTo: passwordStackView.bottomAnchor, constant: 10.0),
+            passwordInfoLabel.leadingAnchor.constraint(equalTo: passwordTextField.leadingAnchor),
+            passwordInfoLabel.trailingAnchor.constraint(equalTo: passwordStackView.trailingAnchor),
+        ])
+    }
+    
     private func setupContentTextView() {
         view.addSubview(contentTextView)
         contentTextView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            contentTextView.topAnchor.constraint(equalTo: passwordStackView.bottomAnchor, constant: 10.0),
+            contentTextView.topAnchor.constraint(equalTo: passwordInfoLabel.bottomAnchor, constant: 20.0),
             contentTextView.leadingAnchor.constraint(equalTo: passwordStackView.leadingAnchor),
             contentTextView.trailingAnchor.constraint(equalTo: passwordStackView.trailingAnchor),
-            contentTextView.heightAnchor.constraint(equalToConstant: 200.0)
+            contentTextView.heightAnchor.constraint(equalToConstant: 180.0)
         ])
     }
 }
