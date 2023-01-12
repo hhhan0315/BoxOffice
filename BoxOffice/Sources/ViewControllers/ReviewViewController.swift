@@ -20,7 +20,7 @@ final class ReviewViewController: UIViewController, View {
     }()
         
     private let userNameTitleLabel: UILabel = {
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 50.0, height: 0))
+        let label = UILabel()
         label.text = "아이디"
         return label
     }()
@@ -47,6 +47,7 @@ final class ReviewViewController: UIViewController, View {
     private let passwordTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "비밀번호를 입력해주세요."
+        textField.isSecureTextEntry = true
         return textField
     }()
     
@@ -56,17 +57,16 @@ final class ReviewViewController: UIViewController, View {
         return stackView
     }()
     
-    private let contentTitleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "내용"
-        label.font = .systemFont(ofSize: 14.0)
-        return label
-    }()
+    private let textViewPlaceHolder = "내용을 입력해주세요."
     
-    private let contentTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "내용을 입력해주세요."
-        return textField
+    private lazy var contentTextView: UITextView = {
+        let textView = UITextView()
+        textView.font = .systemFont(ofSize: 16.0)
+        textView.text = textViewPlaceHolder
+        textView.textColor = .lightGray
+        textView.layer.borderWidth = 0.5
+        textView.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.7).cgColor
+        return textView
     }()
     
     // MARK: - Bind
@@ -94,6 +94,10 @@ final class ReviewViewController: UIViewController, View {
         
         setupNavigationItem()
         setupViews()
+        
+        userNameTextField.delegate = self
+        passwordTextField.delegate = self
+        contentTextView.delegate = self
     }
     
     private func setupNavigationItem() {
@@ -108,6 +112,7 @@ final class ReviewViewController: UIViewController, View {
         
         setupUserNameStackView()
         setupPasswordStackView()
+        setupContentTextView()
     }
     
     private func setupUserNameStackView() {
@@ -134,10 +139,54 @@ final class ReviewViewController: UIViewController, View {
         view.addSubview(passwordStackView)
         passwordStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            passwordStackView.topAnchor.constraint(equalTo: userNameStackView.bottomAnchor, constant: 10.0),
+            passwordStackView.topAnchor.constraint(equalTo: userNameStackView.bottomAnchor, constant: 20.0),
             passwordStackView.leadingAnchor.constraint(equalTo: userNameStackView.leadingAnchor),
             passwordStackView.trailingAnchor.constraint(equalTo: userNameStackView.trailingAnchor)
         ])
     }
+    
+    private func setupContentTextView() {
+        view.addSubview(contentTextView)
+        contentTextView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            contentTextView.topAnchor.constraint(equalTo: passwordStackView.bottomAnchor, constant: 10.0),
+            contentTextView.leadingAnchor.constraint(equalTo: passwordStackView.leadingAnchor),
+            contentTextView.trailingAnchor.constraint(equalTo: passwordStackView.trailingAnchor),
+            contentTextView.heightAnchor.constraint(equalToConstant: 200.0)
+        ])
+    }
 }
 
+// MARK: - UITextFieldDelegate
+
+extension ReviewViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        switch textField {
+        case userNameTextField:
+            passwordTextField.becomeFirstResponder()
+        case passwordTextField:
+            contentTextView.becomeFirstResponder()
+        default:
+            break
+        }
+        return true
+    }
+}
+
+// MARK: - UITextViewDelegate
+
+extension ReviewViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == self.textViewPlaceHolder {
+            textView.text = nil
+            textView.textColor = .black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            textView.text = self.textViewPlaceHolder
+            textView.textColor = .lightGray
+        }
+    }
+}
