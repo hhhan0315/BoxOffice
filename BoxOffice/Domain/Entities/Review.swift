@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import FirebaseFirestoreSwift
 
 struct Review: Codable {
-    let rating: Int
-    let userName: String
+    @DocumentID var id: String?
+    
+    let username: String
     let password: String
     let content: String
 }

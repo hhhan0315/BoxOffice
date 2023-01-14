@@ -18,34 +18,45 @@ final class MovieInfoReactor: Reactor {
         case setLoading(Bool)
         case requestMovieInfo(MovieInfo)
         case requestTmdb(Tmdb)
+        case requestReviews([Review])
     }
     
     struct State {
+        var boxOfficeList: BoxOfficeList?
+        
         var isLoading: Bool?
         var movieInfo: MovieInfo?
         var tmdb: Tmdb?
+        
+        var reviews: [Review] = []
     }
     
-    private let boxOfficeList: BoxOfficeList
-    let initialState: State = State()
+    var initialState: State = State()
     
     init(boxOfficeList: BoxOfficeList) {
-        self.boxOfficeList = boxOfficeList
+        self.initialState.boxOfficeList = boxOfficeList
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .viewDidLoad:
+            guard let boxOfficeList = self.currentState.boxOfficeList else {
+                return Observable.empty()
+            }
+            
             return Observable.concat([
                 Observable.just(Mutation.setLoading(true)),
                 
-                KobisRepository().getMovieInfoResponse(with: self.boxOfficeList.movieCode)
+                KobisRepository().getMovieInfoResponse(with: boxOfficeList.movieCode)
                     .map { $0.movieInfoResult.movieInfo.toDomain() }
                     .map { Mutation.requestMovieInfo($0) },
                 
-                TmdbRepository().getMovieTmdbResponse(movieName: self.boxOfficeList.movieName)
+                TmdbRepository().getMovieTmdbResponse(movieName: boxOfficeList.movieName)
                     .compactMap { $0.results.first?.toDomain() }
                     .map { Mutation.requestTmdb($0) },
+                
+                FirebaseRepository().fetchReviews(movieCode: boxOfficeList.movieCode)
+                    .map { Mutation.requestReviews($0) },
                 
                 Observable.just(Mutation.setLoading(false))
             ])
@@ -64,6 +75,9 @@ final class MovieInfoReactor: Reactor {
             
         case .requestTmdb(let tmdb):
             newState.tmdb = tmdb
+            
+        case .requestReviews(let reviews):
+            newState.reviews = reviews
         }
         
         return newState

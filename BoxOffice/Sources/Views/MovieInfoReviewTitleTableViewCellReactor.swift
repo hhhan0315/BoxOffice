@@ -1,5 +1,5 @@
 //
-//  MovieInfoReviewTableViewCellReactor.swift
+//  MovieInfoReviewTitleTableViewCellReactor.swift
 //  BoxOffice
 //
 //  Created by rae on 2023/01/07.
@@ -9,7 +9,7 @@ import Foundation
 
 import ReactorKit
 
-final class MovieInfoReviewTableViewCellReactor: Reactor {
+final class MovieInfoReviewTitleTableViewCellReactor: Reactor {
     enum Action {
         
     }

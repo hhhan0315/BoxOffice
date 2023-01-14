@@ -1,5 +1,5 @@
 //
-//  MovieInfoReviewTableViewCell.swift
+//  MovieInfoReviewTitleTableViewCell.swift
 //  BoxOffice
 //
 //  Created by rae on 2023/01/07.
@@ -8,13 +8,14 @@
 import UIKit
 
 import ReactorKit
+import Firebase
 
-protocol MovieInfoReviewTableViewCellDelegate: AnyObject {
+protocol MovieInfoReviewTitleTableViewCellDelegate: AnyObject {
     func reviewButtonDidTap()
 }
 
-final class MovieInfoReviewTableViewCell: UITableViewCell, View {
-    static let identifier = String(describing: MovieInfoReviewTableViewCell.self)
+final class MovieInfoReviewTitleTableViewCell: UITableViewCell, View {
+    static let identifier = String(describing: MovieInfoReviewTitleTableViewCell.self)
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -35,18 +36,13 @@ final class MovieInfoReviewTableViewCell: UITableViewCell, View {
         return stackView
     }()
     
-    private let tableView: UITableView = {
-        let tableView = UITableView()
-        return tableView
-    }()
-    
     // MARK: - Bind
     
-    weak var delegate: MovieInfoReviewTableViewCellDelegate?
-    
+    weak var delegate: MovieInfoReviewTitleTableViewCellDelegate?
+            
     var disposeBag = DisposeBag()
     
-    func bind(reactor: MovieInfoReviewTableViewCellReactor) {
+    func bind(reactor: MovieInfoReviewTitleTableViewCellReactor) {
         // Action
         reviewButton.rx.tap
             .subscribe { _ in
@@ -73,7 +69,6 @@ final class MovieInfoReviewTableViewCell: UITableViewCell, View {
     
     private func setupViews() {
         setupHeaderStackView()
-        setupTableView()
     }
     
     private func setupHeaderStackView() {
@@ -82,18 +77,8 @@ final class MovieInfoReviewTableViewCell: UITableViewCell, View {
         NSLayoutConstraint.activate([
             headerStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10.0),
             headerStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10.0),
+            headerStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10.0),
             headerStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10.0),
-        ])
-    }
-    
-    private func setupTableView() {
-        contentView.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10.0),
-            tableView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10.0),
         ])
     }
 }

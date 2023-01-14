@@ -136,7 +136,19 @@ final class ReviewViewController: UIViewController, View {
         navigationItem.rightBarButtonItem?.isEnabled = false
         navigationItem.rightBarButtonItem?.rx.tap
             .subscribe { _ in
-                // MovieCode를 가지고 리뷰 목록 저장 후 dismiss
+                guard let currentState = self.reactor?.currentState else {
+                    return
+                }
+                
+                let review = Review(
+                    username: currentState.userName,
+                    password: currentState.password,
+                    content: currentState.content
+                )
+                
+                FirebaseRepository().postReview(movieCode: currentState.movieCode, review: review) {
+                    self.navigationController?.popViewController(animated: true)
+                }
             }
             .disposed(by: disposeBag)
     }

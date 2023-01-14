@@ -23,6 +23,8 @@ final class ReviewReactor: Reactor {
     }
     
     struct State {
+        var movieCode: String = ""
+        
         var userName: String = ""
         var userNameValid: Bool = false
         var password: String = ""
@@ -33,7 +35,11 @@ final class ReviewReactor: Reactor {
         var submitValid: Bool = false
     }
     
-    let initialState: State = State()
+    var initialState: State = State()
+    
+    init(movieCode: String) {
+        self.initialState.movieCode = movieCode
+    }
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
