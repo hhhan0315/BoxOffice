@@ -12,6 +12,7 @@ import ReactorKit
 final class MovieInfoReactor: Reactor {
     enum Action {
         case viewDidLoad
+        case didPostSuccess
     }
     
     enum Mutation {
@@ -54,6 +55,20 @@ final class MovieInfoReactor: Reactor {
                 TmdbRepository().getMovieTmdbResponse(movieName: boxOfficeList.movieName)
                     .compactMap { $0.results.first?.toDomain() }
                     .map { Mutation.requestTmdb($0) },
+                
+                FirebaseRepository().fetchReviews(movieCode: boxOfficeList.movieCode)
+                    .map { Mutation.requestReviews($0) },
+                
+                Observable.just(Mutation.setLoading(false))
+            ])
+            
+        case .didPostSuccess:
+            guard let boxOfficeList = self.currentState.boxOfficeList else {
+                return Observable.empty()
+            }
+            
+            return Observable.concat([
+                Observable.just(Mutation.setLoading(true)),
                 
                 FirebaseRepository().fetchReviews(movieCode: boxOfficeList.movieCode)
                     .map { Mutation.requestReviews($0) },

@@ -63,7 +63,7 @@ final class MovieInfoViewController: UIViewController, View {
             .bind(to: self.activityIndicatorView.rx.isAnimating)
             .disposed(by: disposeBag)
         
-        reactor.state.map { $0.tmdb }
+        reactor.state.map { $0.reviews }
             .observe(on: MainScheduler.instance)
             .subscribe { _ in
                 self.tableView.reloadData()
@@ -242,6 +242,15 @@ extension MovieInfoViewController: MovieInfoReviewTitleTableViewCellDelegate {
         
         let reviewViewController = ReviewViewController()
         reviewViewController.reactor = ReviewReactor(movieCode: movieCode)
+        reviewViewController.delegate = self
         navigationController?.pushViewController(reviewViewController, animated: true)
+    }
+}
+
+// MARK: - ReviewViewControllerDelegate
+
+extension MovieInfoViewController: ReviewViewControllerDelegate {
+    func didPost() {
+        reactor?.action.onNext(.didPostSuccess)
     }
 }

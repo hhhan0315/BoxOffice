@@ -10,6 +10,7 @@ import Foundation
 extension Date {
     enum DateFormat: String {
         case yyyyMMdd = "yyyyMMdd"
+        case yyyyMMddKorean = "yyyy년 MM월 dd일 HH:mm"
     }
     
     static var yesterday: Date! {

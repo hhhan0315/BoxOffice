@@ -40,11 +40,20 @@ final class MovieInfoReviewContentTableViewCell: UITableViewCell {
         return label
     }()
     
+    private let dateLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 12.0)
+        label.textColor = .gray
+        label.textAlignment = .right
+        return label
+    }()
+    
     var review: Review? {
         didSet {
             cosmosView.rating = review?.rating ?? 0
             usernameLabel.text = review?.username
             contentLabel.text = review?.content
+            dateLabel.text = review?.date.toString(.yyyyMMddKorean)
         }
     }
     
@@ -61,6 +70,7 @@ final class MovieInfoReviewContentTableViewCell: UITableViewCell {
     private func setupViews() {
         setupHeaderStackView()
         setupContentLabel()
+        setupDateLabel()
     }
     
     private func setupHeaderStackView() {
@@ -77,7 +87,7 @@ final class MovieInfoReviewContentTableViewCell: UITableViewCell {
             headerStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10.0)
         ])
     }
-        
+    
     private func setupContentLabel() {
         contentView.addSubview(contentLabel)
         contentLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -85,7 +95,17 @@ final class MovieInfoReviewContentTableViewCell: UITableViewCell {
             contentLabel.topAnchor.constraint(equalTo: headerStackView.bottomAnchor, constant: 10.0),
             contentLabel.leadingAnchor.constraint(equalTo: headerStackView.leadingAnchor),
             contentLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10.0),
-            contentLabel.trailingAnchor.constraint(equalTo: headerStackView.trailingAnchor),
+            contentLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.6)
+        ])
+    }
+    
+    private func setupDateLabel() {
+        contentView.addSubview(dateLabel)
+        dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            dateLabel.bottomAnchor.constraint(equalTo: contentLabel.bottomAnchor),
+            dateLabel.trailingAnchor.constraint(equalTo: headerStackView.trailingAnchor),
+            dateLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.35)
         ])
     }
 }

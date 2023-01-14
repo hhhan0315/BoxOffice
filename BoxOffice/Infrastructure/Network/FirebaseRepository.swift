@@ -15,6 +15,7 @@ final class FirebaseRepository {
     func postReview(movieCode: String, review: Review, completion: @escaping () -> Void) {
         let databaseReference = Firestore.firestore().collection("movies").document(movieCode).collection("reviews")
         databaseReference.addDocument(data: [
+            "date": review.date,
             "rating": review.rating,
             "username": review.username,
             "password": review.password,
@@ -36,7 +37,7 @@ final class FirebaseRepository {
                     return try? queryDocumentSnapshot.data(as: Review.self)
                 }
                 
-                observer.onNext(reviews)
+                observer.onNext(reviews.sorted { $0.date > $1.date })
                 observer.onCompleted()
             }
             

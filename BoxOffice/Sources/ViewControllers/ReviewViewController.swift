@@ -10,6 +10,10 @@ import UIKit
 import ReactorKit
 import Cosmos
 
+protocol ReviewViewControllerDelegate: AnyObject {
+    func didPost()
+}
+
 final class ReviewViewController: UIViewController, View {
     
     // MARK: - View Define
@@ -99,6 +103,7 @@ final class ReviewViewController: UIViewController, View {
     }()
     
     // MARK: - Bind
+    weak var delegate: ReviewViewControllerDelegate?
     
     var disposeBag = DisposeBag()
     
@@ -157,6 +162,7 @@ final class ReviewViewController: UIViewController, View {
                 }
                 
                 let review = Review(
+                    date: Date(),
                     rating: self.cosmosView.rating,
                     username: currentState.userName,
                     password: currentState.password,
@@ -164,6 +170,7 @@ final class ReviewViewController: UIViewController, View {
                 )
                 
                 FirebaseRepository().postReview(movieCode: currentState.movieCode, review: review) {
+                    self.delegate?.didPost()
                     self.navigationController?.popViewController(animated: true)
                 }
             }

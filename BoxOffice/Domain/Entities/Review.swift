@@ -11,6 +11,7 @@ import FirebaseFirestoreSwift
 struct Review: Codable {
     @DocumentID var id: String?
     
+    let date: Date
     let rating: Double
     let username: String
     let password: String
