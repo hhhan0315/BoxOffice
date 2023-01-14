@@ -8,6 +8,7 @@
 import UIKit
 
 import ReactorKit
+import Cosmos
 
 final class ReviewViewController: UIViewController, View {
     
@@ -17,6 +18,21 @@ final class ReviewViewController: UIViewController, View {
         let label = UILabel()
         label.text = "별점"
         return label
+    }()
+    
+    private let cosmosView: CosmosView = {
+        let cosmosView = CosmosView()
+        cosmosView.rating = 0
+        cosmosView.settings.minTouchRating = 0
+        cosmosView.settings.fillMode = .half
+        cosmosView.settings.starSize = 25
+        return cosmosView
+    }()
+    
+    private lazy var ratingStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [ratingTitleLabel, cosmosView])
+        stackView.axis = .horizontal
+        return stackView
     }()
     
     private let userNameTitleLabel: UILabel = {
@@ -141,6 +157,7 @@ final class ReviewViewController: UIViewController, View {
                 }
                 
                 let review = Review(
+                    rating: self.cosmosView.rating,
                     username: currentState.userName,
                     password: currentState.password,
                     content: currentState.content
@@ -158,10 +175,26 @@ final class ReviewViewController: UIViewController, View {
     private func setupViews() {
         view.backgroundColor = .systemBackground
         
+        setupRatingStackView()
         setupUserNameStackView()
         setupPasswordStackView()
         setupPasswordInfoLabel()
         setupContentTextView()
+    }
+    
+    private func setupRatingStackView() {
+        ratingTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            ratingTitleLabel.widthAnchor.constraint(equalToConstant: 100.0),
+        ])
+        
+        view.addSubview(ratingStackView)
+        ratingStackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            ratingStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10.0),
+            ratingStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10.0),
+            ratingStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10.0)
+        ])
     }
     
     private func setupUserNameStackView() {
@@ -173,9 +206,9 @@ final class ReviewViewController: UIViewController, View {
         view.addSubview(userNameStackView)
         userNameStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            userNameStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10.0),
-            userNameStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10.0),
-            userNameStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10.0)
+            userNameStackView.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 20.0),
+            userNameStackView.leadingAnchor.constraint(equalTo: ratingStackView.leadingAnchor),
+            userNameStackView.trailingAnchor.constraint(equalTo: ratingStackView.trailingAnchor)
         ])
     }
     

@@ -15,6 +15,7 @@ final class FirebaseRepository {
     func postReview(movieCode: String, review: Review, completion: @escaping () -> Void) {
         let databaseReference = Firestore.firestore().collection("movies").document(movieCode).collection("reviews")
         databaseReference.addDocument(data: [
+            "rating": review.rating,
             "username": review.username,
             "password": review.password,
             "content": review.content

@@ -45,6 +45,7 @@
 		01AE58562925F7A400B409D8 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AE58552925F7A400B409D8 /* Secrets.swift */; };
 		01AE586029261BD700B409D8 /* MovieCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AE585F29261BD700B409D8 /* MovieCollectionViewCell.swift */; };
 		01AE58642926388F00B409D8 /* MovieListMenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AE58632926388F00B409D8 /* MovieListMenuButton.swift */; };
+		01B8D23D29726A9E00D14462 /* Cosmos in Frameworks */ = {isa = PBXBuildFile; productRef = 01B8D23C29726A9E00D14462 /* Cosmos */; };
 		01D807C1292CC26700B12962 /* MoviePosterNewLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D807C0292CC26700B12962 /* MoviePosterNewLabelView.swift */; };
 		01D807C5292CFC7C00B12962 /* NetworkImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D807C4292CFC7C00B12962 /* NetworkImageService.swift */; };
 		01E9A04E2930E81C00962F7C /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E9A04D2930E81C00962F7C /* UIViewController+Extension.swift */; };
@@ -114,6 +115,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01B8D23D29726A9E00D14462 /* Cosmos in Frameworks */,
 				01850E0329714ADC00658FD1 /* FirebaseFirestoreSwift in Frameworks */,
 				013BD1D429645B4D00C7EA52 /* RxSwift in Frameworks */,
 				01850E01297142E800658FD1 /* FirebaseFirestore in Frameworks */,
@@ -164,17 +166,8 @@
 		013BD1DB29651E9F00C7EA52 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				01AE585F29261BD700B409D8 /* MovieCollectionViewCell.swift */,
-				013BD1EE29668DFB00C7EA52 /* MovieCollectionViewCellReactor.swift */,
-				013BD1F829681AC200C7EA52 /* MovieInfoTitleTableViewCell.swift */,
-				013BD1FA29683EE500C7EA52 /* MovieInfoTitleTableViewCellReactor.swift */,
-				01850DDC2969245400658FD1 /* MovieInfoOverviewTableViewCell.swift */,
-				01850DDE2969246700658FD1 /* MovieInfoOverviewTableViewCellReactor.swift */,
-				01850DE02969464100658FD1 /* MovieInfoReviewTitleTableViewCell.swift */,
-				01850DE22969464B00658FD1 /* MovieInfoReviewTitleTableViewCellReactor.swift */,
-				01850E04297151E400658FD1 /* MovieInfoReviewContentTableViewCell.swift */,
-				01AE58632926388F00B409D8 /* MovieListMenuButton.swift */,
-				01D807C0292CC26700B12962 /* MoviePosterNewLabelView.swift */,
+				01B8D237297264E300D14462 /* MovieInfo */,
+				01B8D236297264D600D14462 /* MovieList */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -290,6 +283,31 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		01B8D236297264D600D14462 /* MovieList */ = {
+			isa = PBXGroup;
+			children = (
+				01AE585F29261BD700B409D8 /* MovieCollectionViewCell.swift */,
+				013BD1EE29668DFB00C7EA52 /* MovieCollectionViewCellReactor.swift */,
+				01AE58632926388F00B409D8 /* MovieListMenuButton.swift */,
+				01D807C0292CC26700B12962 /* MoviePosterNewLabelView.swift */,
+			);
+			path = MovieList;
+			sourceTree = "<group>";
+		};
+		01B8D237297264E300D14462 /* MovieInfo */ = {
+			isa = PBXGroup;
+			children = (
+				01850DDC2969245400658FD1 /* MovieInfoOverviewTableViewCell.swift */,
+				01850DDE2969246700658FD1 /* MovieInfoOverviewTableViewCellReactor.swift */,
+				01850E04297151E400658FD1 /* MovieInfoReviewContentTableViewCell.swift */,
+				01850DE02969464100658FD1 /* MovieInfoReviewTitleTableViewCell.swift */,
+				01850DE22969464B00658FD1 /* MovieInfoReviewTitleTableViewCellReactor.swift */,
+				013BD1F829681AC200C7EA52 /* MovieInfoTitleTableViewCell.swift */,
+				013BD1FA29683EE500C7EA52 /* MovieInfoTitleTableViewCellReactor.swift */,
+			);
+			path = MovieInfo;
+			sourceTree = "<group>";
+		};
 		01EF0C112937997C00DB95A2 /* Request */ = {
 			isa = PBXGroup;
 			children = (
@@ -353,6 +371,7 @@
 				013BD1D329645B4D00C7EA52 /* RxSwift */,
 				01850E00297142E800658FD1 /* FirebaseFirestore */,
 				01850E0229714ADC00658FD1 /* FirebaseFirestoreSwift */,
+				01B8D23C29726A9E00D14462 /* Cosmos */,
 			);
 			productName = BoxOffice;
 			productReference = 01F6E9702925C6D500770A4A /* BoxOffice.app */;
@@ -386,6 +405,7 @@
 				013BD1CD29645B1900C7EA52 /* XCRemoteSwiftPackageReference "ReactorKit" */,
 				013BD1D029645B4D00C7EA52 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				01850DE8296C354C00658FD1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				01B8D23B29726A9E00D14462 /* XCRemoteSwiftPackageReference "Cosmos" */,
 			);
 			productRefGroup = 01F6E9712925C6D500770A4A /* Products */;
 			projectDirPath = "";
@@ -699,6 +719,14 @@
 				minimumVersion = 9.0.0;
 			};
 		};
+		01B8D23B29726A9E00D14462 /* XCRemoteSwiftPackageReference "Cosmos" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/evgenyneu/Cosmos";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 23.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -726,6 +754,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 01850DE8296C354C00658FD1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestoreSwift;
+		};
+		01B8D23C29726A9E00D14462 /* Cosmos */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 01B8D23B29726A9E00D14462 /* XCRemoteSwiftPackageReference "Cosmos" */;
+			productName = Cosmos;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
