@@ -175,60 +175,14 @@
 		013BD1DC29651EA300C7EA52 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				01904898292E5E43003B5FD0 /* Entities */,
+				01EF0C112937997C00DB95A2 /* Request */,
+				019048A8292F6706003B5FD0 /* Response+DataMapping */,
 			);
 			path = Models;
 			sourceTree = "<group>";
 		};
 		013BD1DD29651EA800C7EA52 /* Services */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Services;
-			sourceTree = "<group>";
-		};
-		01850DEF296D55E500658FD1 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		0190488A292E4B16003B5FD0 /* Domain */ = {
-			isa = PBXGroup;
-			children = (
-				01904898292E5E43003B5FD0 /* Entities */,
-			);
-			path = Domain;
-			sourceTree = "<group>";
-		};
-		0190488B292E4B1A003B5FD0 /* Data */ = {
-			isa = PBXGroup;
-			children = (
-				019048A7292F66F6003B5FD0 /* Network */,
-			);
-			path = Data;
-			sourceTree = "<group>";
-		};
-		01904898292E5E43003B5FD0 /* Entities */ = {
-			isa = PBXGroup;
-			children = (
-				0190489B292E7E23003B5FD0 /* BoxOfficeList.swift */,
-				01904899292E7CAB003B5FD0 /* MovieInfo.swift */,
-				01850DEB296D4D1D00658FD1 /* Review.swift */,
-				0190489D292E7F50003B5FD0 /* Tmdb.swift */,
-			);
-			path = Entities;
-			sourceTree = "<group>";
-		};
-		019048A3292F51AE003B5FD0 /* Infrastructure */ = {
-			isa = PBXGroup;
-			children = (
-				019048A4292F51B7003B5FD0 /* Network */,
-			);
-			path = Infrastructure;
-			sourceTree = "<group>";
-		};
-		019048A4292F51B7003B5FD0 /* Network */ = {
 			isa = PBXGroup;
 			children = (
 				013BD1E32965610A00C7EA52 /* KobisAPI.swift */,
@@ -241,16 +195,25 @@
 				013BD1E92965AA4600C7EA52 /* TmdbRepository.swift */,
 				01850DED296D52D800658FD1 /* FirebaseRepository.swift */,
 			);
-			path = Network;
+			path = Services;
 			sourceTree = "<group>";
 		};
-		019048A7292F66F6003B5FD0 /* Network */ = {
+		01850DEF296D55E500658FD1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				01EF0C112937997C00DB95A2 /* Request */,
-				019048A8292F6706003B5FD0 /* Response+DataMapping */,
 			);
-			path = Network;
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		01904898292E5E43003B5FD0 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				0190489B292E7E23003B5FD0 /* BoxOfficeList.swift */,
+				01904899292E7CAB003B5FD0 /* MovieInfo.swift */,
+				01850DEB296D4D1D00658FD1 /* Review.swift */,
+				0190489D292E7F50003B5FD0 /* Tmdb.swift */,
+			);
+			path = Entities;
 			sourceTree = "<group>";
 		};
 		019048A8292F6706003B5FD0 /* Response+DataMapping */ = {
@@ -339,9 +302,6 @@
 		01F6E9722925C6D500770A4A /* BoxOffice */ = {
 			isa = PBXGroup;
 			children = (
-				0190488B292E4B1A003B5FD0 /* Data */,
-				0190488A292E4B16003B5FD0 /* Domain */,
-				019048A3292F51AE003B5FD0 /* Infrastructure */,
 				01AE584B2925C9E600B409D8 /* Resources */,
 				013BD1D829651E8000C7EA52 /* Sources */,
 				013BD1D929651E8500C7EA52 /* Supporting Files */,
