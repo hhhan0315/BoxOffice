@@ -53,12 +53,25 @@
 		01EF0C1729379CE200DB95A2 /* MovieTmdbRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EF0C1629379CE200DB95A2 /* MovieTmdbRequestDTO.swift */; };
 		01F601632974E3B600C229D3 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F601612974E3B600C229D3 /* Date+Extension.swift */; };
 		01F601642974E3B600C229D3 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F601622974E3B600C229D3 /* UIViewController+Extension.swift */; };
+		01F60191297D53FD00C229D3 /* BoxOfficeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F60190297D53FD00C229D3 /* BoxOfficeTests.swift */; };
+		01F60193297D55D600C229D3 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 01F60192297D55D600C229D3 /* FirebaseFirestore */; };
+		01F60195297D55F700C229D3 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 01F60194297D55F700C229D3 /* RxCocoa */; };
 		01F6E9742925C6D500770A4A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F6E9732925C6D500770A4A /* AppDelegate.swift */; };
 		01F6E9762925C6D500770A4A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F6E9752925C6D500770A4A /* SceneDelegate.swift */; };
 		01F6E9782925C6D500770A4A /* MovieListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F6E9772925C6D500770A4A /* MovieListViewController.swift */; };
 		01F6E97D2925C6D700770A4A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01F6E97C2925C6D700770A4A /* Assets.xcassets */; };
 		01F6E9802925C6D700770A4A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01F6E97E2925C6D700770A4A /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		01F6018B297D53E600C229D3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 01F6E9682925C6D500770A4A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 01F6E96F2925C6D500770A4A;
+			remoteInfo = BoxOffice;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		013BD1D529648E1A00C7EA52 /* MovieListReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieListReactor.swift; sourceTree = "<group>"; };
@@ -101,6 +114,8 @@
 		01EF0C1629379CE200DB95A2 /* MovieTmdbRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieTmdbRequestDTO.swift; sourceTree = "<group>"; };
 		01F601612974E3B600C229D3 /* Date+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		01F601622974E3B600C229D3 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		01F60187297D53E600C229D3 /* BoxOfficeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BoxOfficeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		01F60190297D53FD00C229D3 /* BoxOfficeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoxOfficeTests.swift; sourceTree = "<group>"; };
 		01F6E9702925C6D500770A4A /* BoxOffice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BoxOffice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		01F6E9732925C6D500770A4A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		01F6E9752925C6D500770A4A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -111,6 +126,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		01F60184297D53E500C229D3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01F60195297D55F700C229D3 /* RxCocoa in Frameworks */,
+				01F60193297D55D600C229D3 /* FirebaseFirestore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		01F6E96D2925C6D500770A4A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -281,10 +305,19 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		01F60188297D53E600C229D3 /* BoxOfficeTests */ = {
+			isa = PBXGroup;
+			children = (
+				01F60190297D53FD00C229D3 /* BoxOfficeTests.swift */,
+			);
+			path = BoxOfficeTests;
+			sourceTree = "<group>";
+		};
 		01F6E9672925C6D500770A4A = {
 			isa = PBXGroup;
 			children = (
 				01F6E9722925C6D500770A4A /* BoxOffice */,
+				01F60188297D53E600C229D3 /* BoxOfficeTests */,
 				01F6E9712925C6D500770A4A /* Products */,
 				01850DEF296D55E500658FD1 /* Frameworks */,
 			);
@@ -294,6 +327,7 @@
 			isa = PBXGroup;
 			children = (
 				01F6E9702925C6D500770A4A /* BoxOffice.app */,
+				01F60187297D53E600C229D3 /* BoxOfficeTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -311,6 +345,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		01F60186297D53E500C229D3 /* BoxOfficeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 01F6018F297D53E600C229D3 /* Build configuration list for PBXNativeTarget "BoxOfficeTests" */;
+			buildPhases = (
+				01F60183297D53E500C229D3 /* Sources */,
+				01F60184297D53E500C229D3 /* Frameworks */,
+				01F60185297D53E500C229D3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				01F6018C297D53E600C229D3 /* PBXTargetDependency */,
+			);
+			name = BoxOfficeTests;
+			packageProductDependencies = (
+				01F60192297D55D600C229D3 /* FirebaseFirestore */,
+				01F60194297D55F700C229D3 /* RxCocoa */,
+			);
+			productName = BoxOfficeTests;
+			productReference = 01F60187297D53E600C229D3 /* BoxOfficeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		01F6E96F2925C6D500770A4A /* BoxOffice */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 01F6E9842925C6D700770A4A /* Build configuration list for PBXNativeTarget "BoxOffice" */;
@@ -346,6 +402,10 @@
 				LastSwiftUpdateCheck = 1410;
 				LastUpgradeCheck = 1410;
 				TargetAttributes = {
+					01F60186297D53E500C229D3 = {
+						CreatedOnToolsVersion = 14.1;
+						TestTargetID = 01F6E96F2925C6D500770A4A;
+					};
 					01F6E96F2925C6D500770A4A = {
 						CreatedOnToolsVersion = 14.1;
 					};
@@ -371,11 +431,19 @@
 			projectRoot = "";
 			targets = (
 				01F6E96F2925C6D500770A4A /* BoxOffice */,
+				01F60186297D53E500C229D3 /* BoxOfficeTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		01F60185297D53E500C229D3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		01F6E96E2925C6D500770A4A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -389,6 +457,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		01F60183297D53E500C229D3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01F60191297D53FD00C229D3 /* BoxOfficeTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		01F6E96C2925C6D500770A4A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -440,6 +516,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		01F6018C297D53E600C229D3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 01F6E96F2925C6D500770A4A /* BoxOffice */;
+			targetProxy = 01F6018B297D53E600C229D3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		01F6E97E2925C6D700770A4A /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -452,6 +536,50 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		01F6018D297D53E600C229D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WB3J5J4ZWS;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MACOSX_DEPLOYMENT_TARGET = 12.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rae.BoxOfficeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BoxOffice.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BoxOffice";
+			};
+			name = Debug;
+		};
+		01F6018E297D53E600C229D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WB3J5J4ZWS;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MACOSX_DEPLOYMENT_TARGET = 12.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rae.BoxOfficeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BoxOffice.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BoxOffice";
+			};
+			name = Release;
+		};
 		01F6E9822925C6D700770A4A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -633,6 +761,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		01F6018F297D53E600C229D3 /* Build configuration list for PBXNativeTarget "BoxOfficeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				01F6018D297D53E600C229D3 /* Debug */,
+				01F6018E297D53E600C229D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		01F6E96B2925C6D500770A4A /* Build configuration list for PBXProject "BoxOffice" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -718,6 +855,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 01B8D23B29726A9E00D14462 /* XCRemoteSwiftPackageReference "Cosmos" */;
 			productName = Cosmos;
+		};
+		01F60192297D55D600C229D3 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 01850DE8296C354C00658FD1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		01F60194297D55F700C229D3 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 013BD1D029645B4D00C7EA52 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
